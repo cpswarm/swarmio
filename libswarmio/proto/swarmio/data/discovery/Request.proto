@@ -1,0 +1,11 @@
+syntax = "proto3";
+package swarmio.data.discovery;
+
+enum Action {
+    DISCOVER = 0;       // Request discovery information
+    INVALIDATE = 1;     // Invalidate cached discovery information
+}
+
+message Request {
+    Action action = 1;
+}

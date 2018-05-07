@@ -1,0 +1,28 @@
+[submodule "dependencies/zyre"]
+	path = dependencies/zyre
+	url = https://github.com/zeromq/zyre.git
+[submodule "dependencies/czmq"]
+	path = dependencies/czmq
+	url = https://github.com/zeromq/czmq.git
+[submodule "dependencies/libzmq"]
+	path = dependencies/libzmq
+	url = https://github.com/zeromq/libzmq.git
+[submodule "dependencies/libsodium"]
+	path = dependencies/libsodium
+	url = https://github.com/jedisct1/libsodium.git
+	branch = stable
+[submodule "dependencies/protobuf"]
+	path = dependencies/protobuf
+	url = https://github.com/google/protobuf.git
+[submodule "dependencies/concurrentqueue"]
+	path = dependencies/concurrentqueue
+	url = https://github.com/cameron314/concurrentqueue.git
+[submodule "dependencies/readerwriterqueue"]
+	path = dependencies/readerwriterqueue
+	url = https://github.com/cameron314/readerwriterqueue.git
+[submodule "dependencies/g3log"]
+	path = dependencies/g3log
+	url = https://github.com/KjellKod/g3log.git
+[submodule "dependencies/replxx"]
+	path = dependencies/replxx
+	url = https://github.com/AmokHuginnsson/replxx.git

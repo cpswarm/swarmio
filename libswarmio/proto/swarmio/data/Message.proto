@@ -1,0 +1,26 @@
+syntax = "proto3";
+package swarmio.data;
+
+import "swarmio/data/Header.proto";
+import "swarmio/data/Error.proto";
+import "swarmio/data/ping/Echo.proto";
+import "swarmio/data/event/Notification.proto";
+import "swarmio/data/keyvalue/GetRequest.proto";
+import "swarmio/data/keyvalue/GetResponse.proto";
+import "swarmio/data/keyvalue/SetRequest.proto";
+import "swarmio/data/discovery/Request.proto";
+import "swarmio/data/discovery/Response.proto";
+
+message Message {
+    Header header = 1;
+    oneof content {
+        Error error = 2;
+        ping.Echo echo = 3;
+        discovery.Request ds_request = 4;
+        discovery.Response ds_response = 5;
+        event.Notification ev_notification = 6;
+        keyvalue.GetRequest kv_get_request = 7;
+        keyvalue.GetResponse kv_get_response = 8;
+        keyvalue.SetRequest kv_set_request = 9;
+    }
+}

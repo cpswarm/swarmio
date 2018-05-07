@@ -1,0 +1,6 @@
+syntax = "proto3";
+package swarmio.data.keyvalue;
+
+message GetRequest {
+    string key = 1;
+}

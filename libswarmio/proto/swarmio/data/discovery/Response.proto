@@ -1,0 +1,11 @@
+syntax = "proto3";
+package swarmio.data.discovery;
+
+import "swarmio/data/event/Descriptor.proto";
+import "swarmio/data/keyvalue/Descriptor.proto";
+
+message Response {
+    bool echo = 1;
+    repeated event.Descriptor event = 2;
+    repeated keyvalue.Descriptor keyvalue = 3;
+}

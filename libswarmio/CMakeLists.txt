@@ -1,0 +1,140 @@
+# Declare project
+project(libswarmio LANGUAGES CXX)
+
+# Add target
+add_library(libswarmio SHARED
+
+	# Built-in services
+	"src/swarmio/services/StatusAwaiter.cpp"
+	"src/swarmio/services/event/Service.cpp"
+	"src/swarmio/services/ping/Service.cpp"
+	"src/swarmio/services/ping/TimingAwaiter.cpp"
+	"src/swarmio/services/keyvalue/Service.cpp"
+	"src/swarmio/services/keyvalue/ValueAwaiter.cpp"
+	"src/swarmio/services/discovery/Service.cpp"
+
+	# Profiles
+	"src/swarmio/profiles/ClientProfile.cpp"
+	"src/swarmio/profiles/MemberProfile.cpp"
+
+	# Zyre endpoint implementation
+	"src/swarmio/transport/zyre/ZyreControlSocket.cpp"
+	"src/swarmio/transport/zyre/ZyreEndpoint.cpp"
+	"src/swarmio/transport/BasicEndpoint.cpp"
+
+	# Protobuf messages
+	"proto/swarmio/data/Message.proto"
+	"proto/swarmio/data/Header.proto"
+	"proto/swarmio/data/Reliability.proto"
+	"proto/swarmio/data/Error.proto"
+	"proto/swarmio/data/Variant.proto"
+	"proto/swarmio/data/ping/Echo.proto"
+	"proto/swarmio/data/event/Notification.proto"
+	"proto/swarmio/data/event/Descriptor.proto"
+	"proto/swarmio/data/keyvalue/GetRequest.proto"
+	"proto/swarmio/data/keyvalue/GetResponse.proto"
+	"proto/swarmio/data/keyvalue/SetRequest.proto"
+	"proto/swarmio/data/keyvalue/Descriptor.proto"
+	"proto/swarmio/data/discovery/Type.proto"
+	"proto/swarmio/data/discovery/Response.proto"
+	"proto/swarmio/data/discovery/Request.proto"
+)
+
+# Generate C++ files for Protobuf definitions
+get_target_property(_sources libswarmio SOURCES)
+foreach(_source ${_sources})
+
+	# Match .proto files
+	if(_source MATCHES "^proto/(.+)\.proto$")
+
+		# Build output file names
+		set(_outputs
+			"${CMAKE_CURRENT_BINARY_DIR}/include/${CMAKE_MATCH_1}.pb.h"
+			"${CMAKE_CURRENT_BINARY_DIR}/include/${CMAKE_MATCH_1}.pb.cc"
+		)
+
+		# Generate sources
+		add_custom_command(
+			OUTPUT ${_outputs}
+			COMMAND protobuf::protoc
+			ARGS 
+				--cpp_out dllexport_decl=SWARMIO_API:${CMAKE_CURRENT_BINARY_DIR}/include 
+				--proto_path ${CMAKE_CURRENT_SOURCE_DIR}/proto 
+				${CMAKE_CURRENT_SOURCE_DIR}/${_source}
+			DEPENDS
+				${_source} 
+				protobuf::protoc
+			COMMENT "Running CPP protocol buffer compiler on ${_source}"
+			VERBATIM
+		)
+
+		# Add sources to target
+		target_sources(libswarmio PRIVATE ${_outputs})
+
+	endif()
+
+endforeach()
+
+# Add export/import macros
+if (MSVC)
+	target_compile_definitions(libswarmio 
+		PRIVATE "SWARMIO_API=__declspec(dllexport)"
+		INTERFACE "SWARMIO_API=__declspec(dllimport)"
+		PUBLIC "PROTOBUF_USE_DLLS"
+	)
+else()
+	target_compile_definitions(libswarmio 
+		PRIVATE "SWARMIO_API=__attribute__((visibility(\"default\"))"
+		INTERFACE "SWARMIO_API"
+		PUBLIC "PROTOBUF_USE_DLLS"
+	)
+endif()
+
+# Add compile definitions
+target_compile_definitions(libswarmio 
+	PRIVATE "SWARMIO_EXPORT"
+	INTERFACE "SWARMIO_IMPORT"
+)
+
+# Disable Protobuf warnings
+if (MSVC)
+	target_compile_options(libswarmio 
+		PRIVATE 
+			"/wd4251"
+			"/wd4996"
+			"/wd4146"
+	)
+endif()
+
+# Add include directories
+target_include_directories(libswarmio PUBLIC
+	"include"
+	"${CMAKE_CURRENT_BINARY_DIR}/include"
+)
+
+# Link libraries
+target_link_libraries(libswarmio
+	${G3LOG_LIBRARIES}
+	${LIBZMQ_LIBRARIES}
+	${CZMQ_LIBRARIES}
+	${ZYRE_LIBRARIES}
+	${Protobuf_LIBRARIES}
+)
+
+# Install library
+install(TARGETS libswarmio
+	EXPORT "libswarmio-targets"
+	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+	FRAMEWORK DESTINATION "Library/Frameworks"
+	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+)
+
+# Install PDB file
+if (MSVC)
+	install(
+		FILES "${CMAKE_CURRENT_BINARY_DIR}/\${CMAKE_INSTALL_CONFIG_NAME}/libswarmio.pdb"
+		DESTINATION ${CMAKE_INSTALL_BINDIR}
+	)
+endif()

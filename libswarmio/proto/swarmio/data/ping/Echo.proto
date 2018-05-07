@@ -1,0 +1,6 @@
+syntax = "proto3";
+package swarmio.data.ping;
+
+message Echo {
+    bytes payload = 1;
+}

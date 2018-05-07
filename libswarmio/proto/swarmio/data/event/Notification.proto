@@ -1,0 +1,9 @@
+syntax = "proto3";
+package swarmio.data.event;
+
+import "swarmio/data/Variant.proto";
+
+message Notification {
+	string name = 1;
+	map<string, Variant> parameters = 2;
+}
