@@ -77,7 +77,7 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 void Service::RegisterHandler(const std::string& name, Handler* handler)
 {
     // Sanity checks
-    CHECK(handler) << "Nullptr was supplied in shared pointer";
+    CHECK(handler != nullptr) << "Nullptr was supplied in shared pointer";
 
     // Add to map
     std::lock_guard<std::mutex> guard(_mutex);

@@ -226,7 +226,7 @@ namespace swarmio::simulator
                 }
                 else
                 {
-                    throw Exception("In memory parameter queried for unknown resource path.");
+                    return false;
                 }
             }
 
@@ -242,8 +242,8 @@ namespace swarmio::simulator
                     return true;
                 }
                 else
-                {
-                    throw Exception("In memory parameter queried for unknown resource path.");
+		{
+                    return false;
                 }
             }
 

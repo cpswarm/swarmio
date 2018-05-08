@@ -24,9 +24,6 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-# Set install dir
-set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install-prefix/${CMAKE_BUILD_TYPE}-${DEPENDENCIES_ARCH}")
-
 # Assemble common arguments
 set(DEPENDENCIES_CMAKE_ARGS 
     "-DCMAKE_CONFIGURATION_TYPES=${CMAKE_BUILD_TYPE}"
@@ -36,25 +33,39 @@ set(DEPENDENCIES_CMAKE_ARGS
     "-DCMAKE_MODULE_PATH=${CMAKE_CURRENT_SOURCE_DIR}/packages"
 )
 
-# Build g3log
-ExternalProject_Add(g3log
-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/g3log" 
-    INSTALL_COMMAND ""
-    CMAKE_ARGS 
-        ${DEPENDENCIES_CMAKE_ARGS}
-        "-DCHANGE_G3LOG_DEBUG_TO_DBUG=ON"
-)
+if (MSVC)
 
-# Copy g3log files
-ExternalProject_Add_Step(g3log copy-files 
-    WORKING_DIRECTORY "<BINARY_DIR>/${CMAKE_BUILD_TYPE}"
-    COMMAND ${CMAKE_COMMAND} -E copy "g3logger.dll" "g3logger.pdb" "${CMAKE_INSTALL_PREFIX}/bin"
-    COMMAND ${CMAKE_COMMAND} -E copy "g3logger.lib" "${CMAKE_INSTALL_PREFIX}/lib"
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "<SOURCE_DIR>/src/g3log" "${CMAKE_INSTALL_PREFIX}/include/g3log"
-    COMMAND ${CMAKE_COMMAND} -E copy "<BINARY_DIR>/include/g3log/generated_definitions.hpp" "${CMAKE_INSTALL_PREFIX}/include/g3log"
-    DEPENDEES build
-    ALWAYS TRUE
-)
+	# Build g3log
+	ExternalProject_Add(g3log
+	    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/g3log" 
+	    INSTALL_COMMAND ""
+	    CMAKE_ARGS 
+		${DEPENDENCIES_CMAKE_ARGS}
+		"-DCHANGE_G3LOG_DEBUG_TO_DBUG=ON"
+	)
+
+	# Copy g3log files
+	ExternalProject_Add_Step(g3log copy-files 
+	    WORKING_DIRECTORY "<BINARY_DIR>/${CMAKE_BUILD_TYPE}"
+	    COMMAND ${CMAKE_COMMAND} -E copy "g3logger.dll" "g3logger.pdb" "${CMAKE_INSTALL_PREFIX}/bin"
+	    COMMAND ${CMAKE_COMMAND} -E copy "g3logger.lib" "${CMAKE_INSTALL_PREFIX}/lib"
+	    COMMAND ${CMAKE_COMMAND} -E copy_directory "<SOURCE_DIR>/src/g3log" "${CMAKE_INSTALL_PREFIX}/include/g3log"
+	    COMMAND ${CMAKE_COMMAND} -E copy "<BINARY_DIR>/include/g3log/generated_definitions.hpp" "${CMAKE_INSTALL_PREFIX}/include/g3log"
+	    DEPENDEES build
+	    ALWAYS TRUE
+	)
+
+else()
+
+	# Build g3log
+	ExternalProject_Add(g3log
+	    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/g3log" 
+	    CMAKE_ARGS 
+		${DEPENDENCIES_CMAKE_ARGS}
+		"-DCHANGE_G3LOG_DEBUG_TO_DBUG=ON"
+	)
+
+endif()
 
 # Build replxx
 ExternalProject_Add(replxx

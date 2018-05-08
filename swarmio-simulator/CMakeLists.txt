@@ -15,7 +15,6 @@ target_include_directories(swarmio-simulator
 # Link libraries
 target_link_libraries(swarmio-simulator
 	libswarmio
-	${G3LOG_LIBRARIES}
 )
 
 # Install application

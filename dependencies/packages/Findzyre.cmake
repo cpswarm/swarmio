@@ -14,8 +14,7 @@ find_library(ZYRE_LIBRARIES
 find_file(ZYRE_DLL
     NAMES 
         "zyre.dll"
-        "zyre.so" 
-        "zyre.dylib" 
+        "libzyre.so" 
     HINTS 
         "${CMAKE_PREFIX_PATH}/bin"
         "${CMAKE_PREFIX_PATH}/lib"

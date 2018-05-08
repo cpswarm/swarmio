@@ -16,7 +16,6 @@ target_include_directories(swarmio-tool
 # Link libraries
 target_link_libraries(swarmio-tool
 	libswarmio
-	${G3LOG_LIBRARIES}
 	${REPLXX_LIBRARIES}
 )
 

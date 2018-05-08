@@ -1,7 +1,7 @@
 #pragma once
 
 #include <swarmio/Mailbox.h>
-#include <swarmio/services/Ping/TimingAwaiter.h>
+#include <swarmio/services/ping/TimingAwaiter.h>
 #include <swarmio/services/discovery/Discoverable.h>
 
 namespace swarmio::services::ping 

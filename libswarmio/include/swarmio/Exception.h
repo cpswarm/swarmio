@@ -34,7 +34,7 @@ namespace swarmio
              * 
              * @return const char* 
              */
-            const char* what() const override
+            const char* what() const noexcept override
             {
                 return _message.c_str();
             }

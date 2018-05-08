@@ -17,9 +17,6 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 # Use custom package find scripts
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dependencies/packages")
 
-# Use the include directory of the dependencies as a system location
-include_directories(SYSTEM "${CMAKE_PREFIX_PATH}/include")
-
 # Use GNUInstallDirs for determining the correct install locations
 include(GNUInstallDirs)
 
@@ -33,6 +30,11 @@ find_package(replxx REQUIRED)
 
 # Enable C++17
 set(CMAKE_CXX_STANDARD 17)
+
+# For GCC, link with the <filesystem> static library
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    link_libraries("stdc++fs")
+endif()
 
 # Build library
 add_subdirectory("libswarmio")
