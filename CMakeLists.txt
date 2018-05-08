@@ -46,7 +46,7 @@ add_subdirectory("swarmio-simulator")
 add_subdirectory("swarmio-tool")
 
 # Copy DLLs for debugging
-if (ENABLE_TARGET_DEBUGGING)
+if (MSVC AND ENABLE_COPY_LIBRARIES)
 
     # Build list of dependencies
     set(TARGET_DLL_DEPENDENCIES 
@@ -63,7 +63,7 @@ if (ENABLE_TARGET_DEBUGGING)
         COMMAND ${CMAKE_COMMAND} -E copy ${TARGET_DLL_DEPENDENCIES} "$<TARGET_FILE_DIR:swarmio-tool>"
         COMMAND ${CMAKE_COMMAND} -E copy ${TARGET_DLL_DEPENDENCIES} "$<TARGET_FILE_DIR:swarmio-simulator>"
         DEPENDS swarmio-simulator swarmio-tool
-        COMMENT "Copying DLL files to the output directory of the output executables"
+        COMMENT "Copying DLL files to the directory of the output executables"
     )
     
 endif()
