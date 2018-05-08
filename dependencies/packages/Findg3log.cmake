@@ -17,7 +17,7 @@ find_library(G3LOG_LIBRARIES
 find_file(G3LOG_DLL
     NAMES 
         "g3logger.dll"
-	"libg3logger.so"
+        "libg3logger.so"
     HINTS 
         "${CMAKE_PREFIX_PATH}/bin"
         "${CMAKE_PREFIX_PATH}/lib"

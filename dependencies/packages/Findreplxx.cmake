@@ -7,8 +7,8 @@ find_path(REPLXX_INCLUDE_DIRS
 # Get library path
 find_library(REPLXX_LIBRARIES
     NAMES 
-	"replxx-d"
-	"libreplxx.a"
+        "replxx-d"
+        "libreplxx.a"
     HINTS "${CMAKE_PREFIX_PATH}/lib"
 )
 

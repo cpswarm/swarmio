@@ -7,13 +7,6 @@ project(swarmio-dependencies)
 # Use ExternalProject for the superbuild
 include(ExternalProject)
 
-# Determine architecture
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    set(DEPENDENCIES_ARCH "x64")
-else()
-    set(DEPENDENCIES_ARCH "x86")
-endif()
-
 # If not explicitly specified, provide a sane default for the build type
 if (NOT CMAKE_BUILD_TYPE)
     if (EXISTS "${CMAKE_SOURCE_DIR}/../.git")
