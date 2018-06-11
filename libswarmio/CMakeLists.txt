@@ -1,5 +1,11 @@
+# Set minimum required version and baseline policy
+cmake_minimum_required(VERSION 3.5)
+
 # Declare project
 project(libswarmio LANGUAGES CXX)
+
+# Enable C++17
+set(CMAKE_CXX_STANDARD 17)
 
 # Add target
 add_library(libswarmio SHARED
@@ -62,14 +68,13 @@ foreach(_source ${_sources})
 		# Generate sources
 		add_custom_command(
 			OUTPUT ${_outputs}
-			COMMAND protobuf::protoc
+			COMMAND ${TOOL_PROTOC}
 			ARGS 
 				--cpp_out dllexport_decl=SWARMIO_API:${CMAKE_CURRENT_BINARY_DIR}/include 
 				--proto_path ${CMAKE_CURRENT_SOURCE_DIR}/proto 
 				${CMAKE_CURRENT_SOURCE_DIR}/${_source}
 			DEPENDS
 				${_source} 
-				protobuf::protoc
 			COMMENT "Running CPP protocol buffer compiler on ${_source}"
 			VERBATIM
 		)
@@ -96,45 +101,71 @@ else()
 	)
 endif()
 
-# Disable Protobuf warnings
-if (MSVC)
-	target_compile_options(libswarmio 
-		PRIVATE 
-			"/wd4251"
-			"/wd4996"
-			"/wd4146"
-	)
-endif()
-
 # Add include directories
 target_include_directories(libswarmio PUBLIC
-	"include"
-	"${CMAKE_CURRENT_BINARY_DIR}/include"
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+	$<INSTALL_INTERFACE:include>
 )
+
+# Find required packages
+find_package(libzmq REQUIRED)
+find_package(czmq REQUIRED)
+find_package(zyre REQUIRED)
+find_package(protobuf REQUIRED)
+find_package(g3log REQUIRED)
+find_package(readerwriterqueue REQUIRED)
+find_package(concurrentqueue REQUIRED)
 
 # Link libraries
 target_link_libraries(libswarmio PUBLIC
-        protobuf::libprotobuf
-	${G3LOG_LIBRARIES}
+	${PROTOBUF_LIBRARIES}
 	${LIBZMQ_LIBRARIES}
 	${CZMQ_LIBRARIES}
 	${ZYRE_LIBRARIES}
+	${G3LOG_LIBRARIES}
 )
 
+# Add library include paths
+target_include_directories(libswarmio PUBLIC
+	${PROTOBUF_INCLUDE_DIRS}
+	${LIBZMQ_INCLUDE_DIRS}
+	${CZMQ_INCLUDE_DIRS}
+	${ZYRE_INCLUDE_DIRS}
+	${G3LOG_INCLUDE_DIRS}
+	${READERWRITERQUEUE_INCLUDE_DIRS}
+	${CONCURRENTQUEUE_INCLUDE_DIRS}
+)
+
+# Use GNUInstallDirs to determine directories
+include(GNUInstallDirs)
+
 # Install library
-install(TARGETS libswarmio
-	EXPORT "libswarmio-targets"
+install(
+	TARGETS libswarmio
+	EXPORT libswarmio-config
 	ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 	RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-	FRAMEWORK DESTINATION "Library/Frameworks"
-	PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# Install PDB file
-if (MSVC)
-	install(
-		FILES "${CMAKE_CURRENT_BINARY_DIR}/\${CMAKE_INSTALL_CONFIG_NAME}/libswarmio.pdb"
-		DESTINATION ${CMAKE_INSTALL_BINDIR}
-	)
-endif()
+# Install headers
+install(
+	DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/"
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+	FILES_MATCHING PATTERN "*.h"
+)
+
+# Install compiled protobuf headers
+install(
+	DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include/"
+	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+	FILES_MATCHING PATTERN "*.h"
+)
+
+# Install export file
+install(
+	EXPORT libswarmio-config
+	DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/libswarmio"
+)
+

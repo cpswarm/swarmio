@@ -10,27 +10,15 @@ find_library(ZYRE_LIBRARIES
     HINTS "${CMAKE_PREFIX_PATH}/lib"
 )
 
-# Get DLL path
-find_file(ZYRE_DLL
-    NAMES 
-        "zyre.dll"
-        "libzyre.so" 
-    HINTS 
-        "${CMAKE_PREFIX_PATH}/bin"
-        "${CMAKE_PREFIX_PATH}/lib"
-)
-
 # Set required variables
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(ZYRE
     REQUIRED_VARS 
         ZYRE_LIBRARIES 
         ZYRE_INCLUDE_DIRS
-        ZYRE_DLL
 )
 mark_as_advanced(
     ZYRE_FOUND
     ZYRE_LIBRARIES 
-    ZYRE_INCLUDE_DIRS
-    ZYRE_DLL
+    ZYRE_INCLUDE_DIRS    
 )

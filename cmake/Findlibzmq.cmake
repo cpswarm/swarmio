@@ -47,23 +47,6 @@ if (LIBZMQ_INCLUDE_DIRS)
             HINTS "${CMAKE_PREFIX_PATH}/lib"
         )
 
-        # Append dynamic library extension
-        set (LIBZMQ_NAMES_DLL)
-        foreach(name ${LIBZMQ_NAMES_LIB})
-            list(APPEND LIBZMQ_NAMES_DLL "${name}.dll")
-            list(APPEND LIBZMQ_NAMES_DLL "${name}.so")
-            list(APPEND LIBZMQ_NAMES_DLL "${name}.dylib")
-        endforeach()
-
-        # Find dynamic library
-        find_file(LIBZMQ_DLL
-            NAMES
-                ${LIBZMQ_NAMES_DLL}
-            HINTS 
-                "${CMAKE_PREFIX_PATH}/bin"
-                "${CMAKE_PREFIX_PATH}/lib"
-        )
-
     endif()
 endif()
 
@@ -80,5 +63,4 @@ mark_as_advanced(
     LIBZMQ_FOUND
     LIBZMQ_LIBRARIES 
     LIBZMQ_INCLUDE_DIRS
-    LIBZMQ_DLL
 )

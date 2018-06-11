@@ -3,7 +3,6 @@
 #include <swarmio/Exception.h>
 #include <czmq.h>
 #include <iostream>
-#include <experimental/filesystem>
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
 
@@ -11,7 +10,7 @@ int main(int argc, const char* argv[])
 {
     // Initialize logging
     auto worker = g3::LogWorker::createLogWorker();
-    worker->addDefaultLogger(std::experimental::filesystem::v1::path(argv[0]).stem().string(), ".");
+    worker->addDefaultLogger("swarmio-simulator", ".");
     initializeLogging(worker.get());
 
     // Wrap to trigger destructors before shutdown

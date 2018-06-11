@@ -1,0 +1,66 @@
+-----------------
+Building on Linux
+-----------------
+
+By default, everything is compiled for the current computer,
+but cross-compilation is available. Currently armhf and
+aarch64 are supported if the required tools are available.
+
+There are three build modes you can choose from:
+
+ - DEVELOPMENT (default)
+ 
+ Development mode will put all dependencies under the 
+ build directory by default, and leave the core targets
+ in their respective output directories. Useful when an
+ IDE needs a full include path or to build dependencies 
+ into a binary archive. By default, find dependencies 
+ in the "devtree-<ARCH>" subdirectory.
+ 
+ - PACKAGE
+ 
+ Package mode will build .deb packages for each target -
+ and set /opt as the install prefix. Find the packages
+ under the "packages" subdirectory.
+ 
+ - INSTALL
+ 
+ Install will install all outputs onto the local machine,
+ by default under /opt.
+ 
+
+To build, create a new directory outside the source tree, 
+and issue the following commands inside it:
+
+ cmake <PATH TO SOURCE> [optional parameters]
+ cmake --build .
+ 
+Optional parameters:
+ -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (armhf or aarch64)
+ -DSWARMIO_BUILD_MODE=<MODE> (DEVELOPMENT, PACKAGE or INSTALL)
+ -DCMAKE_INSTALL_PREFIX=<PATH>
+ 
+-------------------
+Building on Windows
+-------------------
+
+On Windows, only DEVELOPMENT mode is supported, and all
+executables will be copied into the "devtree-<ARCH>/bin"
+since DLL loading won't work otherwise. 
+
+To build, create a new directory outside the source tree, 
+and issue the following commands inside it:
+
+ cmake <PATH TO SOURCE> [optional parameters]
+ cmake --build .
+ 
+Optional parameters:
+ -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (x86 or x64)
+ -DSWARMIO_HOST_ARCHITECTURE=<ARCH> (x86 or x64)
+ -DCMAKE_INSTALL_PREFIX=<PATH>
+ 
+(Setting the host architecture can be used to run either the
+x86 or x64 executable of the MSVC compiler, and has no other 
+effect on the output.)
+compiler 
+
