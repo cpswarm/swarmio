@@ -506,6 +506,32 @@ ExternalProject_Add(readerwriterqueue
     COMMAND ${CMAKE_COMMAND} -E copy "<SOURCE_DIR>/readerwriterqueue.h" "<SOURCE_DIR>/atomicops.h" "<INSTALL_DIR>/include"
 )
 
+# Set libconfig install dir
+if (NOT SWARMIO_BUILD_MODE STREQUAL "DEVELOPMENT")
+    set(LIBCONFIG_DIR "${CMAKE_CURRENT_BINARY_DIR}/libconfig-${SWARMIO_TARGET_ARCHITECTURE}-output")
+else()
+    set(LIBCONFIG_DIR ${CMAKE_INSTALL_PREFIX})
+endif()
+
+# Build libconfig
+ExternalProject_Add(libconfig
+    GIT_REPOSITORY "https://github.com/hyperrealm/libconfig.git"
+    GIT_TAG "9716f6224cdbc9f8bf3c8d3759a9fb3f864155df"
+    GIT_SHALLOW ON
+    PREFIX "libconfig-${SWARMIO_TARGET_ARCHITECTURE}"
+    INSTALL_DIR ${LIBCONFIG_DIR}
+    CMAKE_ARGS 
+        ${SWARMIO_SUBPROJECT_TARGET_ARGS}
+        "-DBUILD_TESTS=OFF"
+        "-DBUILD_EXAMPLES=OFF"
+        "-DBUILD_SHARED_LIBS=ON"
+)
+
+# Build libconfig package
+if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
+    ExternalProject_Build_Package(libconfig "1.7.2" ${SWARMIO_TARGET_ARCHITECTURE})
+endif()
+
 # Set libswarmio install dir - on Windows, we have to put all binaries together for DLL resolution to work
 if (NOT MSVC)
 	set(LIBSWARMIO_DIR "${CMAKE_CURRENT_BINARY_DIR}/libswarmio-${SWARMIO_TARGET_ARCHITECTURE}-output")
