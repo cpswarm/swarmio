@@ -195,7 +195,7 @@ if (MSVC)
 endif()
 
 # Define a function to build packages
-function(ExternalProject_Build_Package TARGET PACKAGE_VERSION PACKAGE_ARCH)
+function(ExternalProject_Build_Package TARGET PACKAGE_VERSION)
 
     # Build package name
     string(FIND "${TARGET}" "swarmio-" _position)
@@ -210,9 +210,12 @@ function(ExternalProject_Build_Package TARGET PACKAGE_VERSION PACKAGE_ARCH)
     set(PACKAGE_OUTPUT_FILE "packages/${PACKAGE_NAME}-${SWARMIO_TARGET_ARCHITECTURE}.deb")
 
     # Build dependency list
-    if (ARGC GREATER 3)
+    if (ARGC GREATER 2)
         string(REPLACE ";" ", " PACKAGE_DEPENDS "${ARGN}")
     endif()
+
+    # Set architecture
+    set(PACKAGE_ARCH ${SWARMIO_TARGET_ARCHITECTURE})
 
     # Generate package descriptor
     configure_file("cmake/control.tpl" ${PACKAGE_CONTROL_FILE})
@@ -253,7 +256,7 @@ ExternalProject_Add(libzmq
 
 # Build libzmq package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(libzmq "4.2.5-dev" ${SWARMIO_TARGET_ARCHITECTURE})
+    ExternalProject_Build_Package(libzmq "4.2.5-dev")
 endif()
 
 # Set czmq install dir
@@ -278,7 +281,7 @@ ExternalProject_Add(czmq
 
 # Build czmq package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(czmq "4.1.1" ${SWARMIO_TARGET_ARCHITECTURE} "swarmio-libzmq")
+    ExternalProject_Build_Package(czmq "4.1.1" "swarmio-libzmq")
 endif()
 
 # Set zyre install dir
@@ -304,7 +307,7 @@ ExternalProject_Add(zyre
 
 # Build zyre package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(zyre "2.0.0" ${SWARMIO_TARGET_ARCHITECTURE} "swarmio-libzmq" "swarmio-czmq")
+    ExternalProject_Build_Package(zyre "2.0.0" "swarmio-libzmq" "swarmio-czmq")
 endif()
 
 # Set replxx install dir
@@ -327,7 +330,7 @@ ExternalProject_Add(replxx
 
 # Build replxx package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(replxx "0.0.1" ${SWARMIO_TARGET_ARCHITECTURE})
+    ExternalProject_Build_Package(replxx "0.0.1")
 endif()
 
 # Set protobuf install dir
@@ -399,7 +402,7 @@ endif()
 
 # Build protobuf package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(protobuf "3.6.0.1" ${SWARMIO_TARGET_ARCHITECTURE})
+    ExternalProject_Build_Package(protobuf "3.6.0.1")
 endif()
 
 # Set g3log install dir
@@ -462,7 +465,7 @@ if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
 	)
 
 	# Build actual package
-	ExternalProject_Build_Package(g3log "1.3.2" ${SWARMIO_TARGET_ARCHITECTURE})
+	ExternalProject_Build_Package(g3log "1.3.2")
 
 endif()
 
@@ -529,7 +532,7 @@ ExternalProject_Add(libconfig
 
 # Build libconfig package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(libconfig "1.7.2" ${SWARMIO_TARGET_ARCHITECTURE})
+    ExternalProject_Build_Package(libconfig "1.7.2")
 endif()
 
 # Set libswarmio install dir - on Windows, we have to put all binaries together for DLL resolution to work
@@ -559,7 +562,7 @@ endif()
 
 # Build libswarmio package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(libswarmio ${PROJECT_VERSION} ${SWARMIO_TARGET_ARCHITECTURE} "swarmio-libzmq" "swarmio-czmq" "swarmio-zyre" "swarmio-protobuf" "swarmio-g3log")
+    ExternalProject_Build_Package(libswarmio ${PROJECT_VERSION} "swarmio-libzmq" "swarmio-czmq" "swarmio-zyre" "swarmio-protobuf" "swarmio-g3log")
 endif()
 
 # For DEVELOPMENT builds, add the libswarmio output directory to RPATH
@@ -591,7 +594,7 @@ ExternalProject_Add(swarmio-tool
 
 # Build swarmio-tool package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(swarmio-tool ${PROJECT_VERSION} ${SWARMIO_TARGET_ARCHITECTURE} "swarmio-libswarmio" "swarmio-replxx")
+    ExternalProject_Build_Package(swarmio-tool ${PROJECT_VERSION} "swarmio-libswarmio" "swarmio-replxx")
 endif()
 
 # Set swarmio-tool install dir - on Windows, we have to put all binaries together for DLL resolution to work
@@ -615,5 +618,5 @@ ExternalProject_Add(swarmio-simulator
 
 # Build swarmio-simulator package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(swarmio-simulator ${PROJECT_VERSION} ${SWARMIO_TARGET_ARCHITECTURE} "swarmio-libswarmio")
+    ExternalProject_Build_Package(swarmio-simulator ${PROJECT_VERSION} "swarmio-libswarmio")
 endif()
