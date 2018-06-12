@@ -22,28 +22,24 @@ set (SWARMIO_SUBPROJECT_TARGET_ARGS
 
 # Get host package architecture
 if (MSVC)
-
-	# Default to x86 builds
-	if (NOT DEFINED SWARMIO_TARGET_ARCHITECTURE)
-		set(SWARMIO_TARGET_ARCHITECTURE "x86")
-	endif()
 	
 	# Set target platform
-	if (SWARMIO_TARGET_ARCHITECTURE STREQUAL "x86")
-		list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS 
-			"-GVisual Studio 15 2017"
-			"-DCMAKE_GENERATOR_PLATFORM=x86"
-		)
-	elseif(SWARMIO_TARGET_ARCHITECTURE STREQUAL "x64")
+	if(SWARMIO_TARGET_ARCHITECTURE STREQUAL "x64" OR CMAKE_GENERATOR_PLATFORM STREQUAL "x64")
+		set(SWARMIO_TARGET_ARCHITECTURE "x64")
 		list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS 
 			"-GVisual Studio 15 2017"
 			"-DCMAKE_GENERATOR_PLATFORM=x64"
+		)
+	elseif (SWARMIO_TARGET_ARCHITECTURE STREQUAL "x86" OR NOT DEFINED SWARMIO_TARGET_ARCHITECTURE)
+		set(SWARMIO_TARGET_ARCHITECTURE "x86")
+		list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS 
+			"-GVisual Studio 15 2017"
 		)
 	else()
 		message(FATAL_ERROR "Unknown target architecture specified")
 	endif()
 	
-	# Determine host architecture
+	# Set host architecture
 	if (SWARMIO_HOST_ARCHITECTURE STREQUAL "x64" OR CMAKE_SIZEOF_VOID_P EQUAL 8)
 		set(SWARMIO_HOST_ARCHITECTURE "x64")
 		list(APPEND SWARMIO_SUBPROJECT_HOST_ARGS 
@@ -54,11 +50,10 @@ if (MSVC)
 		list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS 
 			"-Tv141,host=x64"
 		)
-	elseif (NOT DEFINED SWARMIO_HOST_ARCHITECTURE OR SWARMIO_HOST_ARCHITECTURE STREQUAL "x86")
+	elseif (SWARMIO_HOST_ARCHITECTURE STREQUAL "x86" OR NOT DEFINED SWARMIO_HOST_ARCHITECTURE)
 		set(SWARMIO_HOST_ARCHITECTURE "x86")
 		list(APPEND SWARMIO_SUBPROJECT_HOST_ARGS 
 			"-GVisual Studio 15 2017"
-			"-DCMAKE_GENERATOR_PLATFORM=x86"
 			"-Tv141"
 		)
 		list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS 
@@ -99,6 +94,7 @@ else()
 endif()
 
 # Show architecture
+message(STATUS "Host architecture: ${SWARMIO_HOST_ARCHITECTURE}")
 message(STATUS "Target architecture: ${SWARMIO_TARGET_ARCHITECTURE}")
 
 # Are we building in development, install or package mode?
@@ -163,8 +159,12 @@ else()
     endif()
 
     # Show mode
-    message(STATUS "Mode: install dependencies to ${CMAKE_INSTALL_PREFIX}, keep core project outputs separate")
-
+	if (MSVC)
+		message(STATUS "Mode: install everything to ${CMAKE_INSTALL_PREFIX}")
+	else()
+		message(STATUS "Mode: install dependencies to ${CMAKE_INSTALL_PREFIX}, keep core project outputs separate")
+	endif()
+	
 endif()
 
 # If using MSVC, pass build type specification onto subprojects
