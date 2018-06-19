@@ -6,10 +6,10 @@
 namespace swarmio::services::keyvalue
 {
     /**
-     * @brief An Awaiter that checks whether the operation was a success.
+     * @brief An Awaiter that returns the requested value.
      * 
      */
-    class SWARMIO_API ValueAwaiter : public Awaiter<data::Variant>
+    class SWARMIO_API ValueAwaiter final : public Awaiter<data::Variant>
     {
         private:
 

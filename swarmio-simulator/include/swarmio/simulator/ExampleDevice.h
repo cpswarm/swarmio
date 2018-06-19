@@ -18,6 +18,12 @@ namespace swarmio::simulator
         private:
 
             /**
+             * @brief Number of incoming messages
+             * 
+             */
+            uint32_t _messageCounter = 0;
+
+            /**
              * @brief Event handlers
              * 
              */
@@ -52,6 +58,24 @@ namespace swarmio::simulator
              * @param parameter Parameter
              */
             void AddInMemoryParameter(InMemoryParameter* parameter);
+
+            /**
+             * @brief Update a telemetry value
+             * 
+             * @param key Key
+             * @param value Value
+             */
+            void SetTelemetryValue(const std::string& key, const data::Variant& value);
+
+            /**
+             * @brief Delivery point of all messages
+             * 
+             * @param sender The node that has sent the message
+             * @param message The message itself
+             * @returns True if the message had been processed and should 
+             *          not be forwarded to other mailboxes
+             */
+            virtual bool ReceiveMessage(const Node* sender, const data::Message* message) override;
 
             /**
              * @brief Destroy the Example Device object

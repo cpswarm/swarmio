@@ -111,7 +111,7 @@ namespace swarmio::simulator
              * 
              * @return data::Variant 
              */
-            virtual data::Variant Get(const std::string& path) const 
+            virtual data::Variant Get(const std::string& path) 
             {
                 if (path == _path)
                 {

@@ -1,5 +1,6 @@
 #include <swarmio/tool/Loop.h>
 #include <swarmio/tool/Command.h>
+#include <swarmio/services/telemetry/Service.h>
 #include <swarmio/Exception.h>
 #include <iomanip>
 #include <iostream>
@@ -11,8 +12,8 @@ using namespace swarmio;
 using namespace swarmio::tool;
 using namespace std::literals::chrono_literals;
 
-Loop::Loop(Endpoint* endpoint)
-    : ClientProfile(endpoint)
+Loop::Loop(Endpoint* endpoint, LogBuffer* logBuffer)
+    : ClientProfile(endpoint), _logBuffer(logBuffer)
 {
     _repl.install_window_change_handler();
     _repl.set_highlighter_callback(&Command::HighlighterCallback, nullptr);
@@ -80,7 +81,7 @@ void Loop::ExecuteInfoCommand(const Command& command)
     if (_selectedNode != nullptr)
     {  
         // UUID
-        std::cout << "UUID: " << _selectedNode->GetUUID() << "\n";
+        std::cout << "UUID: " << _selectedNode->GetUUID() << std::endl;
 
         // Send request
         auto awaiter = _discoveryService.CachedQuery(_selectedNode);
@@ -91,12 +92,12 @@ void Loop::ExecuteInfoCommand(const Command& command)
             auto response = awaiter.GetResponse();
 
             // Echo support
-            std::cout << "Pingable: " << (response.echo() ? "true" : "false") << "\n";
+            std::cout << "Pingable: " << (response.echo() ? "true" : "false") << std::endl;
 
             // Keys
             if (response.keyvalue_size() > 0)
             {
-                std::cout << "Parameters:" << "\n";
+                std::cout << "Parameters:" << std::endl;
                 for (auto kv : response.keyvalue())
                 {
                     std::cout << " - " << kv.name() << ":" << kv.type();
@@ -116,14 +117,14 @@ void Loop::ExecuteInfoCommand(const Command& command)
                     {
                         std::cout << " (na)";
                     }
-                    std::cout << "\n";
+                    std::cout << std::endl;
                 }
             }
 
             // Events
             if (response.event_size() > 0)
             {
-                std::cout << "Events:" << "\n";
+                std::cout << "Events:" << std::endl;
                 for (auto ev : response.event())
                 {
                     std::cout << " - " << ev.name();
@@ -145,25 +146,35 @@ void Loop::ExecuteInfoCommand(const Command& command)
                         }
                         std::cout << ")";
                     }
-                    std::cout << "\n";
+                    std::cout << std::endl;
+                }
+            }
+
+            // Telemetry
+            if (response.telemetry_size() > 0)
+            {
+                std::cout << "Telemetry:" << std::endl;
+                for (auto tm : response.telemetry())
+                {
+                    std::cout << " - " << tm.name() << ":" << tm.type() << std::endl;
                 }
             }
         }
         else
         {
-            std::cout << "Discovery timed out." << "\n";
+            std::cout << "Discovery timed out." << std::endl;
         }
     }
     else
     {
-        std::cout << "No member selected." << "\n";
+        std::cout << "No member selected." << std::endl;
     }
 }
 
 void Loop::ExecuteRediscoverCommand(const Command& command)
 {
     _discoveryService.GlobalQuery();
-    std::cout << "A global discovery request was sent." << "\n";
+    std::cout << "A global discovery request was sent." << std::endl;
 }
 
 void Loop::ExecuteGetCommand(const Command& command)
@@ -179,39 +190,39 @@ void Loop::ExecuteGetCommand(const Command& command)
                 switch (value.value_case())
                 {
                     case data::Variant::ValueCase::kBoolValue:
-                        std::cout << (value.bool_value() ? "true" : "false") << "\n";
+                        std::cout << (value.bool_value() ? "true" : "false") << std::endl;
                         break;
 
                     case data::Variant::ValueCase::kDoubleValue:
-                        std::cout << value.double_value() << "\n";
+                        std::cout << value.double_value() << std::endl;
                         break;
 
                     case data::Variant::ValueCase::kIntValue:
-                        std::cout << value.int_value() << "\n";
+                        std::cout << value.int_value() << std::endl;
                         break;
 
                     case data::Variant::ValueCase::kStringValue:
-                        std::cout << value.string_value() << "\n";
+                        std::cout << "\"" << value.string_value() << "\"" << std::endl;
                         break;
 
                     default:
-                        std::cout << "Unknown value type." << "\n";
+                        std::cout << "<unknown>" << std::endl;
                         break;
                 }
             }
             else
             {
-                std::cout << "Timeout." << "\n";
+                std::cout << "Timeout." << std::endl;
             }
         }
         else
         {
-            std::cout << "No resource path specified." << "\n";
+            std::cout << "No resource path specified." << std::endl;
         }
     }
     else
     {
-        std::cout << "No member selected." << "\n";
+        std::cout << "No member selected." << std::endl;
     }
 }
 
@@ -227,26 +238,26 @@ void Loop::ExecuteSetCommand(const Command& command)
             {
                 if (awaiter.GetResponse())
                 {
-                     std::cout << "Value was set." << "\n";
+                     std::cout << "Value was set." << std::endl;
                 }
                 else
                 {
-                    std::cout << "Request rejected." << "\n";
+                    std::cout << "Request rejected." << std::endl;
                 }
             }
             else
             {
-                std::cout << "Timeout." << "\n";
+                std::cout << "Timeout." << std::endl;
             }
         }
         else
         {
-            std::cout << "Invalid number of parameters." << "\n";
+            std::cout << "Invalid number of parameters." << std::endl;
         }
     }
     else
     {
-        std::cout << "No member selected." << "\n";
+        std::cout << "No member selected." << std::endl;
     }
 }
 
@@ -264,7 +275,7 @@ void Loop::ExecutePingCommand(const Command& command)
             // Check
             if (size < 0 || size > 1024 * 1024 * 256)
             {
-                std::cout << "Invalid ping packet size." << "\n";
+                std::cout << "Invalid ping packet size." << std::endl;
             }
         }
         
@@ -274,16 +285,16 @@ void Loop::ExecutePingCommand(const Command& command)
         // Wait for request
         if (awaiter.WaitForResponse(5s))
         {
-            std::cout << "Response time: " << std::fixed << std::setprecision(2) << awaiter.GetResponseInMilliseconds() << "ms" << "\n";
+            std::cout << "Response time: " << std::fixed << std::setprecision(2) << awaiter.GetResponseInMilliseconds() << "ms" << std::endl;
         }
         else
         {
-            std::cout << "Timeout." << "\n";
+            std::cout << "Timeout." << std::endl;
         }
     }
     else
     {
-        std::cout << "No member selected." << "\n";
+        std::cout << "No member selected." << std::endl;
     }
 }
 
@@ -305,7 +316,7 @@ void Loop::ExecuteEventCommand(const Command& command)
         if (_selectedNode == nullptr)
         {
             services::event::Service::Trigger(GetEndpoint(), event);
-            std::cout << "Event broadcasted." << "\n";
+            std::cout << "Event broadcasted." << std::endl;
         }
         else
         {
@@ -314,22 +325,22 @@ void Loop::ExecuteEventCommand(const Command& command)
             {
                 if (awaiter.GetResponse())
                 {
-                    std::cout << "Event handled remotely." << "\n";
+                    std::cout << "Event handled remotely." << std::endl;
                 }
                 else
                 {
-                    std::cout << "Event rejected." << "\n";
+                    std::cout << "Event rejected." << std::endl; 
                 }
             }
             else
             {
-                std::cout << "Timeout." << "\n";
+                std::cout << "Timeout." << std::endl;
             }
         }
     }
     else
     {
-        std::cout << "No event specified." << "\n";
+        std::cout << "No event specified." << std::endl;
     }
 }
 
@@ -339,17 +350,17 @@ void Loop::ExecuteMembersCommand(const Command& command)
     if (_nodes.size() > 0)
     {
         // Header
-        std::cout << "MID" << "\t" << "UUID" << "\n";
+        std::cout << "MID" << "\t" << "UUID" << std::endl;
 
         // List nodes
         for (int i = 0; i < _nodes.size(); ++i)
         {
-            std::cout << i << "\t" << _nodes[i]->GetUUID() << "\t" << _nodes[i]->GetDescription() << "\n";
+            std::cout << i << "\t" << _nodes[i]->GetUUID() << "\t" << _nodes[i]->GetDescription() << std::endl;
         }
     }
     else
     {
-        std::cout << "No swarm members found." << "\n";
+        std::cout << "No swarm members found." << std::endl;
     }
 }
 
@@ -366,22 +377,145 @@ void Loop::ExecuteSelectCommand(const Command& command)
         if (idx >= 0 && idx < _nodes.size())
         {
             _selectedNode = _nodes[idx];
-            std::cout << "Member selected: " << _selectedNode->GetUUID() << "\n";
+            std::cout << "Member selected: " << _selectedNode->GetUUID() << std::endl;
         }
         else
         {
-            std::cout << "Invalid member index." << "\n";
+            std::cout << "Invalid member index." << std::endl;
         }
     }
     else if (_selectedNode != nullptr)
     {
         _selectedNode = nullptr;
-        std::cout << "Member unselected." << "\n";
+        std::cout << "Member unselected." << std::endl;
     }
     else
     {
-        std::cout << "No effect, no member was selected." << "\n"
-                    << "To select a member, specify a MID." << "\n";
+        std::cout << "No effect, no member was selected." << std::endl
+                    << "To select a member, specify a MID." << std::endl;
+    }
+}
+
+void Loop::ExecuteSubscriptionsCommand(const Command& command)
+{
+    if (_subscriptions.size() > 0)
+    {
+        for (auto& subscription : _subscriptions)
+        {
+            std::cout << "Subscription #" << subscription.GetIdentifier() << std::endl;
+            std::cout << "  " << "Node: " << subscription.GetTarget()->GetUUID() << std::endl;
+            if (subscription.WaitForResponse(0ms))
+            {
+                auto response = subscription.GetResponse();
+
+                // Tick
+                std::cout << "  " << "Tick: " << response.tick() << std::endl;
+
+                // Values
+                if (response.values_size() > 0)
+                {
+                    std::cout << "  " << "Current values:" << std::endl;
+                    for (auto& pair : subscription.GetResponse().values())
+                    {
+                        std::cout << "  " << " - " << pair.first << "=";
+                        switch (pair.second.value_case())
+                        {
+                            case swarmio::data::Variant::ValueCase::kBoolValue:
+                                std::cout << pair.second.bool_value() ? "true" : "false";
+                                break;
+                            case swarmio::data::Variant::ValueCase::kDoubleValue:
+                                std::cout << pair.second.double_value();
+                                break;
+                            case swarmio::data::Variant::ValueCase::kIntValue:
+                                std::cout << pair.second.int_value();
+                                break;
+                            case swarmio::data::Variant::ValueCase::kStringValue:
+                                std::cout << "\"" << pair.second.string_value() << "\"";
+                                break;
+                            default:
+                                std::cout << "<unknown>";
+                                break;
+                        }
+                        std::cout << std::endl;
+                    }
+                }
+                else
+                {
+                    std::cout << "  " << "Last update was empty." << std::endl;
+                }
+            }
+            else
+            {
+                std::cout << "  " << "No update received so far." << std::endl;
+            }
+        }
+    }
+    else
+    {
+        std::cout << "No subscriptions." << std::endl;
+    }
+}
+
+void Loop::ExecuteSubscribeCommand(const Command& command)
+{
+    if (_selectedNode != nullptr)
+    {
+        // Determine interval
+        uint32_t interval = 1;
+        auto intervalParameter = command.GetParameters().find("interval");
+        if (intervalParameter != command.GetParameters().end())
+        {
+            interval = std::stoi(intervalParameter->second);
+        }
+
+        // Determine keys
+        std::list<std::string> keys;
+        auto keyParameter = command.GetParameters().find("key");
+        if (keyParameter != command.GetParameters().end())
+        {
+            keys.push_back(keyParameter->second);
+        }
+
+        // Submit request
+        _subscriptions.emplace_back(services::telemetry::Service::Subscribe(GetEndpoint(), _selectedNode, interval, keys));
+
+        // Success
+        std::cout << "Subscribed." << std::endl;
+    }
+    else
+    {
+        // Error
+        std::cout << "No member selected." << std::endl;
+    }
+}
+
+void Loop::ExecuteUnsubscribeCommand(const Command& command)
+{
+    uint64_t identifier = std::stoi(command.GetPath());
+    auto element = std::find_if(_subscriptions.begin(), _subscriptions.end(), [identifier](const services::telemetry::UpdateAwaiter& awaiter){ return awaiter.GetIdentifier() == identifier; });
+    if (element != _subscriptions.end())
+    {
+        _subscriptions.erase(element);
+        std::cout << "Unsubcribed." << std::endl;
+    }    
+    else
+    {
+        std::cout << "Not found." << std::endl;
+    }
+}
+
+void Loop::ExecuteLogCommand(const Command& command)
+{
+    if (_logBuffer != nullptr)
+    {
+        for (auto& message : _logBuffer->GetMessages())
+        {
+            std::cout << message.timestamp() << "\t" << message.level() << "\t" << message.message() << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "No log buffer found." << std::endl;
     }
 }
 
@@ -425,25 +559,45 @@ bool Loop::ExecuteCommand(const std::string& input)
         {
             ExecuteGetCommand(command);
         }
+        else if (command.Is("subscriptions"))
+        {
+            ExecuteSubscriptionsCommand(command);
+        }
+        else if (command.Is("subscribe"))
+        {
+            ExecuteSubscribeCommand(command);
+        }
+        else if (command.Is("unsubscribe"))
+        {
+            ExecuteUnsubscribeCommand(command);
+        }
+        else if (command.Is("log"))
+        {
+            ExecuteLogCommand(command);
+        }
         else if (command.Is("help"))
         {
             // Display help
-            std::cout << "Available commands:"           << "\n"
-                      << " - members"                    << "\n"
-                      << " - rediscover"                 << "\n"
-                      << " - info"                       << "\n"
-                      << " - select [MID]"               << "\n"
-                      << " - event NAME [KEY=VALUE]..."  << "\n"
-                      << " - get KEY"                    << "\n"
-                      << " - set KEY=VALUE"              << "\n"
-                      << " - ping [SIZE]"                << "\n"
-                      << " - help"                       << "\n"
-                      << " - exit"                       << "\n";
+            std::cout << "Available commands:"                       << std::endl
+                      << " - members"                                << std::endl
+                      << " - rediscover"                             << std::endl
+                      << " - info"                                   << std::endl
+                      << " - select [MID]"                           << std::endl
+                      << " - event NAME [KEY=VALUE]..."              << std::endl
+                      << " - get KEY"                                << std::endl
+                      << " - set KEY=VALUE"                          << std::endl
+                      << " - subscriptions"                          << std::endl
+                      << " - subscribe [key=KEY] [interval=N]"       << std::endl
+                      << " - unsubscribe [SID]"                      << std::endl
+                      << " - ping [SIZE]"                            << std::endl
+                      << " - help"                                   << std::endl
+                      << " - log"                                    << std::endl
+                      << " - exit"                                   << std::endl;
         }
         else if (command.Is("exit"))
         {
             // Say goodbye
-            std::cout << "Goodbye!" << "\n";
+            std::cout << "Goodbye!" << std::endl;
 
             // Exit
             return false;
@@ -451,13 +605,13 @@ bool Loop::ExecuteCommand(const std::string& input)
         else
         {
             // Unknown command
-            std::cout << "Unknown command verb: " << command.GetVerb() << "\n"
-                      << "Try 'help' to list available commands." << "\n";
+            std::cout << "Unknown command verb: " << command.GetVerb() << std::endl
+                      << "Try 'help' to list available commands." << std::endl;
         }
     }
     catch (const std::exception& e)
     {
-        std::cout << e.what() << "\n";
+        std::cout << e.what() << std::endl;
     }
 
     // Continue

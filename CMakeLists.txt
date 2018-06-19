@@ -244,7 +244,7 @@ endif()
 # Build libzmq
 ExternalProject_Add(libzmq
     GIT_REPOSITORY "https://github.com/zeromq/libzmq.git"
-    GIT_TAG "3a1e8f070416c11481b847ac752c0a73ea4bc381"
+    GIT_TAG "85dfca3087893b4ccfc9d4e5b85f30518f1d70e6"
     GIT_SHALLOW ON
     PREFIX "libzmq-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${LIBZMQ_DIR}

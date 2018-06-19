@@ -1,0 +1,9 @@
+syntax = "proto3";
+package swarmio.data.telemetry;
+
+import "swarmio/data/Variant.proto";
+
+message Update {
+    uint32 tick = 1;
+    map<string, Variant> values = 2;
+}

@@ -24,6 +24,11 @@ int main(int argc, const char* argv[])
         // Create device
         swarmio::simulator::ExampleDevice device(&endpoint);
 
+        // Register static telemetry value
+        swarmio::data::Variant value;
+        value.set_string_value("This won't ever change.");
+        device.SetTelemetryValue("static_value", value);
+
         // Register some parameters
         swarmio::simulator::InMemoryParameter p1("examples/boolParameter", false);
         device.AddInMemoryParameter(&p1);

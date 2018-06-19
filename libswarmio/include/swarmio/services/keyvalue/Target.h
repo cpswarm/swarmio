@@ -18,7 +18,7 @@ namespace swarmio::services::keyvalue
              * 
              * @return data::Variant 
              */
-            virtual data::Variant Get(const std::string& path) const = 0;
+            virtual data::Variant Get(const std::string& path) = 0;
 
             /**
              * @brief Set the current value of the target

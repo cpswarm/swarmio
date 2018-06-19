@@ -69,6 +69,16 @@ namespace swarmio::services
              */
             virtual T ExtractResponse(const Node* node, const data::Message* message) = 0;
 
+            /**
+             * @brief Check whether the last message has been received
+             * 
+             * @return True if no further messages should be processed
+             */
+            virtual bool IsFinished()
+            {
+                return _valid;
+            }
+
         public:
 
             /**
@@ -97,7 +107,7 @@ namespace swarmio::services
                 : Mailbox(std::move(other))
             {
                 // Lock
-                std::lock_guard<std::mutex> guard(other._mutex);
+                std::unique_lock<std::mutex> guard(other._mutex);
 
                 // Pass event handling to this instance
                 other.FinishMovingTo(this);
@@ -116,7 +126,7 @@ namespace swarmio::services
              */
             const T& GetResponse()
             {
-                std::lock_guard<std::mutex> guard(_mutex);
+                std::unique_lock<std::mutex> guard(_mutex);
                 if (_valid)
                 {
                     if (_exception)
@@ -144,17 +154,18 @@ namespace swarmio::services
              */
             virtual bool ReceiveMessage(const Node* sender, const data::Message* message) override
             {
-                // Acquire lock
-                std::unique_lock<std::mutex> guard(_mutex);
-
                 // Check if we still need the response and then check the reply_to field
-                if (!_valid &&
+                if (!IsFinished() &&
                     message->header().reply_to() == _requestIdentifier)
                 {
+                    // Acquire lock
+                    std::unique_lock<std::mutex> guard(_mutex);
+
                     // Extract the response
                     try
                     {
                         _response = ExtractResponse(sender, message);
+                        _exception = nullptr;
                     }
                     catch (...)
                     {
@@ -200,7 +211,7 @@ namespace swarmio::services
              */
             bool HasException()
             {
-                std::lock_guard<std::mutex> guard(_mutex);
+                std::unique_lock<std::mutex> guard(_mutex);
                 if (_valid)
                 {
                     return (bool)_exception;
@@ -209,6 +220,16 @@ namespace swarmio::services
                 {
                     throw Exception("Response is not yet available");
                 }
+            }
+
+            /**
+             * @brief Get request identifier
+             * 
+             * @return uint64_t Identifier
+             */
+            uint64_t GetIdentifier() const
+            {
+                return _requestIdentifier;
             }
     };
 }

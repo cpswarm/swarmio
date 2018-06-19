@@ -18,6 +18,7 @@ add_library(libswarmio SHARED
 	"src/swarmio/services/keyvalue/Service.cpp"
 	"src/swarmio/services/keyvalue/ValueAwaiter.cpp"
 	"src/swarmio/services/discovery/Service.cpp"
+	"src/swarmio/services/telemetry/Service.cpp"
 
 	# Profiles
 	"src/swarmio/profiles/ClientProfile.cpp"
@@ -44,6 +45,10 @@ add_library(libswarmio SHARED
 	"proto/swarmio/data/discovery/Type.proto"
 	"proto/swarmio/data/discovery/Response.proto"
 	"proto/swarmio/data/discovery/Request.proto"
+	"proto/swarmio/data/telemetry/SubscribeRequest.proto"
+	"proto/swarmio/data/telemetry/UnsubscribeRequest.proto"
+	"proto/swarmio/data/telemetry/Update.proto"
+	"proto/swarmio/data/telemetry/Descriptor.proto"
 )
 
 # Disable the automatic lib prefix

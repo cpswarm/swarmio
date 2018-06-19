@@ -4,8 +4,10 @@
 #include <mutex>
 #include <replxx.hxx>
 #include <swarmio/tool/Command.h>
+#include <swarmio/tool/LogBuffer.h>
 #include <swarmio/profiles/ClientProfile.h>
 #include <swarmio/transport/zyre/ZyreEndpoint.h>
+#include <swarmio/services/telemetry/UpdateAwaiter.h>
 #include <swarmio/data/Variant.pb.h>
 
 namespace swarmio::tool 
@@ -31,6 +33,12 @@ namespace swarmio::tool
             const Node* _selectedNode = nullptr;
 
             /**
+             * @brief Log buffer
+             * 
+             */
+            LogBuffer* _logBuffer = nullptr;
+
+            /**
              * @brief Build prompt string
              * 
              * @return std::string 
@@ -42,6 +50,12 @@ namespace swarmio::tool
              * 
              */
             std::vector<const Node*> _nodes;
+
+            /**
+             * @brief Currently held subscriptions
+             * 
+             */
+            std::list<services::telemetry::UpdateAwaiter> _subscriptions;
 
             /**
              * @brief Mutex to protect nodes vector
@@ -128,14 +142,43 @@ namespace swarmio::tool
              */
             void ExecuteRediscoverCommand(const Command& command);
 
+            /**
+             * @brief Execute a 'subscriptions' command
+             * 
+             * @param command 
+             */
+            void ExecuteSubscriptionsCommand(const Command& command);
+
+            /**
+             * @brief Execute a 'subscribe' command
+             * 
+             * @param command 
+             */
+            void ExecuteSubscribeCommand(const Command& command);
+
+            /**
+             * @brief Execute an 'unsubscribe' command
+             * 
+             * @param command 
+             */
+            void ExecuteUnsubscribeCommand(const Command& command);
+
+            /**
+             * @brief Execute an 'log' command
+             * 
+             * @param command Command
+             */
+            void ExecuteLogCommand(const Command& command);
+
         public:
 
             /**
              * @brief Construct a new Loop object
              * 
              * @param endpoint Endpoint to use
+             * @param logBuffer Log buffer to read from
              */
-            Loop(Endpoint* endpoint);
+            Loop(Endpoint* endpoint, LogBuffer* logBuffer);
 
             /**
              * @brief Run the command loop

@@ -125,7 +125,7 @@ namespace swarmio
              * @brief Disconnect this Mailbox from the Endpoint
              * 
              */
-            void Disconnect()
+            virtual void Disconnect()
             {
                 if (_endpoint != nullptr)
                 {

@@ -1,0 +1,7 @@
+syntax = "proto3";
+package swarmio.data.telemetry;
+
+message SubscribeRequest {
+    uint32 interval = 1;
+    repeated string keys = 2;
+}

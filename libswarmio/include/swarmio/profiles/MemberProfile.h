@@ -1,6 +1,9 @@
 #pragma once
 
 #include <swarmio/profiles/Profile.h>
+#include <swarmio/services/event/Service.h>
+#include <swarmio/services/keyvalue/Service.h>
+#include <swarmio/services/telemetry/Service.h>
 
 namespace swarmio::profiles 
 {
@@ -24,6 +27,12 @@ namespace swarmio::profiles
              */
             swarmio::services::event::Service _eventService;
 
+            /**
+             * @brief Telemetry service
+             * 
+             */
+            swarmio::services::telemetry::Service _telemetryService;
+
         public:
 
             /**
@@ -32,10 +41,11 @@ namespace swarmio::profiles
              * @param endpoint 
              */
             MemberProfile(Endpoint* endpoint)
-                : Profile(endpoint, false), _keyvalueService(endpoint), _eventService(endpoint)
+                : Profile(endpoint, false), _keyvalueService(endpoint), _eventService(endpoint), _telemetryService(endpoint)
             {
                 _discoveryService.RegisterDiscoverable(&_eventService);
                 _discoveryService.RegisterDiscoverable(&_keyvalueService);
+                _discoveryService.RegisterDiscoverable(&_telemetryService);
             }
 
              /**
@@ -58,6 +68,16 @@ namespace swarmio::profiles
                 return _keyvalueService;
             }
 
+            /**
+             * @brief Get a reference for the Telemetry service
+             * 
+             * @return swarmio::services::telemetry::Service& 
+             */
+            swarmio::services::telemetry::Service& GetTelemetryService()
+            {
+                return _telemetryService;
+            }
+
             
             /**
              * @brief Destroy the MemberProfile object
@@ -65,6 +85,7 @@ namespace swarmio::profiles
              */
             virtual ~MemberProfile()
             {
+                _discoveryService.UnregisterDiscoverable(&_telemetryService);
                 _discoveryService.UnregisterDiscoverable(&_keyvalueService);
                 _discoveryService.UnregisterDiscoverable(&_eventService);
             }

@@ -10,6 +10,9 @@ import "swarmio/data/keyvalue/GetResponse.proto";
 import "swarmio/data/keyvalue/SetRequest.proto";
 import "swarmio/data/discovery/Request.proto";
 import "swarmio/data/discovery/Response.proto";
+import "swarmio/data/telemetry/SubscribeRequest.proto";
+import "swarmio/data/telemetry/UnsubscribeRequest.proto";
+import "swarmio/data/telemetry/Update.proto";
 
 message Message {
     Header header = 1;
@@ -22,5 +25,8 @@ message Message {
         keyvalue.GetRequest kv_get_request = 7;
         keyvalue.GetResponse kv_get_response = 8;
         keyvalue.SetRequest kv_set_request = 9;
+        telemetry.SubscribeRequest tm_subscribe_request = 10;
+        telemetry.UnsubscribeRequest tm_unsubscribe_request = 11;
+        telemetry.Update tm_update = 12;
     }
 }

@@ -6,10 +6,10 @@
 namespace swarmio::services::ping
 {
     /**
-     * @brief An Awaiter that checks whether the operation was a success.
+     * @brief An Awaiter that returns the roundtrip time of the Echo message.
      * 
      */
-    class SWARMIO_API TimingAwaiter : public Awaiter<std::chrono::nanoseconds>
+    class SWARMIO_API TimingAwaiter final : public Awaiter<std::chrono::nanoseconds>
     {
         private:
 
