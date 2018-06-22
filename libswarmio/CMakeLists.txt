@@ -106,6 +106,16 @@ else()
 	)
 endif()
 
+# Ignore protobuf related warnings
+if (MSVC)
+	target_compile_options(libswarmio PUBLIC
+		"/wd4251"
+		"/wd4996"
+		"/wd4275"
+		"/wd4661"
+	)
+endif()
+
 # Add include directories
 target_include_directories(libswarmio PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
@@ -121,6 +131,7 @@ find_package(protobuf REQUIRED)
 find_package(g3log REQUIRED)
 find_package(readerwriterqueue REQUIRED)
 find_package(concurrentqueue REQUIRED)
+find_package(Threads REQUIRED)
 
 # Link libraries
 target_link_libraries(libswarmio PUBLIC
@@ -129,6 +140,7 @@ target_link_libraries(libswarmio PUBLIC
 	${CZMQ_LIBRARIES}
 	${ZYRE_LIBRARIES}
 	${G3LOG_LIBRARIES}
+	Threads::Threads
 )
 
 # Add library include paths

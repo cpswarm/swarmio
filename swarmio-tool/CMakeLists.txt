@@ -22,6 +22,7 @@ target_include_directories(swarmio-tool PUBLIC
 # Find required packages
 find_package(libswarmio REQUIRED)
 find_package(replxx REQUIRED)
+find_package(Threads REQUIRED)
 
 # Link libraries
 target_link_libraries(swarmio-tool PRIVATE

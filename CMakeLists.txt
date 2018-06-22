@@ -105,7 +105,7 @@ if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE" OR SWARMIO_BUILD_MODE STREQUAL "INSTAL
         message(FATAL_ERROR "INSTALL and PACKAGE build modes are only available on UNIX-like systems.")
     endif()
 
-    # Check for the presence of dpkg-deb
+    # Check for the presence of dpkg-deb and fakeroot
     if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
         find_program(TOOL_DPKG_DEB "dpkg-deb")
         if (TOOL_DPKG_DEB STREQUAL "TOOL_DPGK_DEB_NOT_FOUND")
@@ -114,10 +114,6 @@ if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE" OR SWARMIO_BUILD_MODE STREQUAL "INSTAL
         find_program(TOOL_FAKEROOT "fakeroot")
         if (TOOL_FAKEROOT STREQUAL "TOOL_FAKEROOT_NOT_FOUND")
             message(FATAL_ERROR "It seems that fakeroot is not available on your system, install it before trying to build packages.")
-        endif()
-        find_program(TOOL_SED "sed")
-        if (TOOL_SED STREQUAL "TOOL_SED_NOT_FOUND")
-            message(FATAL_ERROR "It seems that sed is not available on your system, install it before trying to build packages.")
         endif()
     endif()
 
@@ -245,7 +241,6 @@ endif()
 ExternalProject_Add(libzmq
     GIT_REPOSITORY "https://github.com/zeromq/libzmq.git"
     GIT_TAG "85dfca3087893b4ccfc9d4e5b85f30518f1d70e6"
-    GIT_SHALLOW ON
     PREFIX "libzmq-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${LIBZMQ_DIR}
     CMAKE_ARGS 
@@ -271,7 +266,6 @@ ExternalProject_Add(czmq
     DEPENDS libzmq
     GIT_REPOSITORY "https://github.com/zeromq/czmq.git"
     GIT_TAG "e305dc2136635cfb38a05e090580a833da54de28"
-    GIT_SHALLOW ON
     PREFIX "czmq-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${CZMQ_DIR}
     CMAKE_ARGS  
@@ -296,7 +290,6 @@ ExternalProject_Add(zyre
     DEPENDS czmq libzmq
     GIT_REPOSITORY "https://github.com/zeromq/zyre.git"
     GIT_TAG "ab263dac21250fc85fa8c7239973109eca2251a7"
-    GIT_SHALLOW ON
     PREFIX "zyre-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${ZYRE_DIR}
     LIST_SEPARATOR |
@@ -321,7 +314,6 @@ endif()
 ExternalProject_Add(replxx 
     GIT_REPOSITORY "https://github.com/AmokHuginnsson/replxx.git"
     GIT_TAG "3cb884e3fb4b1a28efeb716fac75f77eecc7ea3d"
-    GIT_SHALLOW ON
     PREFIX "replxx-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${REPLXX_DIR}
     CMAKE_ARGS  
@@ -347,7 +339,6 @@ if (MSVC)
 	ExternalProject_Add(protobuf
 		GIT_REPOSITORY "https://github.com/google/protobuf.git"
 		GIT_TAG "ce044817c7ba0aea27c3fd8e496635d94d20a755"
-		GIT_SHALLOW ON
 		SOURCE_SUBDIR "cmake"
 		PREFIX "protobuf-${SWARMIO_TARGET_ARCHITECTURE}"
 		INSTALL_DIR ${PROTOBUF_DIR}
@@ -368,7 +359,6 @@ else()
 	ExternalProject_Add(protobuf
 		GIT_REPOSITORY "https://github.com/google/protobuf.git"
 		GIT_TAG "ce044817c7ba0aea27c3fd8e496635d94d20a755"
-		GIT_SHALLOW ON
 		SOURCE_SUBDIR "cmake"
 		PREFIX "protobuf-${SWARMIO_TARGET_ARCHITECTURE}"
 		INSTALL_DIR ${PROTOBUF_DIR}
@@ -384,7 +374,6 @@ else()
 	ExternalProject_Add(protobuf-host
 		GIT_REPOSITORY "https://github.com/google/protobuf.git"
 		GIT_TAG "ce044817c7ba0aea27c3fd8e496635d94d20a755"
-		GIT_SHALLOW ON
 		SOURCE_SUBDIR "cmake"
 		PREFIX "protobuf-host-${SWARMIO_HOST_ARCHITECTURE}"
 		INSTALL_DIR "protobuf-host-${SWARMIO_HOST_ARCHITECTURE}-output"
@@ -419,7 +408,6 @@ if (MSVC)
 	ExternalProject_Add(g3log
 		GIT_REPOSITORY "https://github.com/KjellKod/g3log.git"
 		GIT_TAG "e988aadc6572769809eaf962cab1824eed62086e"
-		GIT_SHALLOW ON
 		PREFIX "g3log-${SWARMIO_TARGET_ARCHITECTURE}"
 		INSTALL_DIR ${G3LOG_DIR}
 		INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory  "<INSTALL_DIR>/bin"
@@ -441,7 +429,6 @@ else()
 	ExternalProject_Add(g3log
 		GIT_REPOSITORY "https://github.com/KjellKod/g3log.git"
 		GIT_TAG "e988aadc6572769809eaf962cab1824eed62086e"
-		GIT_SHALLOW ON
 		PREFIX "g3log-${SWARMIO_TARGET_ARCHITECTURE}"
 		INSTALL_DIR ${G3LOG_DIR}
 		CMAKE_ARGS  
@@ -449,20 +436,26 @@ else()
 			"-DCHANGE_G3LOG_DEBUG_TO_DBUG=ON"
 			"-DADD_FATAL_EXAMPLE=OFF"
 			"-DCPACK_PACKAGING_INSTALL_PREFIX=<INSTALL_DIR>"
-	)
+    )
+
+    # Check for the presence of sed
+    find_program(TOOL_SED "sed")
+    if (TOOL_SED STREQUAL "TOOL_SED_NOT_FOUND")
+        message(FATAL_ERROR "It seems that sed is not available on your system, install it before trying to build g3log.")
+    endif()
+
+    # Patch g3log to install outputs to the correct location
+	ExternalProject_Add_Step(g3log patch-installer
+        DEPENDEES update
+        DEPENDERS configure
+        ALWAYS true
+        COMMAND ${TOOL_SED} -i -e "s/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND FALSE/g" "<SOURCE_DIR>/CPackLists.txt"
+    )
 	
 endif()
 
 # Build g3log package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-
-	# Patch g3log to install outputs to the correct location
-	ExternalProject_Add_Step(g3log patch-installer
-		DEPENDEES update
-		DEPENDERS configure
-		ALWAYS true
-		COMMAND ${TOOL_SED} -i -e "s/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND FALSE/g" "<SOURCE_DIR>/CPackLists.txt"
-	)
 
 	# Build actual package
 	ExternalProject_Build_Package(g3log "1.3.2")
@@ -480,7 +473,6 @@ endif()
 ExternalProject_Add(concurrentqueue
     GIT_REPOSITORY "https://github.com/cameron314/concurrentqueue.git"
     GIT_TAG "8f7e861dd9411a0bf77a6b9de83a47b3424fafba"
-    GIT_SHALLOW ON
     PREFIX "concurrentqueue"
     INSTALL_DIR ${CONCURRENTQUEUE_DIR}
     CONFIGURE_COMMAND ""
@@ -500,7 +492,6 @@ endif()
 ExternalProject_Add(readerwriterqueue
     GIT_REPOSITORY "https://github.com/cameron314/readerwriterqueue.git"
     GIT_TAG "07e22ecdf90501df89ead679bb8294a0b7c80c24"
-    GIT_SHALLOW ON
     PREFIX "readerwriterqueue"
     INSTALL_DIR ${READERWRITERQUEUE_DIR}
     CONFIGURE_COMMAND ""
@@ -519,8 +510,7 @@ endif()
 # Build libconfig
 ExternalProject_Add(libconfig
     GIT_REPOSITORY "https://github.com/hyperrealm/libconfig.git"
-    GIT_TAG "9716f6224cdbc9f8bf3c8d3759a9fb3f864155df"
-    GIT_SHALLOW ON
+    GIT_TAG "04a3674f8fa3f009444c8173259a3ea57ef6c35d"
     PREFIX "libconfig-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${LIBCONFIG_DIR}
     CMAKE_ARGS 
@@ -546,6 +536,7 @@ endif()
 ExternalProject_Add(libswarmio
     DEPENDS libzmq czmq zyre protobuf g3log concurrentqueue readerwriterqueue
     SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libswarmio"
+    BUILD_ALWAYS ON
     PREFIX "libswarmio-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${LIBSWARMIO_DIR}
     LIST_SEPARATOR |
@@ -584,6 +575,7 @@ endif()
 ExternalProject_Add(swarmio-tool
     DEPENDS libswarmio replxx
     SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/swarmio-tool"
+    BUILD_ALWAYS ON
     PREFIX "swarmio-tool-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${SWARMIO_TOOL_DIR}
     LIST_SEPARATOR |
@@ -608,6 +600,7 @@ endif()
 ExternalProject_Add(swarmio-simulator
     DEPENDS libswarmio
     SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/swarmio-simulator"
+    BUILD_ALWAYS ON
     PREFIX "swarmio-simulator-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${SWARMIO_SIMLUATOR_DIR}
     LIST_SEPARATOR |

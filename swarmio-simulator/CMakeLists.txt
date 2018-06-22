@@ -20,6 +20,7 @@ target_include_directories(swarmio-simulator
 
 # Find required packages
 find_package(libswarmio REQUIRED)
+find_package(Threads REQUIRED)
 
 # Link libraries
 target_link_libraries(swarmio-simulator PRIVATE
