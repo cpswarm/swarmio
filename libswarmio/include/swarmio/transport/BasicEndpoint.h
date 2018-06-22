@@ -2,7 +2,7 @@
 
 #include <swarmio/Endpoint.h>
 #include <swarmio/Mailbox.h>
-#include <shared_mutex>
+#include <mutex>
 #include <set>
 #include <atomic>
 
@@ -20,7 +20,7 @@ namespace swarmio::transport
              * @brief Mutex used to synchronize access 
              *        to the list of mailboxes.
              */
-            std::shared_mutex _mutex;
+            std::recursive_mutex _mutex;
 
             /**
              * @brief Container for registered mailboxes

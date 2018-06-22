@@ -8,26 +8,26 @@ using namespace swarmio::transport;
 
 void BasicEndpoint::RegisterMailbox(Mailbox* mailbox)
 {
-    std::lock_guard<std::shared_mutex> guard(_mutex);
+    std::unique_lock<std::recursive_mutex> guard(_mutex);
     _mailboxes.insert(mailbox);
 }
 
 void BasicEndpoint::UnregisterMailbox(Mailbox* mailbox)
 {
-    std::lock_guard<std::shared_mutex> guard(_mutex);
+    std::unique_lock<std::recursive_mutex> guard(_mutex);
     _mailboxes.erase(mailbox);
 }
 
 void BasicEndpoint::ReplaceMailbox(Mailbox* oldMailbox, Mailbox* newMailbox)
 {
-    std::lock_guard<std::shared_mutex> guard(_mutex);
+    std::unique_lock<std::recursive_mutex> guard(_mutex);
     _mailboxes.erase(oldMailbox);
     _mailboxes.insert(newMailbox);
 }
 
 void BasicEndpoint::NodeWasDiscovered(const Node* node) noexcept
 {
-    std::shared_lock<std::shared_mutex> guard(_mutex);
+    std::unique_lock<std::recursive_mutex> guard(_mutex);
     for(auto mailbox : _mailboxes)
     {
         mailbox->NodeWasDiscovered(node);
@@ -36,7 +36,7 @@ void BasicEndpoint::NodeWasDiscovered(const Node* node) noexcept
 
 void BasicEndpoint::NodeDidJoin(const Node* node) noexcept
 {
-    std::shared_lock<std::shared_mutex> guard(_mutex);
+    std::unique_lock<std::recursive_mutex> guard(_mutex);
     for(auto mailbox : _mailboxes)
     {
         mailbox->NodeDidJoin(node);
@@ -45,7 +45,7 @@ void BasicEndpoint::NodeDidJoin(const Node* node) noexcept
 
 void BasicEndpoint::NodeWillLeave(const Node* node) noexcept
 {
-    std::shared_lock<std::shared_mutex> guard(_mutex);
+    std::unique_lock<std::recursive_mutex> guard(_mutex);
     for(auto mailbox : _mailboxes)
     {
         mailbox->NodeWillLeave(node);
@@ -91,7 +91,7 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* mess
     }
 
     // Find mailbox to handle message
-    std::shared_lock<std::shared_mutex> guard(_mutex);
+    std::unique_lock<std::recursive_mutex> guard(_mutex);
     for(auto mailbox : _mailboxes)
     {
         try
