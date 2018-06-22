@@ -40,6 +40,22 @@ void Service::UnregisterDiscoverable(Discoverable* discoverable)
     _cacheValid = false;
 }
 
+void Service::RegisterObserver(Observer* observer)
+{
+    std::lock_guard<std::mutex> guard(_observersMutex);
+
+    // Insert observer
+    _observers.insert(observer);
+}
+
+void Service::UnregisterObserver(Observer* observer)
+{
+    std::lock_guard<std::mutex> guard(_observersMutex);
+
+    // Remove observer
+    _observers.erase(observer);
+}
+
 bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 {
     // Sanity checks
@@ -125,41 +141,61 @@ void Service::HandleDiscoveryRequest(const Node* node, const data::Message* mess
 
 void Service::CacheDiscoveryResponse(const Node* node, const data::Message* message)
 {
-    std::lock_guard<std::mutex> guard(_remotesMutex);
-
     // Sanity checks
     CHECK(node != nullptr) << "Sender address missing";
     CHECK(message != nullptr) << "Message is missing";
 
     // Cache response
+    std::unique_lock<std::mutex> remotesGuard(_remotesMutex);
     _remotes[node] = message->ds_response();
+    remotesGuard.unlock();
 
     // Log
     LOG(DBUG) << "A discovery response from node [" << node->GetUUID() << "] was cached.";
+
+    // Call observers
+    std::unique_lock<std::mutex> observersGuard(_observersMutex);
+    for (auto observer : _observers)
+    {
+        observer->CachedDiscoveryResponseWasUpdated(node, message->ds_response());
+    }
 }
 
 void Service::HandleInvalidationRequest(const Node* node, const data::Message* message)
 {
-    std::lock_guard<std::mutex> guard(_remotesMutex);
-
     // Sanity checks
     CHECK(node != nullptr) << "Sender address missing";
 
     // Erase cached information
+    std::unique_lock<std::mutex> guard(_remotesMutex);
     _remotes.erase(node);
+    _remotesMutex.unlock();
 
     // Log
     LOG(DBUG) << "An invalidation request from node [" << node->GetUUID() << "] was received.";
+
+    // If active discovery is enabled, immediately send a discovery request
+    if (_performActiveDiscovery)
+    {
+        // Build message
+        data::Message request;
+        request.mutable_ds_request()->set_action(data::discovery::Action::DISCOVER);
+
+        // Send message
+        GetEndpoint()->Send(&request, node);
+
+        // Log outgoing request
+        LOG(DBUG) << "An automatic discovery request was sent to [" << node->GetUUID() << "] after the node requested invalidation.";
+    }
 }
 
 void Service::NodeWillLeave(const Node* node) noexcept
 {
-    std::lock_guard<std::mutex> guard(_remotesMutex);
-
-        // Sanity checks
+    // Sanity checks
     CHECK(node != nullptr) << "Node address missing";
 
     // Erase cached information
+    std::lock_guard<std::mutex> guard(_remotesMutex);
     _remotes.erase(node);
 
     // Log
@@ -182,7 +218,7 @@ void Service::NodeDidJoin(const Node* node) noexcept
         GetEndpoint()->Send(&request, node);
 
         // Log outgoing request
-        LOG(DBUG) << "An automatic discovery request was sent to [" << node->GetUUID() << "].";
+        LOG(DBUG) << "An automatic discovery request was sent to [" << node->GetUUID() << "] after the node joined.";
     }
 }
 
@@ -210,12 +246,11 @@ DiscoveryAwaiter Service::Query(Endpoint* endpoint, const Node* node)
 
 DiscoveryAwaiter Service::CachedQuery(const Node* node)
 {
-    std::unique_lock<std::mutex> guard(_remotesMutex);
-
     // Sanity checks
     CHECK(node != nullptr) << "Destination address missing";
 
     // Try finding the cached value
+    std::unique_lock<std::mutex> guard(_remotesMutex);
     auto existing = _remotes.find(node);
     if (existing != _remotes.end())
     {

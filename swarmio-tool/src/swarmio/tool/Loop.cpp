@@ -353,7 +353,7 @@ void Loop::ExecuteMembersCommand(const Command& command)
         std::cout << "MID" << "\t" << "UUID" << std::endl;
 
         // List nodes
-        for (int i = 0; i < _nodes.size(); ++i)
+        for (unsigned i = 0; i < _nodes.size(); ++i)
         {
             std::cout << i << "\t" << _nodes[i]->GetUUID() << "\t" << _nodes[i]->GetDescription() << std::endl;
         }
@@ -370,7 +370,7 @@ void Loop::ExecuteSelectCommand(const Command& command)
     if (command.HasPath())
     {
         // Parse
-        int idx = std::stoi(command.GetPath());
+        unsigned idx = std::stoi(command.GetPath());
 
         // Retreive from nodes vector
         std::lock_guard<std::mutex> guard(_mutex);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <swarmio/Mailbox.h>
+#include <swarmio/services/discovery/Observer.h>
 #include <swarmio/services/discovery/Discoverable.h>
 #include <swarmio/services/discovery/DiscoveryAwaiter.h>
 #include <set>
@@ -19,6 +20,12 @@ namespace swarmio::services::discovery
         private:
 
             /**
+             * @brief Should we send discovery requests automatically?
+             * 
+             */
+            bool _performActiveDiscovery;
+
+            /**
              * @brief Cache of remote node discovery responses
              * 
              */
@@ -31,10 +38,16 @@ namespace swarmio::services::discovery
             std::mutex _remotesMutex;
 
             /**
-             * @brief Should we send discovery requests automatically?
+             * @brief List of discovery observers
              * 
              */
-            bool _performActiveDiscovery;
+            std::set<Observer*> _observers;
+
+            /**
+             * @brief Mutex to protect observer list
+             * 
+             */
+            std::mutex _observersMutex;
 
             /**
              * @brief List of discoverable services
@@ -127,6 +140,20 @@ namespace swarmio::services::discovery
              * @return std::map<const Node*, data::discovery::Response> 
              */
             std::map<const Node*, data::discovery::Response> GetCachedNodeInformation();
+
+            /**
+             * @brief Register a new discovery observer
+             * 
+             * @param observer Observer
+             */
+            void RegisterObserver(Observer* observer);
+
+            /**
+             * @brief Unregister a discovery observer
+             * 
+             * @param observer Observer
+             */
+            void UnregisterObserver(Observer* observer);
 
             /**
              * @brief Invalidate the current cached descriptor.

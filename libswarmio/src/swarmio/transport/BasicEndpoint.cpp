@@ -55,13 +55,14 @@ void BasicEndpoint::NodeWillLeave(const Node* node) noexcept
 bool BasicEndpoint::ReceiveMessage(const Node* sender, const void* data, size_t size) noexcept
 {
     data::Message message;
-    if (message.ParseFromArray(data, size))
+    if (message.ParseFromArray(data, (int)size))
     {
         return ReceiveMessage(sender, &message);
     }
     else
     {
         LOG(WARNING) << "Message received from node [" << sender->GetUUID() << "] cannot be parsed";
+        return false;
     }
 }
 
@@ -160,7 +161,7 @@ void BasicEndpoint::Send(data::Message* message, const Node* node)
 
     // Serialize
     std::vector<char> buffer(message->ByteSizeLong());
-    if (message->SerializeToArray(buffer.data(), buffer.size()))
+    if (message->SerializeToArray(buffer.data(), (int)buffer.size()))
     {
         Send((const void*)buffer.data(), buffer.size(), node);
     }
