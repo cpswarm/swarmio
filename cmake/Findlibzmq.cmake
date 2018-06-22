@@ -1,7 +1,9 @@
 # Get include path
 find_path(LIBZMQ_INCLUDE_DIRS
     NAMES zmq.h
-    HINTS "${CMAKE_PREFIX_PATH}/include"
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
 
 # Get library path
@@ -44,7 +46,9 @@ if (LIBZMQ_INCLUDE_DIRS)
         # Find library
         find_library(LIBZMQ_LIBRARIES
             NAMES ${LIBZMQ_NAMES_LIB}
-            HINTS "${CMAKE_PREFIX_PATH}/lib"
+            NO_SYSTEM_ENVIRONMENT_PATH
+            NO_CMAKE_ENVIRONMENT_PATH
+            NO_CMAKE_SYSTEM_PATH
         )
 
     endif()

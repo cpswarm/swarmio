@@ -1,13 +1,24 @@
 # Get include path
 find_path(PROTOBUF_INCLUDE_DIRS
     NAMES "google/protobuf/message.h"
-    HINTS "${CMAKE_PREFIX_PATH}/include"
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
+
+# Determine library name
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    set(PROTOBUF_NAMES_LIB "protobufd" "libprotobufd.lib")
+else()
+    set(PROTOBUF_NAMES_LIB "protobuf" "libprotobuf.lib")
+endif()
 
 # Get library path
 find_library(PROTOBUF_LIBRARIES
-    NAMES "protobuf" "libprotobufd.lib"
-    HINTS "${CMAKE_PREFIX_PATH}/lib"
+    NAMES ${PROTOBUF_NAMES_LIB}
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
 
 # Set required variables

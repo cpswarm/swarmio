@@ -1,7 +1,9 @@
 # Get include path
 find_path(CONCURRENTQUEUE_INCLUDE_DIRS
     NAMES "concurrentqueue.h"
-    HINTS "${CMAKE_PREFIX_PATH}/include"
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
 
 # Set required variables

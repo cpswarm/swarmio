@@ -1,15 +1,17 @@
 # Get include path
 find_path(REPLXX_INCLUDE_DIRS
     NAMES "replxx.h"
-    HINTS "${CMAKE_PREFIX_PATH}/include"
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
 
 # Get library path
 find_library(REPLXX_LIBRARIES
-    NAMES 
-        "replxx-d"
-        "libreplxx.a"
-    HINTS "${CMAKE_PREFIX_PATH}/lib"
+    NAMES "replxx-d" "libreplxx.a"
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
 
 # Set required variables

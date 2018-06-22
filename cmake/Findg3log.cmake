@@ -1,13 +1,17 @@
 # Get include path
 find_path(G3LOG_INCLUDE_DIRS
     NAMES "g3log/g3log.hpp"
-    HINTS "${CMAKE_PREFIX_PATH}/include"
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
 
 # Get library path
 find_library(G3LOG_LIBRARIES
     NAMES "g3logger"
-    HINTS "${CMAKE_PREFIX_PATH}/lib"
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
 )
 
 # Set required variables

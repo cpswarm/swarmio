@@ -20,13 +20,13 @@ There are three build modes you can choose from:
  - PACKAGE
  
  Package mode will build .deb packages for each target -
- and set /opt as the install prefix. Find the packages
+ and set /opt/swarmio as the install prefix. Find the packages
  under the "packages" subdirectory.
  
  - INSTALL
  
  Install will install all outputs onto the local machine,
- by default under /opt.
+ by default under /opt/swarmio.
  
 
 To build, create a new directory outside the source tree, 
