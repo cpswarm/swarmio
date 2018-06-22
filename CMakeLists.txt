@@ -117,9 +117,14 @@ if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE" OR SWARMIO_BUILD_MODE STREQUAL "INSTAL
         endif()
     endif()
 
-    # Default install location is /opt
+    # Default is to build using a RelWithDebInfo configuration
+	if (NOT DEFINED CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
+        set(CMAKE_BUILD_TYPE "RelWithDebInfo")
+    endif()
+
+    # Default install location is /opt/swarmio
     if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-        set(CMAKE_INSTALL_PREFIX "/opt" CACHE PATH "Install prefix" FORCE)
+        set(CMAKE_INSTALL_PREFIX "/opt/swarmio" CACHE PATH "Install prefix" FORCE)
     endif()
 
     # Must be absolute path
@@ -149,6 +154,11 @@ else()
 		
     endif()
 
+    # Default is to build using a Debug configuration
+	if (NOT DEFINED CMAKE_BUILD_TYPE OR CMAKE_BUILD_TYPE STREQUAL "")
+        set(CMAKE_BUILD_TYPE "Debug")
+    endif()
+
     # Install into a common directory
     if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
         set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/devroot-${SWARMIO_TARGET_ARCHITECTURE}" CACHE PATH "Install prefix" FORCE)
@@ -163,32 +173,20 @@ else()
 	
 endif()
 
-# If using MSVC, pass build type specification onto subprojects
-if (MSVC)
-	
-	# Default is to build using a Debug configuration
-	if (NOT DEFINED CMAKE_BUILD_TYPE)
-		set(CMAKE_BUILD_TYPE "Debug")
-	endif()
+# Pass build type specification onto subprojects
+list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS
+    "-DCMAKE_CONFIGURATION_TYPES=${CMAKE_BUILD_TYPE}"
+    "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+)
 
-	# Add to target arguments
-	list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS
-		"-DCMAKE_CONFIGURATION_TYPES=${CMAKE_BUILD_TYPE}"
-		"-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
-		"--config ${CMAKE_BUILD_TYPE}"
-	)
-	
-	# Host arguments are always in release mode
-	list(APPEND SWARMIO_SUBPROJECT_HOST_ARGS
-		"-DCMAKE_CONFIGURATION_TYPES=RelWithDebInfo"
-		"-DCMAKE_BUILD_TYPE=RelWithDebInfo"
-		"--config RelWithDebInfo"
-	)
-	
-	# Show build type
-	message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-	
-endif()
+# Host arguments are always in release mode
+list(APPEND SWARMIO_SUBPROJECT_HOST_ARGS
+    "-DCMAKE_CONFIGURATION_TYPES=RelWithDebInfo"
+    "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
+)
+
+# Show build type
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # Define a function to build packages
 function(ExternalProject_Build_Package TARGET PACKAGE_VERSION)
@@ -240,7 +238,7 @@ endif()
 # Build libzmq
 ExternalProject_Add(libzmq
     GIT_REPOSITORY "https://github.com/zeromq/libzmq.git"
-    GIT_TAG "85dfca3087893b4ccfc9d4e5b85f30518f1d70e6"
+    GIT_TAG "bb4fb32925c6465fd0f8e8cc89e5347bc79bc4bf"
     PREFIX "libzmq-${SWARMIO_TARGET_ARCHITECTURE}"
     INSTALL_DIR ${LIBZMQ_DIR}
     CMAKE_ARGS 
@@ -251,7 +249,7 @@ ExternalProject_Add(libzmq
 
 # Build libzmq package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(libzmq "4.2.5-dev")
+    ExternalProject_Build_Package(libzmq "4.3.1-dev")
 endif()
 
 # Set czmq install dir
@@ -522,7 +520,7 @@ ExternalProject_Add(libconfig
 
 # Build libconfig package
 if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
-    ExternalProject_Build_Package(libconfig "1.7.2")
+    ExternalProject_Build_Package(libconfig "1.7.2-dev")
 endif()
 
 # Set libswarmio install dir - on Windows, we have to put all binaries together for DLL resolution to work
