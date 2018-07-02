@@ -5,17 +5,17 @@ Building on Linux
 By default, everything is compiled for the current computer,
 but cross-compilation is available. Currently armhf and
 aarch64 are supported if the required tools are available.
+The default compiler is clang, and all builds were tested
+on Ubuntu 18.04.
 
 There are three build modes you can choose from:
 
  - DEVELOPMENT (default)
  
- Development mode will put all dependencies under the 
- build directory by default, and leave the core targets
- in their respective output directories. Useful when an
- IDE needs a full include path or to build dependencies 
- into a binary archive. By default, find dependencies 
- in the "devtree-<ARCH>" subdirectory.
+ Development mode will build and install all components into
+ one subdirectory under the build directory. Useful when an
+ IDE needs a full include path and for debugging. By default,
+ products are installed into the "devtree-<ARCH>" subdirectory.
  
  - PACKAGE
  
@@ -28,7 +28,6 @@ There are three build modes you can choose from:
  Install will install all outputs onto the local machine,
  by default under /opt/swarmio.
  
-
 To build, create a new directory outside the source tree, 
 and issue the following commands inside it:
 
@@ -36,31 +35,96 @@ and issue the following commands inside it:
  cmake --build .
  
 Optional parameters:
- -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (armhf or aarch64)
+
  -DSWARMIO_BUILD_MODE=<MODE> (DEVELOPMENT, PACKAGE or INSTALL)
+
+ Specifies build mode (see above). DEVELOPMENT build will
+ generate debug executables, while PACKAGE and INSTALL builds
+ will compile with release flags (and debug symbols).
+
+ -DCMAKE_BUILD_TYPE=<TYPE> (Debug, Release, RelWithDebInfo)
+
+ Override build type derrived from build mode. See CMake docs
+ for more info.
+
  -DCMAKE_INSTALL_PREFIX=<PATH>
+
+ Overrides the installation directory. For DEVELOPMENT and
+ INSTALL build, this will override the output directory. For
+ PACKAGE builds, it will override the installation prefix 
+ of the generated packages.
+
+ -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (armhf or aarch64)
+
+ Enables cross-compilation - required tools must already be
+ installed. On Ubuntu systems, crossbuild-essential-<ARCH>
+ packages should do the trick.
+
+ -SWARMIO_BUILD_ROS_NODE=ON
+
+ If turned on, swarmros will be built.
+
+ -DSWARMIO_MULTISTRAP_CONFIGURATION=<CONFIG>
+
+ If configured, a full multistrap sysroot will be initialized
+ before cross-compilation. Requires multistrap and a bunch of 
+ other tools to be installed. Currently supported configurations:
+
+  - xenial (Ubuntu 16.04)
+  - xenial-ros (Ubuntu 16.04 with ROS Kinetic Kame)
+  - bionic (Ubuntu 18.04)
+  - bionic-ros (Ubuntu 18.04 with ROS Melodic Morenia)
+
+ -DSWARMIO_ROS_PREFIX=<PATH>
+
+ Specifies the location of the ROS installation to use when 
+ building the ROS node. If not specified, the script will try
+ to automatically detect it - by looking for the default 
+ installation directory of Kinetic Kame and Melodic Morenia.
+
+ -DSWARMIO_PREFER_GCC=ON
+
+ If specified, GCC will be used instead of clang. Please note
+ that cross-compilation will most likely only work if the
+ same operating system (with a different architecture) is
+ used on the host machine.
  
 -------------------
 Building on Windows
 -------------------
 
-On Windows, only DEVELOPMENT mode is supported, and all
-executables will be copied into the "devtree-<ARCH>/bin"
-since DLL loading won't work otherwise. 
-
-To build, create a new directory outside the source tree, 
-and issue the following commands inside it:
+On Windows, only DEVELOPMENT mode is supported. Building the
+ROS node and multistrap environments are not supported. Basic
+build command is the same as on Linux:
 
  cmake <PATH TO SOURCE> [optional parameters]
  cmake --build .
  
 Optional parameters:
- -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (x86 or x64)
- -DSWARMIO_HOST_ARCHITECTURE=<ARCH> (x86 or x64)
- -DCMAKE_INSTALL_PREFIX=<PATH>
- 
-(Setting the host architecture can be used to run either the
-x86 or x64 executable of the MSVC compiler, and has no other 
-effect on the output.)
-compiler 
 
+ -DCMAKE_BUILD_TYPE=<TYPE> (Debug, Release, RelWithDebInfo)
+
+ Overrides the default build mode (Debug).
+
+ -DCMAKE_INSTALL_PREFIX=<PATH>
+
+ Overrides the output directory. 
+
+ -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (x86 or x64)
+
+ Specifies whether to generate 32 or 64 bit builds.
+
+-------------
+Quick example
+-------------
+
+If you want to generate packages for an armhf target, with
+ROS support turned on, targeting Ubuntu Xenial:
+
+cmake <SOURCE_DIR> -DSWARMIO_BUILD_MODE=PACKAGE
+                   -DSWARMIO_TARGET_ARCHITECTURE=armhf
+                   -DSWARMIO_MULTISTRAP_CONFIGURATION=xenial-ros
+                   -SWARMIO_BUILD_ROS_NODE=ON
+cmake --build .
+
+All output packages will be placed into the packages subdirectory.

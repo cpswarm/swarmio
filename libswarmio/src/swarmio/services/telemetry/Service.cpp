@@ -79,12 +79,12 @@ void Service::Worker()
 void Service::Update()
 {
     // Make copy of current list of values
-    std::shared_lock<std::shared_mutex> guardValues(_valuesMutex);
+    std::shared_lock<std::shared_timed_mutex> guardValues(_valuesMutex);
     auto cache = _values;
     guardValues.unlock();
 
     // Send updates
-    std::shared_lock<std::shared_mutex> guardTrackers(_trackersMutex);
+    std::shared_lock<std::shared_timed_mutex> guardTrackers(_trackersMutex);
     bool hasInvalidTrackers = false;
     for (auto& tracker : _trackers)
     {
@@ -151,7 +151,7 @@ void Service::Update()
     // Remove invalid trackers
     if (hasInvalidTrackers)
     {
-        std::unique_lock<std::shared_mutex> guard(_trackersMutex);
+        std::unique_lock<std::shared_timed_mutex> guard(_trackersMutex);
         _trackers.remove_if([](const Tracker& tracker){ return !tracker.IsValid(); });
         LOG(DBUG) << "Invalidated trackers have been removed";
     }
@@ -163,7 +163,7 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
     {  
         if (message->tm_subscribe_request().interval() > 0)
         {
-            std::unique_lock<std::shared_mutex> guard(_trackersMutex);
+            std::unique_lock<std::shared_timed_mutex> guard(_trackersMutex);
 
             // Add new tracker
             _trackers.emplace_back(sender, message->header().identifier(), message->tm_subscribe_request());
@@ -177,7 +177,7 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
     }
     else if (message->content_case() == data::Message::ContentCase::kTmUnsubscribeRequest)
     {
-        std::shared_lock<std::shared_mutex> guardTrackers(_trackersMutex);
+        std::shared_lock<std::shared_timed_mutex> guardTrackers(_trackersMutex);
 
         // Try and find the tracker
         for (auto& tracker : _trackers)
@@ -201,7 +201,7 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 
 void Service::DescribeService(data::discovery::Response& descriptor)
 {
-    std::shared_lock<std::shared_mutex> guard(_valuesMutex);
+    std::shared_lock<std::shared_timed_mutex> guard(_valuesMutex);
     for (auto& pair : _values)
     {
         auto entry = descriptor.add_telemetry();

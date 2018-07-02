@@ -3,7 +3,7 @@ package swarmio.data;
 
 message Variant {
     oneof value {
-        int64 int_value = 3;
+        int32 int_value = 3;
         double double_value = 4;
         bool bool_value = 5;
         string string_value = 6;

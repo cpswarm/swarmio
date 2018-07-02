@@ -9,7 +9,7 @@ using namespace swarmio::transport::zyre;
 
 #define SWARMIO_ZYRE_GROUP_MESSAGES "messages"
 
-ZyreEndpoint::ZyreEndpoint(const char* name, const char* ifname)
+ZyreEndpoint::ZyreEndpoint(const char* name)
 {
     // Create Zyre node
     _zyre = zyre_new(name);
@@ -17,12 +17,30 @@ ZyreEndpoint::ZyreEndpoint(const char* name, const char* ifname)
     {
         throw Exception("Unable to create node");
     }
+}
+
+void ZyreEndpoint::SetPort(uint16_t port)
+{
+    // Check if we are already running
+    if (_worker != nullptr)
+    {
+        throw Exception("Node is already running");
+    }
+
+    // Set port
+    zyre_set_port(_zyre, port);
+}
+
+void ZyreEndpoint::SetInterface(const char* ifname)
+{
+    // Check if we are already running
+    if (_worker != nullptr)
+    {
+        throw Exception("Node is already running");
+    }
 
     // Set interface
-    if (ifname != nullptr)
-    {
-        zyre_set_interface(_zyre, ifname);
-    }
+    zyre_set_interface(_zyre, ifname);
 }
 
 void ZyreEndpoint::Start()
@@ -218,24 +236,35 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t*>*
             if (strcmp(type, "ENTER") == 0)
             {
                 // Lock map
-                std::unique_lock<std::shared_mutex> guard(_mutex);
+                std::unique_lock<std::shared_timed_mutex> guard(_mutex);
 
-                // Create or resolve node
-                auto result = _nodes.try_emplace(uuid, uuid, zyre_event_peer_name(event), zyre_event_peer_addr(event));
-
-                // Unlock map
-                guard.unlock();
-
-                // If freshly discovered, send discovery message
-                if (result.second)
+                // Try to resolve node
+                auto result = _nodes.find(uuid);
+                if (result == _nodes.end())
                 {
-                    NodeWasDiscovered(&result.first->second);
+                    // Construct node
+                    // (It would be nice to use try_emplace, but there is no way to
+                    // get it working with older C++ standard libraries.)
+                    auto it = _nodes.emplace(
+                        std::piecewise_construct, 
+                        std::forward_as_tuple(uuid), 
+                        std::forward_as_tuple(uuid, zyre_event_peer_name(event), zyre_event_peer_addr(event))
+                    );
+
+                    // Unlock map
+                    guard.unlock();
+
+                    // Send discovery message
+                    if (it.second)
+                    {
+                        NodeWasDiscovered(&it.first->second);
+                    }
                 }
             }
             else
             {
                 // Lock map
-                std::shared_lock<std::shared_mutex> guard(_mutex);
+                std::shared_lock<std::shared_timed_mutex> guard(_mutex);
 
                 // Resolve node
                 auto result = _nodes.find(uuid);
@@ -304,7 +333,7 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t*>*
 std::list<const ZyreNode*> ZyreEndpoint::GetNodes()
 {
     // Lock map
-    std::shared_lock<std::shared_mutex> guard(_mutex);
+    std::shared_lock<std::shared_timed_mutex> guard(_mutex);
 
     // Create copy
     std::list<const ZyreNode*> nodes;

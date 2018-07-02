@@ -43,7 +43,7 @@ namespace swarmio::services::telemetry
              * @brief Mutex to protect the map of values
              * 
              */
-            std::shared_mutex _valuesMutex;
+            std::shared_timed_mutex _valuesMutex;
 
             /**
              * @brief Trackers for each remote subscription
@@ -55,7 +55,7 @@ namespace swarmio::services::telemetry
              * @brief Mutex to protect the list of trackers
              * 
              */
-            std::shared_mutex _trackersMutex;
+            std::shared_timed_mutex _trackersMutex;
 
             /**
              * @brief Worker thread entry point
@@ -112,7 +112,7 @@ namespace swarmio::services::telemetry
              */
             void SetValue(const std::string& key, data::Variant value)
             {
-                std::unique_lock<std::shared_mutex> guard(_valuesMutex);
+                std::unique_lock<std::shared_timed_mutex> guard(_valuesMutex);
                 _values[key] = value;
             }
 
@@ -123,7 +123,7 @@ namespace swarmio::services::telemetry
              */
             void RemoveValue(const std::string& key)
             {
-                std::unique_lock<std::shared_mutex> guard(_valuesMutex);
+                std::unique_lock<std::shared_timed_mutex> guard(_valuesMutex);
                 _values.erase(key);
             }
 

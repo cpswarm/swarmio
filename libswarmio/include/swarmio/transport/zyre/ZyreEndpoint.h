@@ -49,7 +49,7 @@ namespace swarmio::transport::zyre
              * @brief Mutex protecting the Nodes registry
              * 
              */
-            std::shared_mutex _mutex;
+            std::shared_timed_mutex _mutex;
 
             /**
              * @brief Worker thread
@@ -90,7 +90,25 @@ namespace swarmio::transport::zyre
              * @param name The discoverable name of the endpoint
              * @param ifname Network interface name
              */
-            ZyreEndpoint(const char* name, const char* ifname);
+            ZyreEndpoint(const char* name);
+
+            /**
+             * @brief Set the port used by the endpoint.
+             * 
+             * Will throw an exception if the node is running.
+             * 
+             * @param port Port
+             */
+            void SetPort(uint16_t port);
+
+            /**
+             * @brief Set the network interface to bind to.
+             * 
+             * Will throw an exception if the node is running.
+             * 
+             * @param ifname Interface name
+             */
+            void SetInterface(const char* ifname);
 
             /**
              * @brief Start the background thread, announce the 
