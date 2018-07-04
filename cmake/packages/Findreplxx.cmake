@@ -7,9 +7,16 @@ find_path(REPLXX_INCLUDE_DIRS
     NO_DEFAULT_PATH
 )
 
+# Determine library name
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+	set(REPLXX_LIBNAME "replxx-d")
+else()
+	set(REPLXX_LIBNAME "replxx")
+endif()
+
 # Get library path
 find_library(REPLXX_LIBRARIES
-    NAMES "replxx-d" "libreplxx.a"
+    NAMES "libreplxx.a" "${REPLXX_LIBNAME}"
     HINTS ${REPLXX_ROOT}
     PATH_SUFFIXES "lib"
     NO_CMAKE_FIND_ROOT_PATH
