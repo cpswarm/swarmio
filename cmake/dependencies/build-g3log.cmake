@@ -1,6 +1,9 @@
 # Prepare
 swarmio_build_component_start(g3log "1.3.2")
 
+# Find Git executable
+find_package(Git REQUIRED)
+
 # Build g3log
 if (MSVC)
 
@@ -26,18 +29,13 @@ if (MSVC)
 	)
 
 else()
-
-	# Check for the presence of sed
-	find_program(TOOL_SED "sed")
-	if (TOOL_SED STREQUAL "TOOL_SED_NOT_FOUND")
-		message(FATAL_ERROR "It seems that sed is not available on your system, install it before trying to build g3log.")
-	endif()
 	
 	# Build and install using CMake
 	ExternalProject_Add(g3log
 		GIT_REPOSITORY "https://github.com/KjellKod/g3log.git"
 		GIT_TAG "e988aadc6572769809eaf962cab1824eed62086e"
 		PREFIX "g3log-${SWARMIO_TARGET_ARCHITECTURE}"
+		PATCH_COMMAND ${GIT_EXECUTABLE} apply "${CMAKE_CURRENT_SOURCE_DIR}/cmake/patches/g3log-cpack-prefix.patch"
 		BUILD_COMMAND ${SWARMIO_TARGET_BUILD_COMMAND}
 		INSTALL_COMMAND ${SWARMIO_TARGET_INSTALL_COMMAND}
 		INSTALL_DIR ${G3LOG_ROOT}
@@ -47,14 +45,6 @@ else()
 			"-DADD_FATAL_EXAMPLE=OFF"
 			"-DCPACK_PACKAGING_INSTALL_PREFIX=<INSTALL_DIR>"
 			${G3LOG_CMAKE_ARGS}
-    )
-
-    # Patch g3log to install outputs to the correct location
-	ExternalProject_Add_Step(g3log patch-installer
-        DEPENDEES update
-        DEPENDERS configure
-        ALWAYS true
-        COMMAND ${TOOL_SED} -i -e "s/CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT/TRUE/g" "<SOURCE_DIR>/CPackLists.txt"
     )
 	
 endif()

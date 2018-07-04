@@ -31,7 +31,7 @@ namespace swarmio::transport
              * @brief Atomic counter for message identifiers
              * 
              */
-            std::atomic<uint64_t> _counter = 1;
+            std::atomic<uint64_t> _counter;
 
             /**
              * @brief Send a reply to a message that only contains a status code.
@@ -43,6 +43,12 @@ namespace swarmio::transport
             void ReplyWithError(const Node* sender, const data::Message* message, data::Error error);
 
         protected:
+
+            /**
+             * @brief Protected constructor
+             * 
+             */
+            BasicEndpoint() : _counter(1) { }
 
             /**
              * @brief Called by this class to send serialized messages.

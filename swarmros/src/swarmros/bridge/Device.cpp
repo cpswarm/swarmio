@@ -16,19 +16,19 @@ void Device::ForwardEvent(const std::string& name, const std::map<std::string, s
     {
         throw swarmio::Exception("Reserved keyword 'all' cannot be used as an event name");
     }
-    auto& element = _eventForwarders.emplace_back(_nodeHandle, _eventPublisher, name, parameters);
-    GetEventService().RegisterHandler(element.GetName(), &element);
+    auto element = _eventForwarders.emplace(_eventForwarders.end(), _nodeHandle, _eventPublisher, name, parameters);
+    GetEventService().RegisterHandler(element->GetName(), std::addressof(*element));
 }
 
 void Device::PublishParameter(const std::string& name, const std::string& path, bool isWritable, const swarmio::data::Variant& defaultValue)
 {
-    auto& element = _parameterTargets.emplace_back(_nodeHandle, name, path, isWritable, defaultValue);
-    GetKeyValueService().RegisterTarget(element.GetName(), &element);
+    auto element = _parameterTargets.emplace(_parameterTargets.end(), _nodeHandle, name, path, isWritable, defaultValue);
+    GetKeyValueService().RegisterTarget(element->GetName(), std::addressof(*element));
 }
 
 void Device::ForwardTelemetry(const std::string& name, const std::string& path, swarmio::data::discovery::Type type)
 {
-    auto& element = _telemetrySources.emplace_back(_nodeHandle, &GetTelemetryService(), name, path, type);
+    _telemetrySources.emplace(_telemetrySources.end(), _nodeHandle, &GetTelemetryService(), name, path, type);
 }
 
 Device::~Device()

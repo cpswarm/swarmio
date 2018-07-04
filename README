@@ -2,11 +2,14 @@
 Building on Linux
 -----------------
 
-By default, everything is compiled for the current computer,
-but cross-compilation is available. Currently armhf and
-aarch64 are supported if the required tools are available.
-The default compiler is clang, and all builds were tested
-on Ubuntu 18.04.
+Build should work on any Linux distribution, but packaging
+and architecture detection will only work on Debian and 
+Ubuntu. By default, everything is compiled for the host 
+architecture, but cross-compilation is available. Currently 
+armhf and arm64 are supported if the required tools are 
+available. The default compiler is clang, but GCC can also 
+be used. Builds were tested with Ubuntu 16.04 and 18.04,
+with all the latest updates installed.
 
 There are three build modes you can choose from:
 
@@ -54,7 +57,7 @@ Optional parameters:
  PACKAGE builds, it will override the installation prefix 
  of the generated packages.
 
- -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (armhf or aarch64)
+ -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (armhf or arm64)
 
  Enables cross-compilation - required tools must already be
  installed. On Ubuntu systems, crossbuild-essential-<ARCH>
@@ -75,6 +78,18 @@ Optional parameters:
   - bionic (Ubuntu 18.04)
   - bionic-ros (Ubuntu 18.04 with ROS Melodic Morenia)
 
+ -DSWARMIO_SYSROOT=<SYSROOT PATH>
+
+ If multistrap is not used, a sysroot needs to be manually set
+ for cross-compilation to work. Ensure that the system image
+ contains no absolute symbolic links before using it.
+
+ -DSWARMIO_GCC_VERSION=<GCC VERSION>
+
+ If multistrap is not used, this should be set to indicate the
+ GCC version present in the manually specified sysroot in order
+ to help compilers find the correct libraries to link against.
+
  -DSWARMIO_ROS_PREFIX=<PATH>
 
  Specifies the location of the ROS installation to use when 
@@ -87,7 +102,7 @@ Optional parameters:
  If specified, GCC will be used instead of clang. Please note
  that cross-compilation will most likely only work if the
  same operating system (with a different architecture) is
- used on the host machine.
+ used on the host machine. Requires GCC 6 or later.
  
 -------------------
 Building on Windows

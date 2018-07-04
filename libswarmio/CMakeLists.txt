@@ -4,8 +4,8 @@ cmake_minimum_required(VERSION 3.5)
 # Declare project
 project(libswarmio LANGUAGES CXX)
 
-# Enable C++17
-set(CMAKE_CXX_STANDARD 17)
+# Enforce C++17
+include("${CMAKE_CURRENT_LIST_DIR}/../cmake/helpers/cxx-standard.cmake")
 
 # Add main library target
 add_library(swarmio SHARED

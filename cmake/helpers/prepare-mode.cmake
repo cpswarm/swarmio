@@ -1,9 +1,27 @@
+# Default to Development mode
+if ("${SWARMIO_BUILD_MODE}" STREQUAL "")
+
+    # Warn if no build mode was specified
+    if (UNIX)
+        message(STATUS "SWARMIO_BUILD_MODE is not specified, defaulting to DEVELOPMENT.")
+    endif()
+    
+    # Set mode
+    set(SWARMIO_BUILD_MODE "DEVELOPMENT")
+    
+endif()
+
 # Are we building in development, install or package mode?
-if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE" OR SWARMIO_BUILD_MODE STREQUAL "INSTALL")
+if ("${SWARMIO_BUILD_MODE}" STREQUAL "PACKAGE" OR "${SWARMIO_BUILD_MODE}" STREQUAL "INSTALL")
 
     # Limit to UNIX-like systems
     if (NOT UNIX)
         message(FATAL_ERROR "INSTALL and PACKAGE build modes are only available on UNIX-like systems.")
+    endif()
+
+    # Must be absolute path
+    if (NOT CMAKE_INSTALL_PREFIX MATCHES "\/.+")
+        message(FATAL_ERROR "CMAKE_INSTALL_PREFIX must be an absolute path for INSTALL or PACKAGE build modes.")
     endif()
 
     # Default is to build using a RelWithDebInfo configuration
@@ -16,11 +34,6 @@ if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE" OR SWARMIO_BUILD_MODE STREQUAL "INSTAL
         set(CMAKE_INSTALL_PREFIX "/opt/swarmio" CACHE PATH "Install prefix" FORCE)
     endif()
 
-    # Must be absolute path
-    if (NOT CMAKE_INSTALL_PREFIX MATCHES "\/.+")
-        message(FATAL_ERROR "CMAKE_INSTALL_PREFIX must be an absolute path for INSTALL or PACKAGE build modes.")
-    endif()
-
     # Show mode
     if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
         message(STATUS "Mode: build DEB packages from project outputs with root ${CMAKE_INSTALL_PREFIX}")
@@ -28,20 +41,7 @@ if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE" OR SWARMIO_BUILD_MODE STREQUAL "INSTAL
         message(STATUS "Mode: install all project outputs to ${CMAKE_INSTALL_PREFIX}")
     endif()
 
-else()
-
-    # Default to Development mode
-    if (NOT SWARMIO_BUILD_MODE STREQUAL "DEVELOPMENT")
-	
-		# Warn if no build mode was specified
-		if (UNIX)
-			message(STATUS "SWARMIO_BUILD_MODE is not specified or invalid, defaulting to DEVELOPMENT.")
-		endif()
-		
-		# Set mode
-        set(SWARMIO_BUILD_MODE "DEVELOPMENT")
-		
-    endif()
+elseif ("${SWARMIO_BUILD_MODE}" STREQUAL "DEVELOPMENT")
 
     # Default is to build using a Debug configuration
 	if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
@@ -54,12 +54,13 @@ else()
     endif()
 
     # Show mode
-	if (MSVC)
-		message(STATUS "Mode: install everything to ${CMAKE_INSTALL_PREFIX}")
-	else()
-		message(STATUS "Mode: install dependencies to ${CMAKE_INSTALL_PREFIX}, keep core project outputs separate")
-	endif()
-	
+	message(STATUS "Mode: install everything to ${CMAKE_INSTALL_PREFIX}")
+    
+else()
+
+    # Display error
+    message(FATAL_ERROR "Unknown build mode specified.")
+
 endif()
 
 # Pass paths to subprojects
@@ -82,14 +83,14 @@ list(APPEND SWARMIO_SUBPROJECT_HOST_ARGS
 if (MSVC)
 
     # Since MSVC is a multi-config generator, we need to modify the build command
-    set(SWARMIO_HOST_BUILD_COMMAND cmake --build . --config RelWithDebInfo)
-    set(SWARMIO_TARGET_BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE})
+    set(SWARMIO_HOST_BUILD_COMMAND ${CMAKE_COMMAND} --build . --config RelWithDebInfo)
+    set(SWARMIO_TARGET_BUILD_COMMAND ${CMAKE_COMMAND} --build . --config ${CMAKE_BUILD_TYPE})
 
 else()
 
     # Just use the default build commands
-    set(SWARMIO_HOST_BUILD_COMMAND cmake --build .)
-    set(SWARMIO_TARGET_BUILD_COMMAND cmake --build .)
+    set(SWARMIO_HOST_BUILD_COMMAND ${CMAKE_COMMAND} --build .)
+    set(SWARMIO_TARGET_BUILD_COMMAND ${CMAKE_COMMAND} --build .)
 
 endif()
 
