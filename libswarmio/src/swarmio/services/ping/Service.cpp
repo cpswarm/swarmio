@@ -56,5 +56,5 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 void Service::DescribeService(data::discovery::Response& descriptor)
 {
     // Mark the ECHO service as available
-    descriptor.set_echo(true);
+    descriptor.set_echo_enabled(true);
 }

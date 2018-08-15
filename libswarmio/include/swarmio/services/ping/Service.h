@@ -32,7 +32,10 @@ namespace swarmio::services::ping
              * @param endpoint Endpoint
              */
             Service(Endpoint* endpoint)
-                : Mailbox(endpoint) { }
+                : Mailbox(endpoint)
+            { 
+                FinishConstruction();
+            }
 
             /**
              * @brief Delivery point of all messages

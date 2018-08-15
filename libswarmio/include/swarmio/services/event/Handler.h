@@ -2,6 +2,7 @@
 
 #include <swarmio/Node.h>
 #include <swarmio/data/event/Notification.pb.h>
+#include <swarmio/data/discovery/Schema.pb.h>
 
 namespace swarmio::services::event 
 {
@@ -29,8 +30,8 @@ namespace swarmio::services::event
              *        by overriding this method.
              * 
              * @param name Event name 
-             * @param descriptor Descriptor to extend
+             * @return data::discovery::Schema 
              */
-            virtual void DescribeEvent(const std::string& name, data::event::Descriptor& descriptor) { }
+            virtual data::discovery::Schema DescribeEvent(const std::string& name) = 0;
     };
 }

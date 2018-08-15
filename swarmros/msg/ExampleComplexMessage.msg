@@ -1,0 +1,5 @@
+uint64 field1
+uint64 field2
+ExampleComplexSubmessage submessage1
+ExampleComplexSubmessage submessage2
+float64 field3

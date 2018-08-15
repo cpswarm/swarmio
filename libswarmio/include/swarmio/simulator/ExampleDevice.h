@@ -13,7 +13,7 @@ namespace swarmio::simulator
      *        an ordinary device.
      * 
      */
-    class ExampleDevice : private profiles::MemberProfile
+    class ExampleDevice final : private profiles::MemberProfile
     {
         private:
 
@@ -42,8 +42,7 @@ namespace swarmio::simulator
              * 
              * @param endpoint Endpoint to use
              */
-            ExampleDevice(Endpoint* endpoint)
-                : MemberProfile(endpoint) { }
+            ExampleDevice(Endpoint* endpoint);
 
             /**
              * @brief Add an event handler and register it.
@@ -60,12 +59,14 @@ namespace swarmio::simulator
             void AddInMemoryParameter(InMemoryParameter* parameter);
 
             /**
-             * @brief Update a telemetry value
+             * @brief Add a constant telemetry value
              * 
              * @param key Key
              * @param value Value
+             * @param includeInStatus True if the value should be 
+             *                        broadcast in the status descriptor
              */
-            void SetTelemetryValue(const std::string& key, const data::Variant& value);
+            void AddConstantTelemetryValue(const std::string& key, const data::Variant& value, bool includeInStatus = false);
 
             /**
              * @brief Delivery point of all messages

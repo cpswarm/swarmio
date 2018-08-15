@@ -1,44 +1,57 @@
 #include <swarmros/bridge/EventForwarder.h>
-#include <swarmros/Event.h>
-#include <swarmio/Exception.h>
-#include <google/protobuf/util/json_util.h>
+#include <swarmros/bridge/MessageMismatchException.h>
+#include <swarmio/services/event/Service.h>
 
 using namespace swarmros;
 using namespace swarmros::bridge;
 
-EventForwarder::EventForwarder(ros::NodeHandle& nodeHandle, ros::Publisher& allPublisher, const std::string& name, const std::map<std::string, swarmio::data::discovery::Type>& parameters)
-    : _allPublisher(allPublisher), _name(name), _parameters(parameters)
+EventForwarder::EventForwarder(ros::NodeHandle& nodeHandle, const std::string& source, const std::string& message, swarmio::Endpoint* endpoint)
+        : _endpoint(endpoint)
 {
-    _thisPublisher = nodeHandle.advertise<swarmros::Event>("events/" + name, 8);
-}
+    // Register schema
+    const auto& serializer = introspection::MessageSerializer::MessageSerializerForType(message, "swarmros");
 
-void EventForwarder::EventWasTriggered(const swarmio::Node* node, const swarmio::data::event::Notification& event)
-{
-    // Serialize basic fields
-    swarmros::Event message;
-    message.node = node->GetUUID();
-    message.name = event.name();
-
-    // Include a JSON serialized version of the event
-    google::protobuf::util::MessageToJsonString(event, &message.json);
-
-    // Publish to both topics
-    _thisPublisher.publish(message);
-    _allPublisher.publish(message);
-}
-
-void EventForwarder::DescribeEvent(const std::string& name, swarmio::data::event::Descriptor& descriptor)
-{
-    if (name == _name)
+    // Check header
+    const auto& headerType = serializer.GetHeaderMessageSerializer().GetFullName();
+    if (headerType != "swarmros/EventHeader")
     {
-        auto& target = *descriptor.mutable_parameters();
-        for (const auto& pair : _parameters)
+        throw MessageMismatchException("Invalid header type for event", source, "swarmros/EventHeader", headerType);
+    }
+
+    // Save message type
+    _message = serializer.GetFullName();
+
+    // Subscribe
+    _subscriber = nodeHandle.subscribe<introspection::HeadedMessage>(source, 1, &EventForwarder::EventReceived, this);
+}
+
+void EventForwarder::EventReceived(const introspection::HeadedMessage::ConstPtr& message)
+{
+    if (message->GetType() == _message)
+    {
+        // Fetch header fields
+        const auto& header = message->GetHeader().pairs();
+        const auto& content = message->GetContent().pairs();
+
+        // Prepare notification
+        swarmio::data::event::Notification notification;
+        notification.set_name(header.at("name").string_value());
+        notification.mutable_parameters()->insert(content.begin(), content.end());
+
+        // Send message
+        auto uuid = header.at("node").string_value();
+        if (uuid.size() == 0)
         {
-            target[pair.first] = pair.second;
+            swarmio::services::event::Service::Trigger(_endpoint, notification);
+        }
+        else
+        {
+            auto node = _endpoint->NodeForUUID(uuid);
+            swarmio::services::event::Service::Trigger(_endpoint, notification, node);
         }
     }
     else
     {
-        throw swarmio::Exception("Name mismatch for event description request.");
+        throw MessageMismatchException("Invalid message type received from topic", _subscriber.getTopic(), _message, message->GetType());
     }
 }

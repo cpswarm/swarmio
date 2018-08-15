@@ -1,8 +1,6 @@
 #pragma once
 
 #include <g3log/g3log.hpp>
-#include <g3log/loglevels.hpp>
-#include <ros/console.h>
 
 namespace swarmros::bridge 
 {
@@ -20,7 +18,7 @@ namespace swarmros::bridge
              *        forwards them to ROS.
              * 
              * @param logEntry Log message
-             */
+            */
             void ReceiveLogMessage(g3::LogMessageMover logEntry);
     };
 }

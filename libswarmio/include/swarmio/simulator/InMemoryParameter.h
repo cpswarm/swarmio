@@ -2,7 +2,7 @@
 
 #include <swarmio/services/keyvalue/Target.h>
 #include <swarmio/data/Variant.pb.h>
-#include <swarmio/data/discovery/Type.pb.h>
+#include <swarmio/data/discovery/Schema.pb.h>
 
 namespace swarmio::simulator 
 {
@@ -11,7 +11,7 @@ namespace swarmio::simulator
      *        target that can be made read-only.
      * 
      */
-    class InMemoryParameter : public services::keyvalue::Target
+    class InMemoryParameter final : public services::keyvalue::Target
     {
         private:
 
@@ -201,11 +201,13 @@ namespace swarmio::simulator
              * 
              * @return data::discovery::Type 
              */
-            virtual data::discovery::Type GetType(const std::string& path) const override
+            virtual data::discovery::Field GetFieldDescriptor(const std::string& path) const override
             {
                 if (path == _path)
                 {    
-                    return _type;  
+                    data::discovery::Field field;
+                    field.set_type(_type);
+                    return field;
                 }
                 else
                 {

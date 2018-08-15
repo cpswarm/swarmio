@@ -1,7 +1,7 @@
 #pragma once
 
 #include <swarmio/data/Variant.pb.h>
-#include <swarmio/data/discovery/Type.pb.h>
+#include <swarmio/data/discovery/Schema.pb.h>
 
 namespace swarmio::services::keyvalue 
 {
@@ -28,11 +28,11 @@ namespace swarmio::services::keyvalue
             virtual void Set(const std::string& path, const data::Variant& value) = 0;
 
             /**
-             * @brief Get the data type of the target
+             * @brief Get the field of the target
              * 
-             * @return data::discovery::Type 
+             * @return data::discovery::Field 
              */
-            virtual data::discovery::Type GetType(const std::string& path) const = 0;
+            virtual data::discovery::Field GetFieldDescriptor(const std::string& path) const = 0;
 
             /**
              * @brief Determines whether the value can be read

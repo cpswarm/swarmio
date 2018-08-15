@@ -1,11 +1,47 @@
 syntax = "proto3";
 package swarmio.data;
 
+message Map {
+    map<string, Variant> pairs = 1;
+}
+
+message ArrayOfMap {
+    repeated Map elements = 1;
+}
+
+message ArrayOfBool {
+    repeated bool elements = 1;
+}
+
+message ArrayOfInt {
+    repeated int64 elements = 1;
+}
+
+message ArrayOfUInt {
+    repeated uint64 elements = 1;
+}
+
+message ArrayOfDouble {
+    repeated double elements = 1;
+}
+
+message ArrayOfString {
+    repeated string elements = 1;
+}
+
 message Variant {
     oneof value {
-        int32 int_value = 3;
+        bool bool_value = 1;
+        int64 int_value = 2;
+        uint64 uint_value = 3;
         double double_value = 4;
-        bool bool_value = 5;
-        string string_value = 6;
+        string string_value= 5;
+        Map map_value = 6;
+        ArrayOfBool bool_array = 11;
+        ArrayOfInt int_array = 12;
+        ArrayOfUInt uint_array = 13;
+        ArrayOfDouble double_array = 14;
+        ArrayOfString string_array = 15;
+        ArrayOfMap map_array = 16;
     }
 }

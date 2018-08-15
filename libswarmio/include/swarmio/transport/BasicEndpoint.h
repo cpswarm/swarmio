@@ -17,15 +17,21 @@ namespace swarmio::transport
         private:
 
             /**
-             * @brief Mutex used to synchronize access 
-             *        to the list of mailboxes.
+             * @brief True if the Mailbox has been started.
+             * 
              */
-            std::recursive_mutex _mutex;
+            bool _isRunning;
 
             /**
              * @brief Container for registered mailboxes
              */
             std::set<Mailbox*> _mailboxes;
+
+            /**
+             * @brief Mutex used to synchronize access 
+             *        to the list of mailboxes.
+             */
+            std::recursive_mutex _mutex;
 
             /**
              * @brief Atomic counter for message identifiers
@@ -48,7 +54,7 @@ namespace swarmio::transport
              * @brief Protected constructor
              * 
              */
-            BasicEndpoint() : _counter(1) { }
+            BasicEndpoint() : _counter(1), _isRunning(false) { }
 
             /**
              * @brief Called by this class to send serialized messages.
@@ -131,6 +137,32 @@ namespace swarmio::transport
             virtual void ReplaceMailbox(Mailbox* oldMailbox, Mailbox* newMailbox) override;
 
         public:
+
+            /**
+             * @brief Start a background thread and begin processing
+             *        messages on this endpoint.
+             * 
+             */
+            virtual void Start() override;
+
+            /**
+             * @brief Send a termination signal and wait until the
+             *        endpoint finished processing messages.
+             * 
+             * Thread-safe. 
+             * 
+             */
+            virtual void Stop() override;
+
+            /**
+             * @brief Checks whether the endpoint has been started
+             * 
+             * @return True if it has been started
+             */
+            bool IsRunning()
+            {
+                return _isRunning;
+            }
 
             /**
              * @brief Send a message to a specific member of the swarm. 

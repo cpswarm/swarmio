@@ -1,0 +1,8 @@
+syntax = "proto3";
+package swarmio.data.telemetry;
+
+import "swarmio/data/Variant.proto";
+
+message Status {
+    map<string, Variant> values = 1;
+}

@@ -35,11 +35,22 @@ namespace swarmio
              * @param endpoint Endpoint
              */
             Mailbox(Endpoint* endpoint)
-                : _endpoint(endpoint)
-            { 
-                _endpoint->RegisterMailbox(this);
+            {
+                _endpoint = endpoint;
             }
 
+            /**
+             * @brief Called when the last constructor has finished its job.
+             * 
+             */
+            void FinishConstruction()
+            {
+                if (_endpoint != nullptr)
+                {
+                    _endpoint->RegisterMailbox(this);
+                }
+            }
+            
             /**
              * @brief Move a Mailbox object
              * 
@@ -110,6 +121,20 @@ namespace swarmio
              * @param node The node that has left
              */
             virtual void NodeWillLeave(const Node* node) noexcept { }
+
+            /**
+             * @brief Called when the mailbox is attached to an already running
+             *        endpoint or if the attached endpoint has just started.
+             * 
+             */
+            virtual void MailboxWasConnected() noexcept { }
+
+            /**
+             * @brief Called right before the mailbox is disconnected from its
+             *        endpoint or if the attached endpoint is about to stop.
+             * 
+             */
+            virtual void MailboxWillBeDisconnected() noexcept { }
 
             /**
              * @brief Get the associated Endpoint

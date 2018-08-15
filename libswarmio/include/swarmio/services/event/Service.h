@@ -1,7 +1,7 @@
 #pragma once
 
 #include <swarmio/Mailbox.h>
-#include <swarmio/services/StatusAwaiter.h>
+#include <swarmio/services/ErrorAwaiter.h>
 #include <swarmio/services/event/Handler.h>
 #include <swarmio/services/discovery/Discoverable.h>
 #include <string>
@@ -51,9 +51,9 @@ namespace swarmio::services::event
              * @param endpoint Endpoint to use
              * @param event Event to propagate
              * @param event Target node
-             * @return StatusAwaiter Async result
+             * @return ErrorAwaiter Async result
              */
-            static StatusAwaiter Trigger(Endpoint* endpoint, const data::event::Notification& event, const Node* node);
+            static ErrorAwaiter Trigger(Endpoint* endpoint, const data::event::Notification& event, const Node* node);
 
             /**
              * @brief Construct a new Service object
@@ -61,7 +61,10 @@ namespace swarmio::services::event
              * @param endpoint Endpoint
              */
             Service(Endpoint* endpoint)
-                : Mailbox(endpoint) { }
+                : Mailbox(endpoint)
+            { 
+                FinishConstruction();
+            }
             
             /**
              * @brief Delivery point of all messages

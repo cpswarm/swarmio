@@ -37,7 +37,12 @@ namespace swarmio::services::ping
              * @param endpoint Endpoint
              * @param requestIdentifier Original message identifier
              */
-            TimingAwaiter(Endpoint* endpoint, uint64_t requestIdentifier);
+            TimingAwaiter(Endpoint* endpoint, uint64_t requestIdentifier)
+                : Awaiter(endpoint, requestIdentifier) 
+            {
+                _start = std::chrono::high_resolution_clock::now();
+                FinishConstruction();
+            }
 
             /**
              * @brief Translate the precise response to a

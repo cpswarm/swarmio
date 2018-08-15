@@ -122,9 +122,9 @@ namespace swarmio::services
              * @brief Get the response value. Will throw an exception 
              *        if called before the response is received.
              *
-             * @return const T& 
+             * @return T response
              */
-            const T& GetResponse()
+            T GetResponse()
             {
                 std::unique_lock<std::mutex> guard(_mutex);
                 if (_valid)

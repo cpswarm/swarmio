@@ -1,8 +1,0 @@
-syntax = "proto3";
-package swarmio.data;
-
-enum Reliability {
-	UNRELIABLE = 0;		// No response needed
-	NACK_REQUESTED = 1; // Require a NACK if not deliverable locally
-	ACK_REQUESTED = 2;	// Require an ACK if delivered
-}

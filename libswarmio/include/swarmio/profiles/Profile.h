@@ -4,7 +4,7 @@
 #include <swarmio/Mailbox.h>
 #include <swarmio/services/discovery/Service.h>
 #include <swarmio/services/keyvalue/Service.h>
-#include <swarmio/services/event/Service.h>
+#include <swarmio/services/telemetry/Service.h>
 #include <swarmio/services/ping/Service.h>
 
 namespace swarmio::profiles 
@@ -13,7 +13,7 @@ namespace swarmio::profiles
      * @brief Base class for profiles
      * 
      */
-    class SWARMIO_API Profile : public Mailbox
+    class Profile : public Mailbox
     {
         protected:
 
@@ -30,6 +30,12 @@ namespace swarmio::profiles
             swarmio::services::ping::Service _pingService;
 
             /**
+             * @brief Telemetry service
+             * 
+             */
+            swarmio::services::telemetry::Service _telemetryService;
+
+            /**
              * @brief Construct a new Profile
              * 
              * @param endpoint Endpoint to use
@@ -39,9 +45,10 @@ namespace swarmio::profiles
             Profile(Endpoint* endpoint, bool performActiveDiscovery)
                 : Mailbox(endpoint), 
                 _discoveryService(endpoint, performActiveDiscovery), 
-                _pingService(endpoint) 
+                _pingService(endpoint), _telemetryService(endpoint)
             {
                  _discoveryService.RegisterDiscoverable(&_pingService);
+                 _discoveryService.RegisterDiscoverable(&_telemetryService);
             }
 
         public:
@@ -67,11 +74,22 @@ namespace swarmio::profiles
             }
 
             /**
+             * @brief Get a reference for the Telemetry service
+             * 
+             * @return swarmio::services::telemetry::Service& 
+             */
+            swarmio::services::telemetry::Service& GetTelemetryService()
+            {
+                return _telemetryService;
+            }
+
+            /**
              * @brief Destroy the Profile object
              * 
              */
             virtual ~Profile()
             {
+                _discoveryService.UnregisterDiscoverable(&_telemetryService);
                 _discoveryService.UnregisterDiscoverable(&_pingService);
             }
     };

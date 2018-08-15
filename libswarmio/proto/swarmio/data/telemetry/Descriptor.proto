@@ -1,9 +1,0 @@
-syntax = "proto3";
-package swarmio.data.telemetry;
-
-import "swarmio/data/discovery/Type.proto";
-
-message Descriptor {
-    string name = 1;
-    discovery.Type type = 2;
-}

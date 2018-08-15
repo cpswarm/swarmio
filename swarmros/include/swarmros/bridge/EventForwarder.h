@@ -1,80 +1,57 @@
 #pragma once
 
-#include <swarmio/services/event/Handler.h>
+#include <swarmros/bridge/Pylon.h>
+#include <swarmros/introspection/HeadedMessage.h>
+#include <swarmio/Endpoint.h>
 #include <ros/ros.h>
-#include <map>
 
 namespace swarmros::bridge
 {
     /**
-     * @brief A Handler implementation that forwards
-     *        matching events to a ROS topic.
+     * @brief A ROS topic subscriber that bridges 
+     *        events from ROS topics to the swarm.
      * 
      */
-    class EventForwarder final : public swarmio::services::event::Handler
+    class EventForwarder final : public Pylon
     {
         private:
 
             /**
-             * @brief Publisher
+             * @brief ROS topic subscriber
              * 
              */
-            ros::Publisher _thisPublisher;
+            ros::Subscriber _subscriber;
 
             /**
-             * @brief Publisher
+             * @brief Message type
              * 
              */
-            ros::Publisher _allPublisher;
+            std::string _message;
+            
+            /**
+             * @brief Telemetry service
+             * 
+             */
+            swarmio::Endpoint* _endpoint;
 
             /**
-             * @brief Event name
+             * @brief Called whenever the topic is updated
              * 
+             * @param message Message
              */
-            std::string _name;
-
-            /**
-             * @brief Parameters
-             * 
-             */
-            std::map<std::string, swarmio::data::discovery::Type> _parameters;
+            void EventReceived(const introspection::HeadedMessage::ConstPtr& message);
 
         public:
 
             /**
-             * @brief Construct a new EventForwarder
+             * @brief Construct a new EventForwarder object
              * 
              * @param nodeHandle Node handle
-             * @param allPublisher All events topic handle
-             * @param name Event name
-             * @param parameters Parameter description
+             * @param source ROS topic
+             * @param message Message type
+             * @param endpoint Endpoint
              */
-            EventForwarder(ros::NodeHandle& nodeHandle, ros::Publisher& allPublisher, const std::string& name, const std::map<std::string, swarmio::data::discovery::Type>& parameters);
-
-            /**
-             * @brief Publish the event in the ROS topic.
-             * 
-             * @param node Source node
-             * @param event Event
-             */
-            virtual void EventWasTriggered(const swarmio::Node* node, const swarmio::data::event::Notification& event) override;
-
-            /**
-             * @brief Describe the event based on the configuration of this instance.
-             * 
-             * @param descriptor Event descriptor
-             */
-            virtual void DescribeEvent(const std::string& name, swarmio::data::event::Descriptor& descriptor) override;
-
-            /**
-             * @brief Get the name of the event
-             * 
-             * @return const std::string& 
-             */
-            const std::string& GetName() const
-            {
-                return _name;
-            }
+            EventForwarder(ros::NodeHandle& nodeHandle, const std::string& source, const std::string& message, swarmio::Endpoint* endpoint);
     };
 }
 

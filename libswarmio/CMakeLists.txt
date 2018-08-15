@@ -11,7 +11,8 @@ include("${CMAKE_CURRENT_LIST_DIR}/../cmake/helpers/cxx-standard.cmake")
 add_library(swarmio SHARED
 
 	# Built-in services
-	"src/swarmio/services/StatusAwaiter.cpp"
+	"src/swarmio/services/PeriodicService.cpp"
+	"src/swarmio/services/ErrorAwaiter.cpp"
 	"src/swarmio/services/event/Service.cpp"
 	"src/swarmio/services/ping/Service.cpp"
 	"src/swarmio/services/ping/TimingAwaiter.cpp"
@@ -20,10 +21,6 @@ add_library(swarmio SHARED
 	"src/swarmio/services/discovery/Service.cpp"
 	"src/swarmio/services/telemetry/Service.cpp"
 
-	# Profiles
-	"src/swarmio/profiles/ClientProfile.cpp"
-	"src/swarmio/profiles/MemberProfile.cpp"
-
 	# Zyre endpoint implementation
 	"src/swarmio/transport/zyre/ZyreControlSocket.cpp"
 	"src/swarmio/transport/zyre/ZyreEndpoint.cpp"
@@ -31,24 +28,22 @@ add_library(swarmio SHARED
 
 	# Protobuf messages
 	"proto/swarmio/data/Message.proto"
-	"proto/swarmio/data/Header.proto"
-	"proto/swarmio/data/Reliability.proto"
-	"proto/swarmio/data/Error.proto"
 	"proto/swarmio/data/Variant.proto"
 	"proto/swarmio/data/ping/Echo.proto"
 	"proto/swarmio/data/event/Notification.proto"
-	"proto/swarmio/data/event/Descriptor.proto"
 	"proto/swarmio/data/keyvalue/GetRequest.proto"
 	"proto/swarmio/data/keyvalue/GetResponse.proto"
 	"proto/swarmio/data/keyvalue/SetRequest.proto"
-	"proto/swarmio/data/keyvalue/Descriptor.proto"
-	"proto/swarmio/data/discovery/Type.proto"
+	"proto/swarmio/data/discovery/Schema.proto"
 	"proto/swarmio/data/discovery/Response.proto"
 	"proto/swarmio/data/discovery/Request.proto"
 	"proto/swarmio/data/telemetry/SubscribeRequest.proto"
 	"proto/swarmio/data/telemetry/UnsubscribeRequest.proto"
 	"proto/swarmio/data/telemetry/Update.proto"
-	"proto/swarmio/data/telemetry/Descriptor.proto"
+	"proto/swarmio/data/telemetry/Status.proto"
+
+	# Data helper
+	"src/swarmio/data/Helper.cpp"
 )
 
 # Add simulator executable target

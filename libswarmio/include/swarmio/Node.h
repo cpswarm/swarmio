@@ -20,11 +20,25 @@ namespace swarmio
             virtual const std::string& GetUUID() const = 0;
 
             /**
+             * @brief Returns the (possibly non-unique) name of the node
+             * 
+             * @return const std::string& 
+             */
+            virtual const std::string& GetName() const = 0;
+
+            /**
              * @brief Get a user-readable description of the node.
              * 
              * @return std::string 
              */
             virtual std::string GetDescription() const = 0;
+
+            /**
+             * @brief Checks whether the Node is reachable.
+             * 
+             * @return True if the Node is online.
+             */
+            virtual bool IsOnline() const = 0;
 
             /**
              * @brief Destroy the Node object

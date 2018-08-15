@@ -1,9 +1,0 @@
-syntax = "proto3";
-package swarmio.data.event;
-
-import "swarmio/data/discovery/Type.proto";
-
-message Descriptor {
-    string name = 1;
-    map<string, discovery.Type> parameters = 2;
-}

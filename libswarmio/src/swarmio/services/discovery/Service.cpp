@@ -40,22 +40,6 @@ void Service::UnregisterDiscoverable(Discoverable* discoverable)
     _cacheValid = false;
 }
 
-void Service::RegisterObserver(Observer* observer)
-{
-    std::lock_guard<std::mutex> guard(_observersMutex);
-
-    // Insert observer
-    _observers.insert(observer);
-}
-
-void Service::UnregisterObserver(Observer* observer)
-{
-    std::lock_guard<std::mutex> guard(_observersMutex);
-
-    // Remove observer
-    _observers.erase(observer);
-}
-
 bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 {
     // Sanity checks
@@ -82,11 +66,13 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 
                 // Mark as handled
                 return true;
-        }
 
-        // Unknown action
-        LOG(WARNING) << "A discovery request with the unknown action '" << message->ds_request().action() << "' was received and promptly ignored.";
-        return false;
+            default:
+            
+                // Unknown action
+                LOG(WARNING) << "A discovery request with the unknown action '" << message->ds_request().action() << "' was received and promptly ignored.";
+                return false;
+        }
     }
     else if (message->content_case() == data::Message::ContentCase::kDsResponse)
     {

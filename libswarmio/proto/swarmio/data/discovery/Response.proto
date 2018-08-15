@@ -1,13 +1,11 @@
 syntax = "proto3";
 package swarmio.data.discovery;
 
-import "swarmio/data/event/Descriptor.proto";
-import "swarmio/data/keyvalue/Descriptor.proto";
-import "swarmio/data/telemetry/Descriptor.proto";
+import "swarmio/data/discovery/Schema.proto";
 
 message Response {
-    bool echo = 1;
-    repeated event.Descriptor event = 2;
-    repeated keyvalue.Descriptor keyvalue = 3;
-    repeated telemetry.Descriptor telemetry = 4;
+    bool echo_enabled = 1;
+    Schema event_schema = 2;
+    Schema keyvalue_schema = 3;
+    Schema telemetry_schema = 4;
 }

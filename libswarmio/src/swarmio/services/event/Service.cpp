@@ -21,7 +21,7 @@ void Service::Trigger(Endpoint* endpoint, const data::event::Notification& event
     endpoint->Send(&request, nullptr);
 }
 
-StatusAwaiter Service::Trigger(Endpoint* endpoint, const data::event::Notification& event, const Node* node)
+ErrorAwaiter Service::Trigger(Endpoint* endpoint, const data::event::Notification& event, const Node* node)
 {
     // Sanity checks
     CHECK(endpoint != nullptr) << "No endpoint specified";
@@ -37,7 +37,7 @@ StatusAwaiter Service::Trigger(Endpoint* endpoint, const data::event::Notificati
 
     // Send and await response
     endpoint->Tag(&request);
-    StatusAwaiter awaiter(endpoint, request.header().identifier());
+    ErrorAwaiter awaiter(endpoint, request.header().identifier());
     endpoint->Send(&request, node);
     return awaiter;
 }
@@ -103,10 +103,9 @@ void Service::DescribeService(data::discovery::Response& descriptor)
     std::lock_guard<std::mutex> guard(_mutex);
 
     // Collect information from handlers
+    auto& fields = *descriptor.mutable_event_schema()->mutable_fields();
     for (auto handler : _handlers)
     {
-        auto entry = descriptor.add_event();
-        entry->set_name(handler.first);
-        handler.second->DescribeEvent(handler.first, *entry);
+        *fields[handler.first].mutable_schema() = handler.second->DescribeEvent(handler.first);
     }
 }

@@ -1,4 +1,5 @@
 #include <swarmio/services/telemetry/Service.h>
+#include <swarmio/data/Helper.h>
 #include <g3log/g3log.hpp>
 #include <chrono>
 
@@ -34,56 +35,45 @@ UpdateAwaiter Service::Subscribe(Endpoint* endpoint, const Node* node, uint32_t 
     return awaiter;
 }
 
-Service::Service(Endpoint* endpoint)
-    : Mailbox(endpoint), _shutdownRequested(false)
-{
-    _worker = new std::thread(&Service::Worker, this);
-}
-
-Service::~Service()
-{
-    // Request shutdown
-    _shutdownRequested = true;
-
-    // Wait for worker thread
-    _worker->join();
-
-    // Delete worker thread
-    delete _worker;
-}
-
-void Service::Worker()
-{
-    // Create clock
-    std::chrono::high_resolution_clock timer;
-    auto next = timer.now();
-
-    // Go
-    for (;;)
-    {
-        // Check if we need to stop
-        if (_shutdownRequested)
-        {
-            break;
-        }
-
-        // Perform update
-        Update();
-
-        // Wait 100 seconds for the next iteration
-        next += 100ms;
-        std::this_thread::sleep_until(next);
-    }
-}
-
 void Service::Update()
 {
     // Make copy of current list of values
-    std::shared_lock<std::shared_timed_mutex> guardValues(_valuesMutex);
+    std::shared_lock guardValues(_valuesMutex);
     auto cache = _values;
     guardValues.unlock();
 
-    // Send updates
+    // Make copy of the status keys
+    std::shared_lock guardSchema(_schemaMutex);
+    auto statusKeys = _statusKeys;
+    guardSchema.unlock();
+
+    // Send status broadcast
+    if (!statusKeys.empty())
+    {
+        // Build message
+        data::Message message;
+        auto& pairs = *message.mutable_tm_status()->mutable_values();
+        for (const auto& key : statusKeys)
+        {                
+            auto entry = cache.find(key);
+            if (entry != cache.end())
+            {
+                pairs[key] = (*entry).second;
+            }
+            else
+            {
+                // Quietly ignore keys not found locally
+            }
+        }
+        
+        // Send message
+        if (!pairs.empty())
+        {
+            GetEndpoint()->Send(&message, nullptr);
+        }
+    }
+
+    // Send updates to telemetry subscribers
     std::shared_lock<std::shared_timed_mutex> guardTrackers(_trackersMutex);
     bool hasInvalidTrackers = false;
     for (auto& tracker : _trackers)
@@ -193,6 +183,26 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
         // No such tracker found
         return false;
     }
+    else if (message->content_case() == data::Message::ContentCase::kTmStatus)
+    {
+        // Cache report
+        std::unique_lock<std::shared_timed_mutex> reportsGuard(_reportsMutex);
+        _reports[sender] = message->tm_status();
+        reportsGuard.unlock();
+
+        // Log
+        LOG(DBUG) << "A status update from node [" << sender->GetUUID() << "] was cached.";
+
+        // Call observers
+        std::shared_lock<std::shared_timed_mutex> observersGuard(_observersMutex);
+        for (auto observer : _observers)
+        {
+            observer->CachedStatusWasUpdated(sender, message->tm_status());
+        }
+
+        // Mark as handled
+        return true;
+    }
     else
     {
         return false;
@@ -201,36 +211,8 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 
 void Service::DescribeService(data::discovery::Response& descriptor)
 {
-    std::shared_lock<std::shared_timed_mutex> guard(_valuesMutex);
-    for (auto& pair : _values)
-    {
-        auto entry = descriptor.add_telemetry();
+    std::lock_guard guard(_schemaMutex);
 
-        // Set name
-        entry->set_name(pair.first);
-
-        // Determine type
-        switch (pair.second.value_case())
-        {
-            case data::Variant::ValueCase::kIntValue:
-                entry->set_type(data::discovery::Type::INT);
-                break;
-
-            case data::Variant::ValueCase::kDoubleValue:
-                entry->set_type(data::discovery::Type::DOUBLE);
-                break;
-
-            case data::Variant::ValueCase::kBoolValue:
-                entry->set_type(data::discovery::Type::BOOL);
-                break;
-
-            case data::Variant::ValueCase::kStringValue:
-                entry->set_type(data::discovery::Type::STRING);
-                break;
-
-            default:
-                LOG(WARNING) << "Unexpected variant data type for key '" << pair.first << "'";
-                break;
-        }        
-    }
+    // Simply return with the cached schema
+    *descriptor.mutable_telemetry_schema() = _schema;
 }

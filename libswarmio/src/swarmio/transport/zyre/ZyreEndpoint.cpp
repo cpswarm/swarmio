@@ -59,10 +59,16 @@ void ZyreEndpoint::Start()
 
     // Start the thread
     _worker = new std::thread(&ZyreEndpoint::Process, this);
+
+    // Call base implementation
+    BasicEndpoint::Start();
 }
 
 void ZyreEndpoint::Stop()
 {
+    // Call base implementation
+    BasicEndpoint::Stop();
+
     // Check if we are running
     if (_worker == nullptr)
     {
@@ -224,6 +230,18 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t*>*
         // Check if we need to exit
         if (event == nullptr)
         {
+            // Set all remote nodes as offline and send notifications
+            std::shared_lock<std::shared_timed_mutex> guard(_mutex);
+            for (auto& element : _nodes)
+            {
+                if (element.second.IsOnline())
+                {
+                    element.second.SetOnline(false);
+                    NodeWillLeave(&element.second);
+                }
+            }
+
+            // Exit loop
             break;
         }
 
@@ -346,4 +364,21 @@ std::list<const ZyreNode*> ZyreEndpoint::GetNodes()
 std::string ZyreEndpoint::GetUUID()
 {
     return zyre_uuid(_zyre);
+}
+
+const Node* ZyreEndpoint::NodeForUUID(const std::string& uuid)
+{
+    // Lock map
+    std::shared_lock<std::shared_timed_mutex> guard(_mutex);
+
+    // Find element
+    auto it = _nodes.find(uuid);
+    if (it != _nodes.end())
+    {
+        return &it->second;
+    }
+    else
+    {
+        return nullptr;
+    }
 }

@@ -58,21 +58,25 @@ namespace swarmio::services::telemetry
              * @param requestIdentifier Original message identifier
              */
             UpdateAwaiter(Endpoint* endpoint, uint64_t requestIdentifier, const Node* target)
-                : Awaiter(endpoint, requestIdentifier), _target(target) { }
+                : Awaiter(endpoint, requestIdentifier), _target(target)
+            {
+                FinishConstruction();
+            }
 
             /**
-             * @brief Intercepted to handle unsubscriptions gracefully
+             * @brief On disconnect, an unsubscribe request is sent
+             *        in order to stop the flow of messages gracefully.
              * 
              */
-            virtual void Disconnect() override
+            virtual void MailboxWillBeDisconnected() noexcept override 
             {
-                if (GetEndpoint() != nullptr)
-                {
-                    data::Message request;
-                    request.mutable_tm_unsubscribe_request()->set_identifier(GetIdentifier());
-                    GetEndpoint()->Send(&request, _target);
-                }
-                Awaiter::Disconnect();
+                // Send unsubscribe message
+                data::Message request;
+                request.mutable_tm_unsubscribe_request()->set_identifier(GetIdentifier());
+                GetEndpoint()->Send(&request, _target);
+
+                // Call base implementation
+                Awaiter::MailboxWillBeDisconnected();
             }
 
             /**

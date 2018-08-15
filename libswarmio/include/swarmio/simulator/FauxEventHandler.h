@@ -1,7 +1,7 @@
 #pragma once
 
 #include <swarmio/Exception.h>
-#include <swarmio/data/discovery/Type.pb.h>
+#include <swarmio/data/discovery/Schema.pb.h>
 #include <swarmio/services/event/Handler.h>
 #include <map>
 #include <iostream>
@@ -65,16 +65,18 @@ namespace swarmio::simulator
              *        to the event descriptor when asked to do so
              *        by overriding this method.
              * 
-             * @param descriptor 
+             * @param name Name 
              */
-            virtual void DescribeEvent(const std::string& name, data::event::Descriptor& descriptor) override
+            virtual data::discovery::Schema DescribeEvent(const std::string& name) override
             {
                 if (name == _name)
                 {
+                    data::discovery::Schema schema;
                     for (auto p : _parameters)
                     {
-                        (*descriptor.mutable_parameters())[p.first] = p.second;
+                        (*schema.mutable_fields())[p.first].set_type(p.second);
                     }
+                    return schema;
                 }
                 else
                 {

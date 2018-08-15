@@ -6,12 +6,6 @@ using namespace swarmio;
 using namespace swarmio::services;
 using namespace swarmio::services::ping;
 
-TimingAwaiter::TimingAwaiter(Endpoint* endpoint, uint64_t requestIdentifier)
-    : Awaiter(endpoint, requestIdentifier) 
-{
-    _start = std::chrono::high_resolution_clock::now();
-}
-
 std::chrono::nanoseconds TimingAwaiter::ExtractResponse(const Node* node, const data::Message* message)
 {
     if (message->content_case() == data::Message::ContentCase::kEcho)

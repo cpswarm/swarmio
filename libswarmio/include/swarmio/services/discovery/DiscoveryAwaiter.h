@@ -9,7 +9,7 @@ namespace swarmio::services::discovery
      * @brief An Awaiter that returns discovery data on a remote node
      * 
      */
-    class SWARMIO_API DiscoveryAwaiter : public Awaiter<data::discovery::Response>
+    class SWARMIO_API DiscoveryAwaiter final : public Awaiter<data::discovery::Response>
     {
         protected:
 
@@ -27,9 +27,26 @@ namespace swarmio::services::discovery
         public:
 
             /**
-             * @brief Inherit constructor
+             * @brief Construct a new DiscoveryAwaiter object
              * 
+             * @param endpoint Endpoint
+             * @param requestIdentifier Original message identifier
              */
-            using Awaiter::Awaiter;
+            DiscoveryAwaiter(Endpoint* endpoint, uint64_t requestIdentifier)
+                : Awaiter(endpoint, requestIdentifier) 
+            {
+                FinishConstruction();
+            }
+
+            /**
+             * @brief Construct a DiscoveryAwaiter with a cached value
+             * 
+             * @param value Value
+             */
+            DiscoveryAwaiter(const data::discovery::Response& value)
+                : Awaiter(value)
+            {
+                FinishConstruction();
+            }
     };
 }

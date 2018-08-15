@@ -108,7 +108,10 @@ namespace swarmio::services::discovery
              *                               requests to newly joined nodes
              */
             Service(Endpoint* endpoint, bool performActiveDiscovery)
-                : Mailbox(endpoint), _performActiveDiscovery(performActiveDiscovery) { }
+                : Mailbox(endpoint), _performActiveDiscovery(performActiveDiscovery)
+            { 
+                FinishConstruction();
+            }
 
             /**
              * @brief Send a Discovery query to a remote node
@@ -146,14 +149,21 @@ namespace swarmio::services::discovery
              * 
              * @param observer Observer
              */
-            void RegisterObserver(Observer* observer);
-
+            void RegisterObserver(Observer* observer)
+            {
+                std::unique_lock<std::mutex> guard(_observersMutex);
+                _observers.insert(observer);
+            }
             /**
              * @brief Unregister a discovery observer
              * 
              * @param observer Observer
              */
-            void UnregisterObserver(Observer* observer);
+            void UnregisterObserver(Observer* observer)
+            {
+                std::unique_lock<std::mutex> guard(_observersMutex);
+                _observers.erase(observer);
+            }
 
             /**
              * @brief Invalidate the current cached descriptor.

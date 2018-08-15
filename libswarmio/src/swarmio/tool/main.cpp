@@ -23,10 +23,15 @@ int main(int argc, const char* argv[])
         // Print UUID
         std::cout << "Local node started with UUID: " << endpoint.GetUUID() << "\n";   
 
+        // Start endpoint
+        endpoint.Start();
+
         // Start loop
         swarmio::tool::Loop loop(&endpoint, buffer_ptr);
-        endpoint.Start();
         loop.Run();
+
+        // Stop endpoint
+        endpoint.Stop();
     }
 
     // Shut down zsys manually to avoid assertion failure on Windows

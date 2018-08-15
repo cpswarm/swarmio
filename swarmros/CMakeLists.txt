@@ -15,6 +15,8 @@ find_package(catkin REQUIRED COMPONENTS
 	rosconsole
 	std_msgs
 	message_generation
+	roslib 
+	ros_type_introspection
 )
 
 ################################################
@@ -23,8 +25,31 @@ find_package(catkin REQUIRED COMPONENTS
 
 ## Generate messages in the 'msg' folder
 add_message_files(
-  FILES
-  	Event.msg
+	FILES
+
+		# Node descriptor
+		"NodeInfo.msg"
+
+		# Event descriptor
+		"EventHeader.msg"
+		"SimpleEvent.msg"
+
+		# Primitives
+		"ArrayOfBool.msg"
+		"ArrayOfDouble.msg"
+		"ArrayOfInt.msg"
+		"ArrayOfString.msg"
+		"ArrayOfUInt.msg"
+		"Bool.msg"
+		"Double.msg"
+		"Int.msg"
+		"String.msg"
+		"UInt.msg"
+
+		# Example messages
+		"ExampleEvent.msg"
+		"ExampleComplexMessage.msg"
+		"ExampleComplexSubmessage.msg"
 )
 
 ## Generate added messages and services with any dependencies listed here
@@ -43,6 +68,8 @@ catkin_package(
 		roscpp
 		rosconsole
 		std_msgs 
+		roslib
+		ros_type_introspection
 )
 
 # This is kind of hacky, but for some reason catkin insists 
@@ -57,12 +84,38 @@ endif()
 
 # Add main executable target
 add_executable(bridge
-	src/main.cpp
-	src/swarmros/bridge/DebugSink.cpp
-	src/swarmros/bridge/Device.cpp
-	src/swarmros/bridge/EventForwarder.cpp
-	src/swarmros/bridge/ParameterTarget.cpp
-	src/swarmros/bridge/TelemetrySource.cpp
+
+	# Bridging node
+	"src/swarmros/bridge/main.cpp"
+	"src/swarmros/bridge/Node.cpp"
+	"src/swarmros/bridge/DebugSink.cpp"
+
+	# Pylons
+	"src/swarmros/bridge/EventForwarder.cpp"
+	"src/swarmros/bridge/EventPublisher.cpp"
+	"src/swarmros/bridge/ParameterPublisher.cpp"
+	"src/swarmros/bridge/ParameterTarget.cpp"
+	"src/swarmros/bridge/TelemetryForwarder.cpp"
+
+	# Message introspection
+	"src/swarmros/introspection/Serializer.cpp"
+	"src/swarmros/introspection/MessageSerializer.cpp"
+	"src/swarmros/introspection/PrimitiveSerializer.cpp"
+	"src/swarmros/introspection/Field.cpp"
+	"src/swarmros/introspection/ConstantField.cpp"
+	"src/swarmros/introspection/ArrayField.cpp"
+	"src/swarmros/introspection/FixedArrayField.cpp"
+
+	# MD5 provider
+	"src/external/md5.cpp"
+)
+
+# Add ROS node example target
+add_executable(example
+
+	# Example node
+	"src/swarmros/example/main.cpp"
+	"src/swarmros/example/Node.cpp"
 )
 
 # Link with swarmio
@@ -76,27 +129,39 @@ target_link_libraries(bridge
 # paths returned are actually correct.
 if ("${CMAKE_SYSROOT}" STREQUAL "")
 	target_link_libraries(bridge ${catkin_LIBRARIES})
+	target_link_libraries(example ${catkin_LIBRARIES})
 else()
 	foreach (_lib ${catkin_LIBRARIES})
 		string(FIND "${_lib}" "${CMAKE_SYSROOT}" _location)
 		if (_location EQUAL 0)
 			target_link_libraries(bridge "${_lib}")
+			target_link_libraries(example "${_lib}")
 		else()
 			target_link_libraries(bridge "${CMAKE_SYSROOT}${_lib}")
+			target_link_libraries(example "${CMAKE_SYSROOT}${_lib}")
 		endif()
 	endforeach()
 endif()
 
-# Add include directory
+# Add include directories
 target_include_directories(bridge
 	PRIVATE
 		include
 		${LIBCONFIG_INCLUDE_DIRS}
 		${catkin_INCLUDE_DIRS}
 )
+target_include_directories(example
+	PRIVATE
+		include
+		${catkin_INCLUDE_DIRS}
+)
 
 # Depend on message generation
 add_dependencies(bridge
+	${swarmros_EXPORTED_TARGETS}
+	${catkin_EXPORTED_TARGETS}
+)
+add_dependencies(example
 	${swarmros_EXPORTED_TARGETS}
 	${catkin_EXPORTED_TARGETS}
 )
@@ -111,7 +176,7 @@ target_compile_definitions(bridge PRIVATE
 #############
 
 install(
-	TARGETS bridge 
+	TARGETS bridge example
     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 	RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

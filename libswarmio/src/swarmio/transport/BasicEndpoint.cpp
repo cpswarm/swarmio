@@ -6,28 +6,92 @@
 using namespace swarmio;
 using namespace swarmio::transport;
 
+void BasicEndpoint::Start()
+{
+    std::lock_guard guard(_mutex);
+
+    // Check if we are already running
+    if (_isRunning)
+    {
+        throw Exception("Endpoint is already running");
+    }
+    else
+    {
+        // Mark as running
+        _isRunning = true;   
+
+        // Fire callbacks
+        for (auto mailbox : _mailboxes)
+        {
+            mailbox->MailboxWasConnected();
+        }
+    }
+}
+
+void BasicEndpoint::Stop()
+{
+    std::lock_guard guard(_mutex);
+
+    // Check if we are already running
+    if (_isRunning)
+    {
+        // Fire callbacks
+        for (auto mailbox : _mailboxes)
+        {
+            mailbox->MailboxWillBeDisconnected();
+        }
+
+        // Mark as stopped
+        _isRunning = false;
+    }
+    else
+    {
+        throw Exception("Endpoint has not been started");
+    }
+}
+
 void BasicEndpoint::RegisterMailbox(Mailbox* mailbox)
 {
-    std::unique_lock<std::recursive_mutex> guard(_mutex);
+    std::lock_guard guard(_mutex);
+
+    // Add mailbox
     _mailboxes.insert(mailbox);
+
+    // Fire callback
+    if (_isRunning)
+    {
+        mailbox->MailboxWasConnected();
+    }
 }
 
 void BasicEndpoint::UnregisterMailbox(Mailbox* mailbox)
 {
-    std::unique_lock<std::recursive_mutex> guard(_mutex);
+    std::lock_guard guard(_mutex);
+
+    // Fire callback
+    if (_isRunning)
+    {
+        mailbox->MailboxWillBeDisconnected();
+    }
+
+    // Remove mailbox
     _mailboxes.erase(mailbox);
 }
 
 void BasicEndpoint::ReplaceMailbox(Mailbox* oldMailbox, Mailbox* newMailbox)
 {
-    std::unique_lock<std::recursive_mutex> guard(_mutex);
+    std::lock_guard guard(_mutex);
+
+    // Remove the old one, add the new one
     _mailboxes.erase(oldMailbox);
     _mailboxes.insert(newMailbox);
 }
 
 void BasicEndpoint::NodeWasDiscovered(const Node* node) noexcept
 {
-    std::unique_lock<std::recursive_mutex> guard(_mutex);
+    std::lock_guard guard(_mutex);
+
+    // Fire callbacks
     for(auto mailbox : _mailboxes)
     {
         mailbox->NodeWasDiscovered(node);
@@ -36,7 +100,9 @@ void BasicEndpoint::NodeWasDiscovered(const Node* node) noexcept
 
 void BasicEndpoint::NodeDidJoin(const Node* node) noexcept
 {
-    std::unique_lock<std::recursive_mutex> guard(_mutex);
+    std::lock_guard guard(_mutex);
+
+    // Fire callbacks
     for(auto mailbox : _mailboxes)
     {
         mailbox->NodeDidJoin(node);
@@ -45,7 +111,9 @@ void BasicEndpoint::NodeDidJoin(const Node* node) noexcept
 
 void BasicEndpoint::NodeWillLeave(const Node* node) noexcept
 {
-    std::unique_lock<std::recursive_mutex> guard(_mutex);
+    std::lock_guard guard(_mutex);
+
+    // Fire callbacks
     for(auto mailbox : _mailboxes)
     {
         mailbox->NodeWillLeave(node);

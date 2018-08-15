@@ -1,4 +1,6 @@
 #include <swarmros/bridge/DebugSink.h>
+#include <g3log/loglevels.hpp>
+#include <ros/console.h>
 
 using namespace swarmros;
 using namespace swarmros::bridge;

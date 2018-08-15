@@ -27,7 +27,11 @@ int main(int argc, const char* argv[])
         // Register static telemetry value
         swarmio::data::Variant value;
         value.set_string_value("This won't ever change.");
-        device.SetTelemetryValue("static_value", value);
+        device.AddConstantTelemetryValue("static_value", value, false);
+
+        // Register static telemetry and status value
+        value.set_string_value("And neither will this.");
+        device.AddConstantTelemetryValue("static_status_value", value, true);
 
         // Register some parameters
         swarmio::simulator::InMemoryParameter p1("examples/boolParameter", false);
@@ -58,6 +62,9 @@ int main(int argc, const char* argv[])
 
         // Get a character
         std::cin.get();
+
+        // Stop endpoint
+        endpoint.Stop();
     }
 
     // Shut down zsys manually to avoid assertion failure on Windows

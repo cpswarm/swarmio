@@ -27,7 +27,7 @@ ValueAwaiter Service::Get(Endpoint* endpoint, const Node* node, const std::strin
     return awaiter;
 }
 
-StatusAwaiter Service::Set(Endpoint* endpoint, const Node* node, const std::string& path, const data::Variant& value)
+ErrorAwaiter Service::Set(Endpoint* endpoint, const Node* node, const std::string& path, const data::Variant& value)
 {
     // Sanity checks
     CHECK(endpoint != nullptr) << "No endpoint specified";
@@ -44,7 +44,7 @@ StatusAwaiter Service::Set(Endpoint* endpoint, const Node* node, const std::stri
 
     // Send and await response
     endpoint->Tag(&request);
-    StatusAwaiter awaiter(endpoint, request.header().identifier());
+    ErrorAwaiter awaiter(endpoint, request.header().identifier());
     endpoint->Send(&request, node);
     return awaiter;
 }
@@ -151,12 +151,9 @@ void Service::DescribeService(data::discovery::Response& descriptor)
     std::lock_guard<std::mutex> guard(_mutex);
 
     // Collect information from targets
+    auto& fields = *descriptor.mutable_keyvalue_schema()->mutable_fields();
     for (auto target : _targets)
     {
-        auto entry = descriptor.add_keyvalue();
-        entry->set_name(target.first);
-        entry->set_type(target.second->GetType(target.first));
-        entry->set_can_read(target.second->CanRead(target.first));
-        entry->set_can_write(target.second->CanWrite(target.first));
+        fields[target.first] = target.second->GetFieldDescriptor(target.first);
     }
 }

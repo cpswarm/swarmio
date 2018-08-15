@@ -1,0 +1,26 @@
+syntax = "proto3";
+package swarmio.data.discovery;
+
+enum Type {
+    UNKNOWN = 0;
+    BOOL = 1;
+    INT = 2;
+    UINT = 3;
+    DOUBLE = 4;
+    STRING = 5;
+};
+
+message Field {
+    oneof multiplicity {
+        bool is_variable_size = 1;
+        uint64 fixed_size = 2;
+    }
+    oneof descriptor {
+        Type type = 3;
+        Schema schema = 4;
+    }
+}
+
+message Schema {
+    map<string, Field> fields = 1;
+}

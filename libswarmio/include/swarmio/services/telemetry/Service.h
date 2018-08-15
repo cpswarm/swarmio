@@ -1,9 +1,10 @@
 #pragma once
 
-#include <swarmio/Mailbox.h>
+#include <swarmio/services/PeriodicService.h>
 #include <swarmio/services/discovery/Discoverable.h>
 #include <swarmio/services/telemetry/UpdateAwaiter.h>
 #include <swarmio/services/telemetry/Tracker.h>
+#include <swarmio/services/telemetry/Observer.h>
 #include <swarmio/data/Variant.pb.h>
 #include <list>
 #include <string>
@@ -17,21 +18,9 @@ namespace swarmio::services::telemetry
      *        updates from remote nodes on named values.
      * 
      */
-    class SWARMIO_API Service final : public Mailbox, public discovery::Discoverable
+    class SWARMIO_API Service final : public PeriodicService, public discovery::Discoverable
     {
         private:
-
-            /**
-             * @brief Worker thread
-             * 
-             */
-            std::thread* _worker = nullptr;
-
-            /**
-             * @brief Worker thread shutdown requested
-             * 
-             */
-            std::atomic<bool> _shutdownRequested;
 
             /**
              * @brief List of published telemetry values
@@ -46,6 +35,24 @@ namespace swarmio::services::telemetry
             std::shared_timed_mutex _valuesMutex;
 
             /**
+             * @brief Schema
+             * 
+             */
+            data::discovery::Schema _schema;
+
+            /**
+             * @brief List of keys to include in the status broadcast
+             * 
+             */
+            std::set<std::string> _statusKeys;
+
+            /**
+             * @brief Mutex to protect the schema
+             * 
+             */
+            std::shared_timed_mutex _schemaMutex;
+
+            /**
              * @brief Trackers for each remote subscription
              * 
              */
@@ -58,16 +65,36 @@ namespace swarmio::services::telemetry
             std::shared_timed_mutex _trackersMutex;
 
             /**
-             * @brief Worker thread entry point
+             * @brief List of observers
              * 
              */
-            void Worker();
+            std::set<Observer*> _observers;
+
+            /**
+             * @brief Mutex to protect the list of observers
+             * 
+             */
+            std::shared_timed_mutex _observersMutex;
+
+            /**
+             * @brief Cached values for remote status reports
+             * 
+             */
+            std::map<const Node*, data::telemetry::Status> _reports;
+
+            /**
+             * @brief Mutex to protect remote status reports
+             * 
+             */
+            std::shared_timed_mutex _reportsMutex;
+
+        protected:
 
             /**
              * @brief Send an update to all subscribers.
              * 
              */
-            void Update();
+            virtual void Update() override final;
 
         public:
 
@@ -85,7 +112,6 @@ namespace swarmio::services::telemetry
                 return Subscribe(endpoint, node, interval, emptyList);
             }
 
-            
             /**
              * @brief Subscribe to soecific named values on the remote node.
              * 
@@ -101,8 +127,13 @@ namespace swarmio::services::telemetry
              * @brief Construct a new Service object
              * 
              * @param endpoint Endpoint
+             * @param period Tick period
              */
-            Service(Endpoint* endpoint);
+            Service(Endpoint* endpoint, std::chrono::milliseconds period = std::chrono::milliseconds(10))
+                : PeriodicService(endpoint, period)
+            { 
+                FinishConstruction();
+            }
 
             /**
              * @brief Add or update a value in the local telemetry cache.
@@ -110,9 +141,9 @@ namespace swarmio::services::telemetry
              * @param key Key
              * @param value Value
              */
-            void SetValue(const std::string& key, data::Variant value)
+            void SetValue(const std::string& key, const data::Variant& value)
             {
-                std::unique_lock<std::shared_timed_mutex> guard(_valuesMutex);
+                std::unique_lock guard(_valuesMutex);
                 _values[key] = value;
             }
 
@@ -123,8 +154,68 @@ namespace swarmio::services::telemetry
              */
             void RemoveValue(const std::string& key)
             {
-                std::unique_lock<std::shared_timed_mutex> guard(_valuesMutex);
+                std::unique_lock guard(_valuesMutex);
                 _values.erase(key);
+            }
+
+            /**
+             * @brief Add field to the schema
+             * 
+             * @param key Key
+             * @param field Field
+             */
+            void SetFieldDefinitionForKey(const std::string& key, const data::discovery::Field& field, bool includeInStatus)
+            {
+                std::unique_lock guard(_schemaMutex);
+                (*_schema.mutable_fields())[key] = field;
+                if (includeInStatus)
+                {
+                    _statusKeys.insert(key);
+                }
+                else
+                {
+                    _statusKeys.erase(key);
+                }
+            }
+
+            /**
+             * @brief Remove a field from the schema
+             * 
+             * @param key Key
+             */
+            void RemoveFieldDefinitionForKey(const std::string& key)
+            {
+                std::unique_lock guard(_schemaMutex);
+                _schema.mutable_fields()->erase(key);
+                _statusKeys.erase(key);
+            }
+
+            /**
+             * @brief Register a new status observer
+             * 
+             * @param observer Observer
+             */
+            void RegisterObserver(Observer* observer)
+            {
+                std::unique_lock<std::shared_timed_mutex> guard(_observersMutex);
+                _observers.insert(observer);
+            }
+
+            /**
+             * @brief Unregister a status observer
+             * 
+             * @param observer Observer
+             */
+            void UnregisterObserver(Observer* observer)
+            {
+                std::unique_lock<std::shared_timed_mutex> guard(_observersMutex);
+                _observers.erase(observer);
+            }
+
+            data::telemetry::Status GetCachedStatus(const Node* node)
+            {
+                std::shared_lock guard(_reportsMutex);
+                return _reports[node];
             }
 
             /**
@@ -145,11 +236,5 @@ namespace swarmio::services::telemetry
              *                   the description into
              */
             virtual void DescribeService(data::discovery::Response& descriptor) override;
-
-            /**
-             * @brief Destructor
-             * 
-             */
-            virtual ~Service() override;
     };
 }

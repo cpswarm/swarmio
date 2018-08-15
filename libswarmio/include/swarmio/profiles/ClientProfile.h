@@ -9,7 +9,7 @@ namespace swarmio::profiles
      * @brief Service profile for non-member clients
      * 
      */
-    class SWARMIO_API ClientProfile : public Profile, public services::discovery::Observer
+    class ClientProfile : public Profile, public services::discovery::Observer
     {
         public:
 

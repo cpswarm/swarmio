@@ -1,9 +1,0 @@
-syntax = "proto3";
-package swarmio.data;
-
-enum Error {
-    NONE = 0;       // No error, serves as ACK
-    UNKNOWN = 1;    // Unknown exception while processing
-    DELIVERY = 2;   // Message was not handled
-    MALFORMED = 3;  // Message format error
-}

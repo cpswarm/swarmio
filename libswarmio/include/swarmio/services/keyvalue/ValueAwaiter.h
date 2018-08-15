@@ -38,6 +38,11 @@ namespace swarmio::services::keyvalue
              * @param requestIdentifier Original message identifier
              * @param key Expected key for the response
              */
-            ValueAwaiter(Endpoint* endpoint, uint64_t requestIdentifier, const std::string& key);
+            ValueAwaiter(Endpoint* endpoint, uint64_t requestIdentifier, const std::string& key)
+                : Awaiter(endpoint, requestIdentifier) 
+            {
+                _key = key;
+                FinishConstruction();
+            }
     };
 }

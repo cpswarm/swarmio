@@ -1,16 +1,19 @@
 #pragma once
 
+#include <swarmros/bridge/Pylon.h>
+#include <swarmio/services/keyvalue/Service.h>
 #include <swarmio/services/keyvalue/Target.h>
 #include <ros/ros.h>
+#include <xmlrpcpp/XmlRpcValue.h>
 
 namespace swarmros::bridge
 {
     /**
      * @brief A Target implementation that uses
-     *        the ROS parameter server. 
+     *        the ROS parameter server.
      * 
      */
-    class ParameterTarget final : public swarmio::services::keyvalue::Target
+    class ParameterTarget : public Pylon, public swarmio::services::keyvalue::Target
     {
         private:
 
@@ -21,19 +24,19 @@ namespace swarmros::bridge
             ros::NodeHandle _nodeHandle;
 
             /**
-             * @brief Publisher
+             * @brief Parameter name
              * 
              */
-            ros::Publisher _publisher;
+            std::string _parameter;
 
             /**
-             * @brief Discoverable parameter name
+             * @brief Key-value service
              * 
              */
-            std::string _name;
+            swarmio::services::keyvalue::Service& _keyvalueService;
 
             /**
-             * @brief ROS parameter path
+             * @brief Discoverable keyvalue name
              * 
              */
             std::string _path;
@@ -45,30 +48,39 @@ namespace swarmros::bridge
             bool _isWritable;
 
             /**
-             * @brief Data type
+             * @brief Current value
              * 
              */
-            swarmio::data::Variant _defaultValue;
+            swarmio::data::Variant _value;
 
             /**
-             * @brief Publish an update to the associated ROS topic
+             * @brief Convert an XmlRpc value to a variant
              * 
              * @param value Value
+             * @return swarmio::data::Variant 
              */
-            void PublishValue(const swarmio::data::Variant& value);
+            static swarmio::data::Variant VariantFromXmlRpcValue(XmlRpc::XmlRpcValue& value);
+
+            /**
+             * @brief Convert a variant to an XmlRpc value
+             * 
+             * @param value Value
+             * @return XmlRpc::XmlRpcValue 
+             */
+            static XmlRpc::XmlRpcValue XmlRpcValueFromVariant(const swarmio::data::Variant& value);
 
         public:
 
             /**
              * @brief Construct a new ParameterTarget object
              * 
-             * @param nodeHandle ROS node handle
-             * @param name Parameter name
-             * @param path ROS parameter path
-             * @param isWritable True if the parameter can be set
-             * @param defaultValue Default value
+             * @param nodeHandle Node handle
+             * @param parameter Parameter name
+             * @param keyvalueService Key-value service
+             * @param path Parameter name
+             * @param isWritable True if can be set remotely
              */
-            ParameterTarget(ros::NodeHandle& nodeHandle, const std::string& name, const std::string& path, bool isWritable, const swarmio::data::Variant& defaultValue);
+            ParameterTarget(ros::NodeHandle& nodeHandle, swarmio::services::keyvalue::Service& keyvalueService, const std::string& name, const std::string& parameter, bool isWritable);
             
             /**
              * @brief Get the current value of the target parameter
@@ -89,47 +101,27 @@ namespace swarmros::bridge
              * 
              * @return swarmio::data::discovery::Type 
              */
-            virtual swarmio::data::discovery::Type GetType(const std::string& name) const override;
+            virtual swarmio::data::discovery::Field GetFieldDescriptor(const std::string& path) const override;
 
             /**
              * @brief Determines whether the value can be written
              * 
              * @return True if Set operations are allowed
              */
-            virtual bool CanWrite(const std::string& name) const noexcept override
-            {
-                return _isWritable;
-            }
+            virtual bool CanWrite(const std::string& name) const noexcept override;
 
             /**
              * @brief Determines whether the value can be read
              * 
              * @return True if Get operations are allowed
              */
-            virtual bool CanRead(const std::string& name) const noexcept override
-            {
-                return true;
-            }
+            virtual bool CanRead(const std::string& name) const noexcept override;
 
             /**
-             * @brief Get parameter name
+             * @brief Destructor
              * 
-             * @return const std::string& Name
              */
-            const std::string& GetName() const
-            {
-                return _name;
-            }
-
-            /**
-             * @brief Get ROS parameter path
-             * 
-             * @return const std::string& Path
-             */
-            const std::string& GetPath() const
-            {
-                return _path;
-            }
+            virtual ~ParameterTarget();
     };
 }
 

@@ -1,24 +1,38 @@
 #include <swarmio/simulator/ExampleDevice.h>
+#include <swarmio/data/Helper.h>
 
 using namespace swarmio;
 using namespace swarmio::simulator;
+
+ExampleDevice::ExampleDevice(Endpoint* endpoint)
+    : MemberProfile(endpoint)    
+{ 
+    // Add message counter to telemetry schema
+    data::discovery::Field field;
+    field.set_type(data::discovery::Type::UINT);
+    GetTelemetryService().SetFieldDefinitionForKey("incoming_messages", field, true);
+
+    // Finish construction
+    FinishConstruction();
+}
 
 bool ExampleDevice::ReceiveMessage(const Node* sender, const data::Message* message)
 {
     // Increment message counter
     ++_messageCounter;
 
-    // Publish telemetry
+    // Update message counter telemetry key
     data::Variant value;
-    value.set_int_value(_messageCounter);
-    SetTelemetryValue("incoming_messages", value);
+    value.set_uint_value(_messageCounter);
+    GetTelemetryService().SetValue("incoming_messages", value);
 
     // Leave message unhandled
     return false;
 }
 
-void ExampleDevice::SetTelemetryValue(const std::string& key, const data::Variant& value)
+void ExampleDevice::AddConstantTelemetryValue(const std::string& key, const data::Variant& value, bool includeInStatus)
 {
+    GetTelemetryService().SetFieldDefinitionForKey(key, data::Helper::GetFieldDescriptor(value), includeInStatus);
     GetTelemetryService().SetValue(key, value);
 }
 

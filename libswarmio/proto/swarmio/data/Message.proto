@@ -1,8 +1,6 @@
 syntax = "proto3";
 package swarmio.data;
 
-import "swarmio/data/Header.proto";
-import "swarmio/data/Error.proto";
 import "swarmio/data/ping/Echo.proto";
 import "swarmio/data/event/Notification.proto";
 import "swarmio/data/keyvalue/GetRequest.proto";
@@ -13,6 +11,27 @@ import "swarmio/data/discovery/Response.proto";
 import "swarmio/data/telemetry/SubscribeRequest.proto";
 import "swarmio/data/telemetry/UnsubscribeRequest.proto";
 import "swarmio/data/telemetry/Update.proto";
+import "swarmio/data/telemetry/Status.proto";
+
+enum Reliability {
+    UNRELIABLE = 0;		            // No response needed
+    NACK_REQUESTED = 1;             // Require a NACK if not deliverable locally
+    ACK_REQUESTED = 2;	            // Require an ACK if delivered
+}
+
+enum Error {
+    NONE = 0;                       // No error, serves as ACK
+    UNKNOWN = 1;                    // Unknown exception while processing
+    DELIVERY = 2;                   // Message was not handled
+    MALFORMED = 3;                  // Message format error
+}
+
+message Header {
+    uint64 timestamp = 1;			// UNIX timestamp in milliseconds
+    uint64 identifier = 2;			// A per-member sequentially incrementing counter
+    uint64 reply_to = 3;			// Indicates the identifier of the original message
+    Reliability reliability = 4;	// Determines how the message is acknowledged
+}
 
 message Message {
     Header header = 1;
@@ -28,5 +47,6 @@ message Message {
         telemetry.SubscribeRequest tm_subscribe_request = 10;
         telemetry.UnsubscribeRequest tm_unsubscribe_request = 11;
         telemetry.Update tm_update = 12;
+        telemetry.Status tm_status = 13;
     }
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <swarmio/Mailbox.h>
-#include <swarmio/services/StatusAwaiter.h>
+#include <swarmio/services/ErrorAwaiter.h>
 #include <swarmio/services/keyvalue/Target.h>
 #include <swarmio/services/keyvalue/ValueAwaiter.h>
 #include <swarmio/services/discovery/Discoverable.h>
@@ -72,9 +72,9 @@ namespace swarmio::services::keyvalue
              * @param endpoint Endpoint to use
              * @param node Node to set the value at
              * @param path Resource path
-             * @return StatusAwaiter Async result
+             * @return ErrorAwaiter Async result
              */
-            static StatusAwaiter Set(Endpoint* endpoint, const Node* node, const std::string& path, const data::Variant& value);
+            static ErrorAwaiter Set(Endpoint* endpoint, const Node* node, const std::string& path, const data::Variant& value);
 
             /**
              * @brief Construct a new Service object
@@ -82,7 +82,10 @@ namespace swarmio::services::keyvalue
              * @param endpoint Endpoint
              */
             Service(Endpoint* endpoint)
-                : Mailbox(endpoint) { }
+                : Mailbox(endpoint)
+            { 
+                FinishConstruction();
+            }
 
             /**
              * @brief Delivery point of all messages

@@ -143,5 +143,13 @@ namespace swarmio::transport::zyre
              * @return std::list<ZyreNode> 
              */
             std::list<const ZyreNode*> GetNodes();
+
+            /**
+             * @brief Retreive a node by its UUID
+             * 
+             * @param uuid UUID
+             * @return const Node* 
+             */
+            virtual const Node* NodeForUUID(const std::string& uuid) override;
     };
 }

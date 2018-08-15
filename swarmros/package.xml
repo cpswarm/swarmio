@@ -14,11 +14,16 @@
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rosconsole</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>roslib</build_export_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rosconsole</build_depend>
   <build_depend>std_msgs</build_depend>
+  <build_depend>roslib</build_depend>
+  <build_depend>ros_type_introspection</build_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rosconsole</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+  <exec_depend>roslib</exec_depend>
+  <exec_depend>ros_type_introspection</exec_depend>
 
 </package>

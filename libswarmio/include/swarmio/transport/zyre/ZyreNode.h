@@ -4,8 +4,15 @@
 #include <string>
 #include <sstream>
 #include <atomic>
+
 namespace swarmio::transport::zyre
 {
+    /**
+     * @brief Forward declare ZyreEndpoint
+     * 
+     */
+    class ZyreEndpoint;
+
     /**
      * @brief A Node as discovered by the Zyre protocol
      * 
@@ -15,10 +22,10 @@ namespace swarmio::transport::zyre
         private:
 
             /**
-             * @brief The UUID of the node
+             * @brief Only ZyreEdpoint can manage these objects
              * 
              */
-            std::string _name;
+            friend ZyreEndpoint;
 
             /**
              * @brief IP address of the node
@@ -32,6 +39,16 @@ namespace swarmio::transport::zyre
              */
             std::atomic<bool> _online;
 
+            /**
+             * @brief Mark the Node as online or offline
+             * 
+             * @param online Current status
+             */
+            void SetOnline(bool online)
+            {
+                _online = online;
+            }
+
         public:
 
             /**
@@ -42,16 +59,16 @@ namespace swarmio::transport::zyre
              * @param address IP address
              */
             ZyreNode(const std::string& uuid, const std::string& name, const std::string& address)
-                : BasicNode(uuid), _name(name), _address(address), _online(false) { }
+                : BasicNode(uuid, name), _address(address), _online(false) { }
 
             /**
-             * @brief Get the UUID of the node
+             * @brief Is the Node currently online?
              * 
-             * @return const std::string& 
+             * @return True if online
              */
-            const std::string& GetName() const
+            bool IsOnline() const override
             {
-                return _name;
+                return _online;
             }
 
             /**
@@ -65,26 +82,6 @@ namespace swarmio::transport::zyre
             }
 
             /**
-             * @brief Is the Node currently online?
-             * 
-             * @return True if online
-             */
-            bool IsOnline() const
-            {
-                return _online;
-            }
-
-            /**
-             * @brief Mark the Node as online or offline
-             * 
-             * @param online Current status
-             */
-            void SetOnline(bool online)
-            {
-                _online = online;
-            }
-
-            /**
              * @brief Get a user-readable description of the node.
              * 
              * @return std::string 
@@ -92,8 +89,7 @@ namespace swarmio::transport::zyre
             virtual std::string GetDescription() const override
             {
                 std::ostringstream stream;
-                stream << "name=" << _name << ", "
-                       << "online=" << (_online ? "true" : "false") << ", "
+                stream << "online=" << (_online ? "true" : "false") << ", "
                        << "address=" << _address;
                 return stream.str();
             }

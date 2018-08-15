@@ -102,6 +102,14 @@ namespace swarmio
             virtual void Send(data::Message* message, const Node* node) = 0;
 
             /**
+             * @brief Retreive a node by its UUID
+             * 
+             * @param uuid UUID
+             * @return const Node* 
+             */
+            virtual const Node* NodeForUUID(const std::string& uuid) = 0;
+
+            /**
              * @brief Destroy the Endpoint object
              * 
              */

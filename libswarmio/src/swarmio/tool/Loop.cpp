@@ -1,7 +1,9 @@
 #include <swarmio/tool/Loop.h>
 #include <swarmio/tool/Command.h>
 #include <swarmio/services/telemetry/Service.h>
+#include <swarmio/services/event/Service.h>
 #include <swarmio/Exception.h>
+#include <swarmio/data/Helper.h>
 #include <iomanip>
 #include <iostream>
 #include <exception>
@@ -17,6 +19,7 @@ Loop::Loop(Endpoint* endpoint, LogBuffer* logBuffer)
 {
     _repl.install_window_change_handler();
     _repl.set_highlighter_callback(&Command::HighlighterCallback, nullptr);
+    FinishConstruction();
 }
 
 void Loop::NodeWasDiscovered(const Node* node) noexcept
@@ -92,77 +95,44 @@ void Loop::ExecuteInfoCommand(const Command& command)
             auto response = awaiter.GetResponse();
 
             // Echo support
-            std::cout << "Pingable: " << (response.echo() ? "true" : "false") << std::endl;
+            std::cout << "Pingable: " << (response.echo_enabled() ? "true" : "false") << std::endl;
 
             // Keys
-            if (response.keyvalue_size() > 0)
+            if (response.keyvalue_schema().fields_size() > 0)
             {
-                std::cout << "Parameters:" << std::endl;
-                for (auto kv : response.keyvalue())
-                {
-                    std::cout << " - " << kv.name() << ":" << kv.type();
-                    if (kv.can_read() && kv.can_write())
-                    {
-                        std::cout << " (rw)";
-                    }
-                    else if (kv.can_read())
-                    {
-                        std::cout << " (ro)";
-                    }
-                    else if (kv.can_write())
-                    {
-                        std::cout << " (wo)";
-                    }
-                    else
-                    {
-                        std::cout << " (na)";
-                    }
-                    std::cout << std::endl;
-                }
+                std::cout << "Parameters: ";
+                data::Helper::WriteToStream(std::cout, response.keyvalue_schema());
+                std::cout << std::endl;
             }
 
             // Events
-            if (response.event_size() > 0)
+            if (response.event_schema().fields_size() > 0)
             {
-                std::cout << "Events:" << std::endl;
-                for (auto ev : response.event())
-                {
-                    std::cout << " - " << ev.name();
-                    if (ev.parameters_size() > 0)
-                    {
-                        std::cout << "(";
-                        bool first = true;
-                        for (auto p : ev.parameters())
-                        {
-                            if (first)
-                            {
-                                first = false;
-                            }
-                            else 
-                            {
-                                std::cout << ", ";
-                            }
-                            std::cout << p.first << ":" << p.second;
-                        }
-                        std::cout << ")";
-                    }
-                    std::cout << std::endl;
-                }
+                std::cout << "Events: ";
+                data::Helper::WriteToStream(std::cout, response.event_schema());
+                std::cout << std::endl;
             }
 
             // Telemetry
-            if (response.telemetry_size() > 0)
+            if (response.telemetry_schema().fields_size() > 0)
             {
-                std::cout << "Telemetry:" << std::endl;
-                for (auto tm : response.telemetry())
-                {
-                    std::cout << " - " << tm.name() << ":" << tm.type() << std::endl;
-                }
+                std::cout << "Telemetry: ";
+                data::Helper::WriteToStream(std::cout, response.telemetry_schema());
+                std::cout << std::endl;
             }
         }
         else
         {
             std::cout << "Discovery timed out." << std::endl;
+        }
+
+        // Status
+        auto report = _telemetryService.GetCachedStatus(_selectedNode);
+        if (report.values_size() > 0)
+        {
+            std::cout << "Current status: ";
+            data::Helper::WriteToStream(std::cout, report.values());
+            std::cout << std::endl;
         }
     }
     else
@@ -350,12 +320,12 @@ void Loop::ExecuteMembersCommand(const Command& command)
     if (_nodes.size() > 0)
     {
         // Header
-        std::cout << "MID" << "\t" << "UUID" << std::endl;
+        std::cout << "MID" << "\t" << "UUID" << "\t" << "Name" << std::endl;
 
         // List nodes
         for (unsigned i = 0; i < _nodes.size(); ++i)
         {
-            std::cout << i << "\t" << _nodes[i]->GetUUID() << "\t" << _nodes[i]->GetDescription() << std::endl;
+            std::cout << i << "\t" << _nodes[i]->GetUUID() << "\t" << _nodes[i]->GetName() << "\t" << _nodes[i]->GetDescription() << std::endl;
         }
     }
     else
@@ -403,7 +373,7 @@ void Loop::ExecuteSubscriptionsCommand(const Command& command)
         for (auto& subscription : _subscriptions)
         {
             std::cout << "Subscription #" << subscription.GetIdentifier() << std::endl;
-            std::cout << "  " << "Node: " << subscription.GetTarget()->GetUUID() << std::endl;
+            std::cout << "  " << "Node: " << subscription.GetTarget()->GetUUID() << std::endl; 
             if (subscription.WaitForResponse(0ms))
             {
                 auto response = subscription.GetResponse();
@@ -414,30 +384,9 @@ void Loop::ExecuteSubscriptionsCommand(const Command& command)
                 // Values
                 if (response.values_size() > 0)
                 {
-                    std::cout << "  " << "Current values:" << std::endl;
-                    for (auto& pair : subscription.GetResponse().values())
-                    {
-                        std::cout << "  " << " - " << pair.first << "=";
-                        switch (pair.second.value_case())
-                        {
-                            case swarmio::data::Variant::ValueCase::kBoolValue:
-                                std::cout << (pair.second.bool_value() ? "true" : "false");
-                                break;
-                            case swarmio::data::Variant::ValueCase::kDoubleValue:
-                                std::cout << pair.second.double_value();
-                                break;
-                            case swarmio::data::Variant::ValueCase::kIntValue:
-                                std::cout << pair.second.int_value();
-                                break;
-                            case swarmio::data::Variant::ValueCase::kStringValue:
-                                std::cout << "\"" << pair.second.string_value() << "\"";
-                                break;
-                            default:
-                                std::cout << "<unknown>";
-                                break;
-                        }
-                        std::cout << std::endl;
-                    }
+                    std::cout << "  " << "Current values: ";
+                    data::Helper::WriteToStream(std::cout, response.values(), true, 1);
+                    std::cout << std::endl;
                 }
                 else
                 {
