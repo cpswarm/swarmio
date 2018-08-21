@@ -16,7 +16,6 @@ find_package(catkin REQUIRED COMPONENTS
 	std_msgs
 	message_generation
 	roslib 
-	ros_type_introspection
 )
 
 ################################################
@@ -69,7 +68,6 @@ catkin_package(
 		rosconsole
 		std_msgs 
 		roslib
-		ros_type_introspection
 )
 
 # This is kind of hacky, but for some reason catkin insists 
