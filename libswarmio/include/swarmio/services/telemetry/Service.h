@@ -143,7 +143,7 @@ namespace swarmio::services::telemetry
              */
             void SetValue(const std::string& key, const data::Variant& value)
             {
-                std::unique_lock guard(_valuesMutex);
+                std::unique_lock<std::shared_timed_mutex> guard(_valuesMutex);
                 _values[key] = value;
             }
 
@@ -154,7 +154,7 @@ namespace swarmio::services::telemetry
              */
             void RemoveValue(const std::string& key)
             {
-                std::unique_lock guard(_valuesMutex);
+                std::unique_lock<std::shared_timed_mutex> guard(_valuesMutex);
                 _values.erase(key);
             }
 
@@ -166,7 +166,7 @@ namespace swarmio::services::telemetry
              */
             void SetFieldDefinitionForKey(const std::string& key, const data::discovery::Field& field, bool includeInStatus)
             {
-                std::unique_lock guard(_schemaMutex);
+                std::unique_lock<std::shared_timed_mutex> guard(_schemaMutex);
                 (*_schema.mutable_fields())[key] = field;
                 if (includeInStatus)
                 {
@@ -185,7 +185,7 @@ namespace swarmio::services::telemetry
              */
             void RemoveFieldDefinitionForKey(const std::string& key)
             {
-                std::unique_lock guard(_schemaMutex);
+                std::unique_lock<std::shared_timed_mutex> guard(_schemaMutex);
                 _schema.mutable_fields()->erase(key);
                 _statusKeys.erase(key);
             }
@@ -214,7 +214,7 @@ namespace swarmio::services::telemetry
 
             data::telemetry::Status GetCachedStatus(const Node* node)
             {
-                std::shared_lock guard(_reportsMutex);
+                std::shared_lock<std::shared_timed_mutex> guard(_reportsMutex);
                 return _reports[node];
             }
 

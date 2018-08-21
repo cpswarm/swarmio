@@ -38,12 +38,12 @@ UpdateAwaiter Service::Subscribe(Endpoint* endpoint, const Node* node, uint32_t 
 void Service::Update()
 {
     // Make copy of current list of values
-    std::shared_lock guardValues(_valuesMutex);
+    std::shared_lock<std::shared_timed_mutex> guardValues(_valuesMutex);
     auto cache = _values;
     guardValues.unlock();
 
     // Make copy of the status keys
-    std::shared_lock guardSchema(_schemaMutex);
+    std::shared_lock<std::shared_timed_mutex> guardSchema(_schemaMutex);
     auto statusKeys = _statusKeys;
     guardSchema.unlock();
 
@@ -211,7 +211,7 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
 
 void Service::DescribeService(data::discovery::Response& descriptor)
 {
-    std::lock_guard guard(_schemaMutex);
+    std::shared_lock<std::shared_timed_mutex> guard(_schemaMutex);
 
     // Simply return with the cached schema
     *descriptor.mutable_telemetry_schema() = _schema;

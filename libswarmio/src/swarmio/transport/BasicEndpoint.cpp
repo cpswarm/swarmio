@@ -8,7 +8,7 @@ using namespace swarmio::transport;
 
 void BasicEndpoint::Start()
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Check if we are already running
     if (_isRunning)
@@ -30,7 +30,7 @@ void BasicEndpoint::Start()
 
 void BasicEndpoint::Stop()
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Check if we are already running
     if (_isRunning)
@@ -52,7 +52,7 @@ void BasicEndpoint::Stop()
 
 void BasicEndpoint::RegisterMailbox(Mailbox* mailbox)
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Add mailbox
     _mailboxes.insert(mailbox);
@@ -66,7 +66,7 @@ void BasicEndpoint::RegisterMailbox(Mailbox* mailbox)
 
 void BasicEndpoint::UnregisterMailbox(Mailbox* mailbox)
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Fire callback
     if (_isRunning)
@@ -80,7 +80,7 @@ void BasicEndpoint::UnregisterMailbox(Mailbox* mailbox)
 
 void BasicEndpoint::ReplaceMailbox(Mailbox* oldMailbox, Mailbox* newMailbox)
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Remove the old one, add the new one
     _mailboxes.erase(oldMailbox);
@@ -89,7 +89,7 @@ void BasicEndpoint::ReplaceMailbox(Mailbox* oldMailbox, Mailbox* newMailbox)
 
 void BasicEndpoint::NodeWasDiscovered(const Node* node) noexcept
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Fire callbacks
     for(auto mailbox : _mailboxes)
@@ -100,7 +100,7 @@ void BasicEndpoint::NodeWasDiscovered(const Node* node) noexcept
 
 void BasicEndpoint::NodeDidJoin(const Node* node) noexcept
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Fire callbacks
     for(auto mailbox : _mailboxes)
@@ -111,7 +111,7 @@ void BasicEndpoint::NodeDidJoin(const Node* node) noexcept
 
 void BasicEndpoint::NodeWillLeave(const Node* node) noexcept
 {
-    std::lock_guard guard(_mutex);
+    std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Fire callbacks
     for(auto mailbox : _mailboxes)
