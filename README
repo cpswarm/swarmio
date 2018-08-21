@@ -63,7 +63,7 @@ Optional parameters:
  installed. On Ubuntu systems, crossbuild-essential-<ARCH>
  packages should do the trick.
 
- -SWARMIO_BUILD_ROS_NODE=ON
+ -DSWARMIO_BUILD_ROS_NODE=ON
 
  If turned on, swarmros will be built.
 
