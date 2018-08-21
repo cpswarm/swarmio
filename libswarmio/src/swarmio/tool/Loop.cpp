@@ -340,11 +340,11 @@ void Loop::ExecuteSelectCommand(const Command& command)
     if (command.HasPath())
     {
         // Parse
-        unsigned idx = std::stoi(command.GetPath());
+        unsigned idx = std::stoul(command.GetPath());
 
         // Retreive from nodes vector
         std::lock_guard<std::mutex> guard(_mutex);
-        if (idx >= 0 && idx < _nodes.size())
+        if (idx < _nodes.size())
         {
             _selectedNode = _nodes[idx];
             std::cout << "Member selected: " << _selectedNode->GetUUID() << std::endl;

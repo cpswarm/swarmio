@@ -84,19 +84,19 @@ namespace swarmros::example
              * @brief Shutdown signal for worker thread
              * 
              */
-            std::atomic_bool _shutdownRequested;
+            std::atomic<bool> _shutdownRequested;
 
             /**
              * @brief Global heartbeat counter
              * 
              */
-            std::atomic_uint64_t _heartbeatCounter;
+            std::atomic<uint64_t> _heartbeatCounter;
 
             /**
              * @brief Report interval
              * 
              */
-            std::atomic_uint64_t _reportInterval;
+            std::atomic<uint64_t> _reportInterval;
 
             /**
              * @brief Entry point for worker thread
