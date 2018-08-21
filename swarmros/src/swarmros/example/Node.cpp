@@ -2,7 +2,6 @@
 #include <swarmros/ExampleComplexMessage.h>
 #include <chrono>
 #include <iostream>
-#include <sys/random.h>
 
 using namespace swarmros;
 using namespace swarmros::example;
@@ -54,15 +53,21 @@ void Node::Worker()
             // Reset tick counter
             tick = 0;
 
+            // Create distributions
+            std::uniform_int_distribution<uint64_t> intDistribution;
+            std::uniform_real_distribution<double> doubleDistribution;
+
             // Publish complex message filled with random values
             ExampleComplexMessage complexMessage;
             complexMessage.submessage1.field1 = "random1";
             complexMessage.submessage2.field1 = "random2";
-            getrandom(&complexMessage.field1, sizeof(complexMessage.field1), 0);
-            getrandom(&complexMessage.field2, sizeof(complexMessage.field2), 0);
-            getrandom(&complexMessage.field3, sizeof(complexMessage.field3), 0);
-            getrandom(&complexMessage.submessage1.field2, sizeof(complexMessage.submessage1.field2), 0);
-            getrandom(&complexMessage.submessage2.field2, sizeof(complexMessage.submessage2.field2), 0);
+            complexMessage.field1 = intDistribution(_random);
+            complexMessage.field2 = intDistribution(_random);
+            complexMessage.field3 = doubleDistribution(_random);
+            complexMessage.submessage1.field1 = intDistribution(_random);
+            complexMessage.submessage1.field2 = intDistribution(_random);
+            complexMessage.submessage2.field1 = intDistribution(_random);
+            complexMessage.submessage2.field2 = intDistribution(_random);
             _complexMessageTelemetryPublisher.publish(complexMessage);
         }
 

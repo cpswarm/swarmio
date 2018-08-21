@@ -7,12 +7,19 @@
 #include <string>
 #include <thread>
 #include <atomic>
+#include <random>
 
 namespace swarmros::example 
 {
     class Node final
     {
         private:
+
+            /**
+             * @brief Random number generator
+             * 
+             */
+            std::random_device _random;
             
             /**
              * @brief ROS node handle
