@@ -1,5 +1,5 @@
 # Prepare
-swarmio_build_component_start(protobuf "3.6.0.1")
+swarmio_build_component_start(protobuf "3.6.1")
 
 # Find Git executable
 find_package(Git REQUIRED)
