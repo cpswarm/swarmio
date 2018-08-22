@@ -1,7 +1,7 @@
 #pragma once
 
 #include <swarmros/bridge/Pylon.h>
-#include <swarmros/introspection/HeadedMessage.h>
+#include <swarmros/bridge/EventMessage.h>
 #include <swarmio/Endpoint.h>
 #include <ros/ros.h>
 
@@ -39,7 +39,7 @@ namespace swarmros::bridge
              * 
              * @param message Message
              */
-            void EventReceived(const introspection::HeadedMessage::ConstPtr& message);
+            void EventReceived(const EventMessage::ConstPtr& message);
 
         public:
 

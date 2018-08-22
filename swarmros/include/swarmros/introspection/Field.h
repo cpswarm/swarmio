@@ -55,7 +55,7 @@ namespace swarmros::introspection
              * 
              * @return const Serializer&
              */
-            const Serializer& GetSerializer()
+            const Serializer& GetSerializer() const
             {
                 return _serializer;
             }

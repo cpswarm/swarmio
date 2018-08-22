@@ -1,5 +1,5 @@
 #include <swarmros/bridge/ParameterPublisher.h>
-#include <swarmros/introspection/AnyMessage.h>
+#include <swarmros/introspection/VariantMessage.h>
 
 using namespace swarmros;
 using namespace swarmros::bridge;
@@ -31,7 +31,7 @@ void ParameterPublisher::Set(const std::string& path, const swarmio::data::Varia
 void ParameterPublisher::UpdateValue(const swarmio::data::Variant& value)
 {
     // Construct message
-    introspection::AnyMessage message(_serializer->GetFullName(), value);
+    introspection::VariantMessage message(_serializer->GetFullName(), value);
 
     // Publish message
     _publisher.publish(message);

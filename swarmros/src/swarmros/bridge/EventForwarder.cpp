@@ -11,42 +11,36 @@ EventForwarder::EventForwarder(ros::NodeHandle& nodeHandle, const std::string& s
     // Register schema
     const auto& serializer = introspection::MessageSerializer::MessageSerializerForType(message, "swarmros");
 
-    // Check header
-    const auto& headerType = serializer.GetHeaderMessageSerializer().GetFullName();
-    if (headerType != "swarmros/EventHeader")
-    {
-        throw MessageMismatchException("Invalid header type for event", source, "swarmros/EventHeader", headerType);
-    }
-
     // Save message type
     _message = serializer.GetFullName();
 
+    // Check message format
+    if (!EventMessage::IsEventSerializer(serializer))
+    {
+        throw MessageMismatchException("Message type has no valid event header", source, "swarmros/EventHeader", _message);
+    }
+
     // Subscribe
-    _subscriber = nodeHandle.subscribe<introspection::HeadedMessage>(source, 1, &EventForwarder::EventReceived, this);
+    _subscriber = nodeHandle.subscribe<EventMessage>(source, 1, &EventForwarder::EventReceived, this);
 }
 
-void EventForwarder::EventReceived(const introspection::HeadedMessage::ConstPtr& message)
+void EventForwarder::EventReceived(const EventMessage::ConstPtr& message)
 {
     if (message->GetType() == _message)
     {
-        // Fetch header fields
-        const auto& header = message->GetHeader().pairs();
-        const auto& content = message->GetContent().pairs();
-
         // Prepare notification
         swarmio::data::event::Notification notification;
-        notification.set_name(header.at("name").string_value());
-        notification.mutable_parameters()->insert(content.begin(), content.end());
+        notification.set_name(message->GetName());
+        notification.mutable_parameters()->insert(message->GetParameters().pairs().begin(), message->GetParameters().pairs().end());
 
         // Send message
-        auto uuid = header.at("node").string_value();
-        if (uuid.size() == 0)
+        if (message->GetNode().empty())
         {
             swarmio::services::event::Service::Trigger(_endpoint, notification);
         }
         else
         {
-            auto node = _endpoint->NodeForUUID(uuid);
+            auto node = _endpoint->NodeForUUID(message->GetNode());
             swarmio::services::event::Service::Trigger(_endpoint, notification, node);
         }
     }

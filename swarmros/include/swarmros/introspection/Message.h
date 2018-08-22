@@ -1,9 +1,10 @@
 #pragma once
 
 #include <swarmros/introspection/MessageSerializer.h>
-#include <swarmio/Exception.h>
+#include <swarmros/Exception.h>
 #include <ros/ros.h>
 #include <ros/message_traits.h>
+#include <std_msgs/Header.h>
 
 namespace swarmros::introspection 
 {
@@ -28,6 +29,12 @@ namespace swarmros::introspection
              * 
              */
             std::string _type;
+
+            /**
+             * @brief Header
+             * 
+             */
+            std_msgs::Header _header;       
 
         protected:
 
@@ -92,6 +99,26 @@ namespace swarmros::introspection
             {
                 return _serializer;
             }
+
+            /**
+             * @brief Get a reference to the header
+             * 
+             * @return const std_msgs::Header& 
+             */
+            const std_msgs::Header& GetHeader() const
+            {
+                return _header;
+            }
+
+            /**
+             * @brief Get a mutable reference to the header
+             * 
+             * @return std_msgs::Header& 
+             */
+            std_msgs::Header& GetMutableHeader()
+            {
+                return _header;
+            }
     };
 }
 
@@ -135,7 +162,7 @@ namespace ros::message_traits
             }
             else
             {
-                throw swarmio::Exception("Trying to serialize Message without serializer");
+                throw Exception("Trying to serialize Message without serializer");
             }
         }
 
@@ -173,7 +200,7 @@ namespace ros::message_traits
             }
             else
             {
-                throw swarmio::Exception("Trying to serialize Message without serializer");
+                throw Exception("Trying to serialize Message without serializer");
             }             
         }
 
@@ -211,7 +238,93 @@ namespace ros::message_traits
             }
             else
             {
-                throw swarmio::Exception("Trying to serialize Message without serializer");
+                throw Exception("Trying to serialize Message without serializer");
+            }
+        }
+    };
+}
+
+namespace ros::serialization
+{
+    /**
+     * @brief Trait to perform the serialization and
+     *        deserialization of a Message instance - 
+     *        incomplete, actual implementation must 
+     *        call this first to detect the message 
+     *        header then do its own extraction.
+     */
+    template<> 
+    struct Serializer<swarmros::introspection::Message>
+    {
+        /**
+         * @brief Calculates the size of the header, if present.
+         * 
+         * @param message Message
+         * @return uint32_t
+         */
+        inline static uint32_t serializedLength(const swarmros::introspection::Message& message) 
+        {
+            auto serializer = message.GetSerializer();
+            if (serializer != nullptr)
+            {
+                if (serializer->HasHeader())
+                {
+                    return Serializer<std_msgs::Header>::serializedLength(message.GetHeader());
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                throw Exception("Trying to serialize VariantMessage without serializer");
+            }
+        }
+
+        /**
+         * @brief Writes the header to the stream, if present.
+         * 
+         * @param stream Stream
+         * @param message Message
+         */
+        template<typename Stream>
+        inline static void write(Stream& stream, const swarmros::introspection::Message& message) 
+        {
+            auto serializer = message.GetSerializer();
+            if (serializer != nullptr)
+            {
+                if (serializer->HasHeader())
+                {
+                    return Serializer<std_msgs::Header>::write(stream, message.GetHeader());
+                }
+            }
+            else
+            {
+                throw Exception("Trying to serialize VariantMessage without serializer");
+            }
+        }
+
+        /**
+         * @brief Reads the header from the stream, if present.
+         * 
+         * @param stream Stream
+         * @param message Message
+         */
+        template<typename Stream>
+        inline static void read(Stream& stream, swarmros::introspection::Message& message)
+        {
+            auto serializer = message.GetSerializer();
+            if (serializer != nullptr)
+            {
+                if (serializer->HasHeader())
+                {
+                    return Serializer<std_msgs::Header>::read(stream, message.GetMutableHeader());
+                }
+            }
+            else
+            {
+                throw Exception("Trying to deserialize VariantMessage without serializer");
             }
         }
     };

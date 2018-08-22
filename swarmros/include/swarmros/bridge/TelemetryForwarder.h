@@ -1,7 +1,7 @@
 #pragma once
 
 #include <swarmros/bridge/Pylon.h>
-#include <swarmros/introspection/AnyMessage.h>
+#include <swarmros/introspection/VariantMessage.h>
 #include <swarmio/services/telemetry/Service.h>
 #include <ros/ros.h>
 
@@ -45,7 +45,7 @@ namespace swarmros::bridge
              * 
              * @param message Message
              */
-            void UpdateReceived(const introspection::AnyMessage::ConstPtr& message);
+            void UpdateReceived(const introspection::VariantMessage::ConstPtr& message);
 
         public:
 

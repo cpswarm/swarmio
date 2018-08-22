@@ -7,7 +7,7 @@ using namespace swarmros;
 using namespace swarmros::example;
 
 Node::Node(const std::string& name)
-    : _handle(name), _shutdownRequested(false), _reportInterval(50)
+    : _handle(name), _shutdownRequested(false), _reportInterval(50), _heartbeatCounter(0)
 {
     // Add event sources
     _pongEventSource = _handle.advertise<SimpleEvent>("events/pong", 64, false);
@@ -38,7 +38,7 @@ void Node::Worker()
     {
         // Publish heartbeat event
         SimpleEvent heartbeatEvent;
-        heartbeatEvent.header.name = "heartbeat";
+        heartbeatEvent.eventHeader.name = "heartbeat";
         _heartbeatEventSource.publish(heartbeatEvent);
 
         // Every interval, report current counter value
@@ -46,7 +46,7 @@ void Node::Worker()
         {
             // Send report
             ExampleEvent exampleEvent;
-            exampleEvent.header.name = "report";
+            exampleEvent.eventHeader.name = "report";
             exampleEvent.counter = _heartbeatCounter;
             _exampleEventSource.publish(exampleEvent);
 
@@ -59,15 +59,13 @@ void Node::Worker()
 
             // Publish complex message filled with random values
             ExampleComplexMessage complexMessage;
-            complexMessage.submessage1.field1 = "random1";
-            complexMessage.submessage2.field1 = "random2";
             complexMessage.field1 = intDistribution(_random);
             complexMessage.field2 = intDistribution(_random);
             complexMessage.field3 = doubleDistribution(_random);
-            complexMessage.submessage1.field1 = intDistribution(_random);
-            complexMessage.submessage1.field2 = intDistribution(_random);
-            complexMessage.submessage2.field1 = intDistribution(_random);
-            complexMessage.submessage2.field2 = intDistribution(_random);
+            complexMessage.submessage1.field1 = "random1";
+            complexMessage.submessage1.field2 = doubleDistribution(_random);
+            complexMessage.submessage2.field1 = "random2";
+            complexMessage.submessage2.field2 = doubleDistribution(_random);
             _complexMessageTelemetryPublisher.publish(complexMessage);
         }
 
@@ -78,18 +76,18 @@ void Node::Worker()
 
 void Node::HandleSimpleEvent(const swarmros::SimpleEvent& event)
 {
-    if (event.header.name == "ping")
+    if (event.eventHeader.name == "ping")
     {
         // Respond
         SimpleEvent pongEvent;
-        pongEvent.header.name = "pong";
-        pongEvent.header.node = event.header.node;
+        pongEvent.eventHeader.name = "pong";
+        pongEvent.eventHeader.node = event.eventHeader.node;
         _pongEventSource.publish(pongEvent);
 
         // Log
-        std::cout << "A response was sent for a ping SimpleEvent to node " << pongEvent.header.node << std::endl;
+        std::cout << "A response was sent for a ping SimpleEvent to node " << pongEvent.eventHeader.node << std::endl;
     }
-    else if (event.header.name == "heartbeat")
+    else if (event.eventHeader.name == "heartbeat")
     {
         // Increment
         uint64_t current = ++_heartbeatCounter;
@@ -101,19 +99,19 @@ void Node::HandleSimpleEvent(const swarmros::SimpleEvent& event)
     }
     else
     {
-        std::cout << "Unknown SimpleEvent received: " << event.header.name << std::endl;
+        std::cout << "Unknown SimpleEvent received: " << event.eventHeader.name << std::endl;
     }
 }
 
 void Node::HandleExampleEvent(const swarmros::ExampleEvent& event)
 {
-    if (event.header.name == "report")
+    if (event.eventHeader.name == "report")
     {
-        std::cout << "Node " << event.header.node << " reports that its counter is at " << event.counter << std::endl;
+        std::cout << "Node " << event.eventHeader.node << " reports that its counter is at " << event.counter << std::endl;
     }
     else
     {
-        std::cout << "Unknown ExampleEvent received: " << event.header.name << std::endl;
+        std::cout << "Unknown ExampleEvent received: " << event.eventHeader.name << std::endl;
     }
 }
 

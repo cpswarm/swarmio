@@ -93,7 +93,7 @@ const MessageSerializer& MessageSerializer::MessageSerializerForType(const std::
 }
 
 MessageSerializer::MessageSerializer(const std::string& package, const std::string& name, const std::string& path)
-    : Serializer(name), _package(package), _fullName(package + "/" + name), _shortcut(nullptr)
+    : Serializer(name), _package(package), _fullName(package + "/" + name), _shortcut(nullptr), _hasHeader(false)
 {
     // Read file line-by-line
     std::ifstream stream(path);
@@ -133,8 +133,15 @@ MessageSerializer::MessageSerializer(const std::string& package, const std::stri
                         std::smatch typeMatch;
                         if (std::regex_match(type, typeMatch, TypePattern))
                         {
+                            // Override parent package for header fields
+                            const char* parentPackage = package.c_str();
+                            if (typeMatch[1].str() == "Header" && _fields.empty())
+                            {
+                                parentPackage = "std_msgs";
+                            }
+
                             // Fetch serializer
-                            const Serializer& serializer = Serializer::SerializerForType(typeMatch[1].str(), package);
+                            const Serializer& serializer = Serializer::SerializerForType(typeMatch[1].str(), parentPackage);
 
                             // Determine if this is an array
                             if (typeMatch[2].matched)
@@ -206,6 +213,12 @@ MessageSerializer::MessageSerializer(const std::string& package, const std::stri
         {
             _shortcut = _fields.front().get();
         }
+    }
+    
+    // Check if we have a standard message header
+    if (!_fields.empty() && _fields.front()->GetName() == "header" && _fields.front()->GetSerializer().GetFullName() == "std_msgs/Header")
+    {
+        _hasHeader = true;
     }
 }
 
@@ -281,13 +294,18 @@ std::string MessageSerializer::CalculateHash()
 
 uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const
 {
+    return CalculateSerializedLength(value, true, fieldStack);
+}
+
+uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Variant& value, unsigned skipCount, const FieldStack& fieldStack) const
+{
     if (_shortcut != nullptr)
     {
         return _shortcut->CalculateSerializedLength(value, fieldStack);
     }
     else if (value.value_case() == swarmio::data::Variant::ValueCase::kMapValue)
     {
-        return CalculateSerializedLength(value.map_value(), fieldStack);
+        return CalculateSerializedLength(value.map_value(), skipCount, fieldStack);
     }
     else
     {
@@ -299,34 +317,61 @@ uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Varia
     }
 }
 
-uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Map& value, const FieldStack& fieldStack) const
+uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Map& value, unsigned skipCount, const FieldStack& fieldStack) const
 {
     uint32_t length = 0;
-    for (const auto& field : _fields)
+    auto it = _fields.begin();
+
+    // Skip fields
+    while (skipCount > 0)
     {
-        length += field->CalculateSerializedLength(value.pairs().at(field->GetName()), fieldStack);
+        ++it;
+        --skipCount;
     }
+
+    // Fill the rest of the fields
+    while (it != _fields.end())
+    {
+        auto& field = *it;
+        length += field->CalculateSerializedLength(value.pairs().at(field->GetName()), fieldStack);
+        ++it;
+    }
+
+    // Return length
     return length;
 }
 
 void MessageSerializer::Serialize(ros::serialization::OStream& stream, const swarmio::data::Variant& value, const FieldStack& fieldStack) const
 {
+    // Check for an array
+    if (value.value_case() == swarmio::data::Variant::ValueCase::kMapArray)
+    {
+        IndexedFieldStack current(fieldStack);
+        for (const auto& element : value.map_array().elements())
+        {
+            // Serialize each element
+            Serialize(stream, element, 0, current);
+            ++current;
+        }
+    }
+    else
+    {
+        // Serialize as a single item
+        Serialize(stream, value, 0, fieldStack);
+    }
+}
+
+void MessageSerializer::Serialize(ros::serialization::OStream& stream, const swarmio::data::Variant& value, unsigned skipCount, const FieldStack& fieldStack) const
+{
+    // Check for a shortcut
     if (_shortcut != nullptr)
     {
         _shortcut->Serialize(stream, value, fieldStack);
     }
     else if (value.value_case() == swarmio::data::Variant::ValueCase::kMapValue)
     {
-        Serialize(stream, value.map_value(), fieldStack);
-    }
-    else if (value.value_case() == swarmio::data::Variant::ValueCase::kMapArray)
-    {
-        IndexedFieldStack current(fieldStack);
-        for (const auto& element : value.map_array().elements())
-        {
-            Serialize(stream, element, current);
-            ++current;
-        }
+        // Serialize as a map value
+        Serialize(stream, value.map_value(), skipCount, fieldStack);
     }
     else
     {
@@ -338,69 +383,103 @@ void MessageSerializer::Serialize(ros::serialization::OStream& stream, const swa
     }
 }
 
-void MessageSerializer::Serialize(ros::serialization::OStream& stream, const swarmio::data::Map& value, const FieldStack& fieldStack) const
+void MessageSerializer::Serialize(ros::serialization::OStream& stream, const swarmio::data::Map& value, unsigned skipCount, const FieldStack& fieldStack) const
 {
     const auto& pairs = value.pairs();
-    for (const auto& field : _fields)
+    auto it = _fields.begin();
+
+    // Skip fields
+    while (skipCount > 0)
     {
-        auto it = pairs.find(field->GetName());
-        if (it != pairs.end())
+        ++it;
+        --skipCount;
+    }
+
+    // Fill the rest of the fields
+    while (it != _fields.end())
+    {
+        auto& field = *it;
+        auto value = pairs.find(field->GetName());
+        if (value != pairs.end())
         {
-            field->Serialize(stream, it->second, fieldStack);
+            field->Serialize(stream, value->second, fieldStack);
         }
         else
         {
             field->EmitDefault(stream, fieldStack); 
         }
+        ++it;
     }
 }
 
 void MessageSerializer::EmitDefault(ros::serialization::OStream& stream, const FieldStack& fieldStack) const
 {
+    // Emit default value for each field
     for (const auto& field : _fields)
     {
         field->EmitDefault(stream, fieldStack); 
     }
 }
 
-swarmio::data::Variant MessageSerializer::Deserialize(ros::serialization::IStream& stream, const FieldStack& fieldStack) const 
-{
-    if (_shortcut != nullptr)
-    {
-        return _shortcut->Deserialize(stream, fieldStack);
-    }
-    else
-    {
-        swarmio::data::Variant value;
-        auto& map = *value.mutable_map_value()->mutable_pairs();
-        for (const auto& field : _fields)
-        {
-            map[field->GetName()] = field->Deserialize(stream, fieldStack);
-        }
-        return value;
-    }
-}
-
 swarmio::data::Variant MessageSerializer::DeserializeArray(ros::serialization::IStream& stream, uint32_t count, const FieldStack& fieldStack) const
 {
+    // Check for a shortcut
     if (_shortcut != nullptr)
     {
         return _shortcut->DeserializeArray(stream, count, fieldStack);
     }
     else
     {
+        // Perform array deserialization
         IndexedFieldStack current(fieldStack);
         swarmio::data::Variant value;
         for (uint32_t i = 0; i < count; ++i)
         {
-            auto& map = *value.mutable_map_array()->add_elements()->mutable_pairs();
-            for (const auto& field : _fields)
-            {
-                map[field->GetName()] = field->Deserialize(stream, current);
-                ++current;
-            }
+            Deserialize(stream, *value.mutable_map_array()->add_elements(), 0, current);
         }
         return value;
+    }
+}
+
+swarmio::data::Variant MessageSerializer::Deserialize(ros::serialization::IStream& stream, const FieldStack& fieldStack) const
+{
+    return Deserialize(stream, 0, fieldStack);
+}
+
+swarmio::data::Variant MessageSerializer::Deserialize(ros::serialization::IStream& stream, unsigned skipCount, const FieldStack& fieldStack) const 
+{
+    // Check for a shortcut
+    if (_shortcut != nullptr)
+    {
+        return _shortcut->Deserialize(stream, fieldStack);
+    }
+    else
+    {
+        // Deserialize as a map
+        swarmio::data::Variant value;
+        Deserialize(stream, *value.mutable_map_value(), skipCount, fieldStack);
+        return value;
+    }
+}
+
+void MessageSerializer::Deserialize(ros::serialization::IStream& stream, swarmio::data::Map& value, unsigned skipCount, const FieldStack& fieldStack) const
+{
+    auto& map = *value.mutable_pairs();
+    auto it = _fields.begin();
+
+    // Skip fields
+    while (skipCount > 0)
+    {
+        ++it;
+        --skipCount;
+    }
+
+    // Fill the rest of the fields
+    while (it != _fields.end())
+    {
+        auto& field = *it;
+        map[field->GetName()] = field->Deserialize(stream, fieldStack);
+        ++it;
     }
 }
 
@@ -414,186 +493,44 @@ swarmio::data::discovery::Field MessageSerializer::GetFieldDescriptor() const
     else
     {
         swarmio::data::discovery::Field field;
-        *field.mutable_schema() = GetSchemaDescriptor();
+        *field.mutable_schema() = GetSchemaDescriptor(true);
         return field;
     }
 }
 
-swarmio::data::discovery::Schema MessageSerializer::GetSchemaDescriptor() const
+swarmio::data::discovery::Schema MessageSerializer::GetSchemaDescriptor(unsigned skipCount) const
 {
     swarmio::data::discovery::Schema schema;
-    for (const auto& field : _fields)
+    auto& map = *schema.mutable_fields();
+    auto it = _fields.begin();
+
+    // Skip fields
+    while (skipCount > 0)
     {
-        (*schema.mutable_fields())[field->GetName()] = field->GetFieldDescriptor();
+        ++it;
+        --skipCount;
     }
+
+    // Fill the rest of the fields
+    while (it != _fields.end())
+    {
+        auto& field = *it;
+        map[field->GetName()] = field->GetFieldDescriptor();
+        ++it;
+    }
+
+    // Return schema
     return schema;
 }
 
-
-bool MessageSerializer::HasHeader() const
+void MessageSerializer::EnumerateFields(std::function<bool(unsigned, const Field&)> enumerator) const
 {
-    if (_shortcut == nullptr && _fields.size() > 0)
+    unsigned n = 0;
+    for (auto& field : _fields)
     {
-        return _fields.front()->GetName() == "header";
-    }
-    else
-    {
-        return false;
-    }
-}
-
-const MessageSerializer& MessageSerializer::GetHeaderMessageSerializer() const
-{
-    if (HasHeader())
-    {
-        const MessageSerializer* serializer = dynamic_cast<const MessageSerializer*>(&_fields.front()->GetSerializer());
-        if (serializer != nullptr)
+        if (!enumerator(n++, *field))
         {
-            return *serializer;
+            break;
         }
-        else
-        {
-            throw SchemaMismatchException("Invalid header field type", GetFullName());
-        }
-    }
-    else
-    {
-        throw SchemaMismatchException("Message has no header", GetFullName());
-    }
-}
-
-uint32_t MessageSerializer::CalculateSerializedHeaderLength(const swarmio::data::Map& value, const FieldStack& fieldStack) const
-{
-    if (HasHeader())
-    {
-        const MessageSerializer* serializer = dynamic_cast<const MessageSerializer*>(&_fields.front()->GetSerializer());
-        if (serializer != nullptr)
-        {
-            return serializer->CalculateSerializedLength(value, fieldStack);
-        }
-        else
-        {
-            throw SchemaMismatchException("Invalid header field type", fieldStack.GetLocation());
-        }
-    }
-    else
-    {
-        throw SchemaMismatchException("Message has no header", fieldStack.GetLocation());
-    }
-}
-
-void MessageSerializer::SerializeHeader(ros::serialization::OStream& stream, const swarmio::data::Map& value, const FieldStack& fieldStack) const
-{
-    if (HasHeader())
-    {
-        const MessageSerializer* serializer = dynamic_cast<const MessageSerializer*>(&_fields.front()->GetSerializer());
-        if (serializer != nullptr)
-        {
-            serializer->Serialize(stream, value, fieldStack);
-        }
-        else
-        {
-            throw SchemaMismatchException("Invalid header field type", fieldStack.GetLocation());
-        }
-    }
-    else
-    {
-        throw SchemaMismatchException("Message has no header", fieldStack.GetLocation());
-    }
-}
-
-swarmio::data::Map MessageSerializer::DeserializeHeader(ros::serialization::IStream& stream, const FieldStack& fieldStack) const
-{
-    if (HasHeader())
-    {
-        auto value = _fields.front()->Deserialize(stream, fieldStack);
-        if (value.value_case() == swarmio::data::Variant::ValueCase::kMapValue)
-        {
-            return value.map_value();
-        }
-        else
-        {
-            throw SchemaMismatchException("Invalid header field type", fieldStack.GetLocation());
-        }
-    }
-    else
-    {
-        throw SchemaMismatchException("Message has no header", fieldStack.GetLocation());
-    }
-}
-
-uint32_t MessageSerializer::CalculateSerializedContentLength(const swarmio::data::Map& value, const FieldStack& fieldStack) const
-{
-    if (HasHeader())
-    {
-        uint32_t length = 0;
-        for (auto field = ++_fields.begin(); field != _fields.end(); ++field)
-        {
-            length += (*field)->CalculateSerializedLength(value.pairs().at((*field)->GetName()), fieldStack);
-        }
-        return length;
-    }
-    else
-    {
-        throw Exception("Message has no header");
-    }
-}
-
-void MessageSerializer::SerializeContent(ros::serialization::OStream& stream, const swarmio::data::Map& value, const FieldStack& fieldStack) const
-{
-    if (HasHeader())
-    {
-        const auto& pairs = value.pairs();
-        for (auto field = ++_fields.begin(); field != _fields.end(); ++field)
-        {
-            auto it = pairs.find((*field)->GetName());
-            if (it != pairs.end())
-            {
-                (*field)->Serialize(stream, it->second, fieldStack);
-            }
-            else
-            {
-                (*field)->EmitDefault(stream, fieldStack); 
-            }
-        }
-    }
-    else
-    {
-        throw Exception("Message has no header");
-    }
-}
-
-swarmio::data::Map MessageSerializer::DeserializeContent(ros::serialization::IStream& stream, const FieldStack& fieldStack) const
-{
-    if (HasHeader())
-    {
-        swarmio::data::Map value;
-        auto& map = *value.mutable_pairs();
-        for (auto field = ++_fields.begin(); field != _fields.end(); ++field)
-        {
-            map[(*field)->GetName()] = (*field)->Deserialize(stream, fieldStack);
-        }
-        return value;
-    }
-    else
-    {
-        throw Exception("Message has no header");
-    }
-}
-
-swarmio::data::discovery::Schema MessageSerializer::GetContentSchemaDescriptor() const
-{
-    if (HasHeader())
-    {
-        swarmio::data::discovery::Schema schema;
-        for (auto field = ++_fields.begin(); field != _fields.end(); ++field)
-        {
-            (*schema.mutable_fields())[(*field)->GetName()] = (*field)->GetFieldDescriptor();
-        }
-        return schema;
-    }
-    else
-    {
-        throw Exception("Message has no header");
     }
 }

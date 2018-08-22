@@ -3,6 +3,7 @@
 #include <swarmros/introspection/Serializer.h>
 #include <swarmros/introspection/Field.h>
 #include <list>
+#include <functional>
 
 namespace swarmros::introspection 
 {
@@ -25,6 +26,13 @@ namespace swarmros::introspection
              * 
              */
             std::list<std::unique_ptr<Field>> _fields; 
+
+            /**
+             * @brief Whether the message begins  
+             *        with the standard header.
+             * 
+             */
+            bool _hasHeader;
 
             /**
              * @brief For certain messages, the normal field processing 
@@ -134,6 +142,17 @@ namespace swarmros::introspection
             }
 
             /**
+             * @brief Checks whether the message fits the requirements 
+             *        of a message with a header
+             * 
+             * @return True if the message has a header
+             */
+            bool HasHeader() const
+            {
+                return _hasHeader;
+            }
+
+            /**
              * @brief Calculate the length of a serialized message in bytes
              * 
              * @param value Value
@@ -141,41 +160,6 @@ namespace swarmros::introspection
              * @return uint32_t 
              */
             virtual uint32_t CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const override;
-
-            /**
-             * @brief Calculate the length of a serialized message in bytes
-             * 
-             * @param value Value
-             * @param fieldStack Stack of fields to determine location
-             * @return uint32_t 
-             */
-            uint32_t CalculateSerializedLength(const swarmio::data::Map& value, const FieldStack& fieldStack) const;
-
-            /**
-             * @brief Serialize a variant onto a stream
-             * 
-             * @param stream Output stream
-             * @param value Value to serialize
-             * @param fieldStack Stack of fields to determine location
-             */
-            virtual void Serialize(ros::serialization::OStream& stream, const swarmio::data::Variant& value, const FieldStack& fieldStack) const override;
-
-            /**
-             * @brief Serialize a variant onto a stream
-             * 
-             * @param stream Output stream
-             * @param value Value to serialize
-             * @param fieldStack Stack of fields to determine location
-             */
-            void Serialize(ros::serialization::OStream& stream, const swarmio::data::Map& value, const FieldStack& fieldStack) const;
-
-            /**
-             * @brief Write the default value to the stream
-             * 
-             * @param stream Output stream
-             * @param fieldStack Stack of fields to determine location
-             */
-            virtual void EmitDefault(ros::serialization::OStream& stream, const FieldStack& fieldStack) const override;
 
             /**
              * @brief Deserialize a stream into a variant
@@ -197,6 +181,23 @@ namespace swarmros::introspection
             virtual swarmio::data::Variant DeserializeArray(ros::serialization::IStream& stream, uint32_t count, const FieldStack& fieldStack) const override;
 
             /**
+             * @brief Serialize a variant onto a stream
+             * 
+             * @param stream Output stream
+             * @param value Value to serialize
+             * @param fieldStack Stack of fields to determine location
+             */
+            virtual void Serialize(ros::serialization::OStream& stream, const swarmio::data::Variant& value, const FieldStack& fieldStack) const override;
+
+            /**
+             * @brief Write the default value to the stream
+             * 
+             * @param stream Output stream
+             * @param fieldStack Stack of fields to determine location
+             */
+            virtual void EmitDefault(ros::serialization::OStream& stream, const FieldStack& fieldStack) const override;
+
+            /**
              * @brief Build a field descriptor for the underlying type
              * 
              * @return swarmio::data::discovery::Field 
@@ -204,86 +205,86 @@ namespace swarmros::introspection
             virtual swarmio::data::discovery::Field GetFieldDescriptor() const override;
 
             /**
-             * @brief Build a field descriptor for the underlying type
-             * 
-             * @return swarmio::data::discovery::Schema 
-             */
-            swarmio::data::discovery::Schema GetSchemaDescriptor() const; 
-
-            /**
-             * @brief Checks whether the message fits the requirements 
-             *        of a message with a header
-             * 
-             * @return True if the message has a header
-             */
-            bool HasHeader() const;
-
-            /**
-             * @brief Get the message seralizer for the header portion
-             * 
-             * @return const MessageSerializer& 
-             */
-            const MessageSerializer& GetHeaderMessageSerializer() const;
-
-            /**
-             * @brief Deserialize the header of the message
-             * 
-             * @param stream Input stream
-             * @param fieldStack Stack of fields to determine location
-             * @return swarmio::data::Map 
-             */
-            swarmio::data::Map DeserializeHeader(ros::serialization::IStream& stream, const FieldStack& fieldStack) const;
-
-            /**
-             * @brief Serialize the header onto a stream
-             * 
-             * @param stream Output stream
-             * @param value Value to serialize
-             * @param fieldStack Stack of fields to determine location
-             */
-            void SerializeHeader(ros::serialization::OStream& stream, const swarmio::data::Map& value, const FieldStack& fieldStack) const;
-
-            /**
-             * @brief Deserialize the rest of the message
-             * 
-             * @param stream Input stream
-             * @param fieldStack Stack of fields to determine location
-             * @return swarmio::data::Map 
-             */
-            swarmio::data::Map DeserializeContent(ros::serialization::IStream& stream, const FieldStack& fieldStack) const;
-
-            /**
-             * @brief Serialize the rest of the message onto a stream
-             * 
-             * @param stream Output stream
-             * @param value Value to serialize
-             * @param fieldStack Stack of fields to determine location
-             */
-            void SerializeContent(ros::serialization::OStream& stream, const swarmio::data::Map& value, const FieldStack& fieldStack) const;
-
-            /**
-             * @brief Calculate the length of a serialized header in bytes
+             * @brief Calculate the length of a serialized message 
+             *        in bytes from a variant, with or without its header.
              * 
              * @param value Value
+             * @param skipCount Number of fields to skip
              * @param fieldStack Stack of fields to determine location
              * @return uint32_t 
              */
-            uint32_t CalculateSerializedHeaderLength(const swarmio::data::Map& value, const FieldStack& fieldStack) const;
+            uint32_t CalculateSerializedLength(const swarmio::data::Variant& value, unsigned skipCount, const FieldStack& fieldStack) const;
 
             /**
-             * @brief Calculate the length of a serialized content in bytes
+             * @brief Calculate the length of a serialized message
+             *        in bytes from a map, with or without its header.
              * 
              * @param value Value
+             * @param skipCount Number of fields to skip
              * @param fieldStack Stack of fields to determine location
              * @return uint32_t 
              */
-            uint32_t CalculateSerializedContentLength(const swarmio::data::Map& value, const FieldStack& fieldStack) const;
+            uint32_t CalculateSerializedLength(const swarmio::data::Map& value, unsigned skipCount, const FieldStack& fieldStack) const;
 
             /**
-             * @brief Build a field descriptor for the content
+             * @brief Serialize a variant onto a stream, with or
+             *        without its header.
              * 
+             * @param stream Output stream
+             * @param value Value to serialize
+             * @param skipCount Number of fields to skip
+             * @param fieldStack Stack of fields to determine location
+             */
+            void Serialize(ros::serialization::OStream& stream, const swarmio::data::Variant& value, unsigned skipCount, const FieldStack& fieldStack) const;
+
+            /**
+             * @brief Serialize a map onto a stream, with or 
+             *        without its header.
+             * 
+             * @param stream Output stream
+             * @param value Value to serialize             
+             * @param skipCount Number of fields to skip
+             * @param fieldStack Stack of fields to determine location
+             */
+            void Serialize(ros::serialization::OStream& stream, const swarmio::data::Map& value, unsigned skipCount, const FieldStack& fieldStack) const;
+
+            /**
+             * @brief Deserialize a stream into a variant, with or 
+             *        without its header.
+             * 
+             * @param stream Input stream
+             * @param fieldStack Stack of fields to determine location
+             * @param skipCount Number of fields to skip
+             * @return swarmio::data::Variant 
+             */
+            swarmio::data::Variant Deserialize(ros::serialization::IStream& stream, unsigned skipCount, const FieldStack& fieldStack) const;
+
+            /**
+             * @brief Deserialize a stream into a map, with or 
+             *        without its header.
+             * 
+             * @param stream Input stream
+             * @param map Map to fill values with
+             * @param fieldStack Stack of fields to determine location
+             * @param skipCount Number of fields to skip
+             */
+            void Deserialize(ros::serialization::IStream& stream, swarmio::data::Map& map, unsigned skipCount, const FieldStack& fieldStack) const;
+
+            /**
+             * @brief Build a field descriptor for the underlying type,
+             *        with or without its header.
+             * 
+             * @param skipCount Number of fields to skip
              * @return swarmio::data::discovery::Schema 
              */
-            swarmio::data::discovery::Schema GetContentSchemaDescriptor() const; 
+            swarmio::data::discovery::Schema GetSchemaDescriptor(unsigned skipCount) const; 
+
+            /**
+             * @brief Enumerate the fields of the message
+             *        with a function.
+             * 
+             * @param enumerator Enumerator function
+             */
+            void EnumerateFields(std::function<bool(unsigned, const Field&)> enumerator) const;
     };
 }

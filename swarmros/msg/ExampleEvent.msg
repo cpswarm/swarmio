@@ -1,2 +1,3 @@
-EventHeader header
+Header header
+EventHeader eventHeader
 uint64 counter

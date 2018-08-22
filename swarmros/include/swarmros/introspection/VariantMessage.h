@@ -10,11 +10,11 @@
 namespace swarmros::introspection 
 {
     /**
-     * @brief AnyMessage implements an interface with
+     * @brief VariantMessage implements an interface with
      *        the ROS type system to send and receive
      *        messages of any known type.
      */
-    class AnyMessage final : public Message
+    class VariantMessage : public Message
     {
         private:
 
@@ -30,27 +30,27 @@ namespace swarmros::introspection
              * @brief Constant pointer type
              * 
              */
-            typedef boost::shared_ptr<AnyMessage const> ConstPtr;
+            typedef boost::shared_ptr<VariantMessage const> ConstPtr;
  
             /**
              * @brief Pointer type
              * 
              */
-            typedef boost::shared_ptr<AnyMessage> Ptr;
+            typedef boost::shared_ptr<VariantMessage> Ptr;
 
             /**
-             * @brief Construct an empty AnyMessage instance
+             * @brief Construct an empty VariantMessage instance
              * 
              */
-            AnyMessage() { }
+            VariantMessage() { }
 
             /**
-             * @brief Build an AnyMessage instance from a Variant
+             * @brief Build an VariantMessage instance from a Variant
              * 
              * @param type ROS type
              * @param value Variant value
              */
-            AnyMessage(const std::string& type, const swarmio::data::Variant& value)
+            VariantMessage(const std::string& type, const swarmio::data::Variant& value)
                 : Message(type), _value(value) { }
 
             /**
@@ -94,14 +94,14 @@ namespace ros
          * 
          */
         template<> 
-        struct IsMessage<swarmros::introspection::AnyMessage> : public IsMessage<swarmros::introspection::Message> { };
+        struct IsMessage<swarmros::introspection::VariantMessage> : public IsMessage<swarmros::introspection::Message> { };
 
         /**
          * @brief Trait to mark const Message as a message
          * 
          */
         template<> 
-        struct IsMessage<const swarmros::introspection::AnyMessage> : public IsMessage<const swarmros::introspection::Message> { };
+        struct IsMessage<const swarmros::introspection::VariantMessage> : public IsMessage<const swarmros::introspection::Message> { };
  
         /**
          * @brief Trait to accept messages with any MD5 sum and 
@@ -109,39 +109,39 @@ namespace ros
          * 
          */
         template<> 
-        struct MD5Sum<swarmros::introspection::AnyMessage> : public MD5Sum<swarmros::introspection::Message> { };
+        struct MD5Sum<swarmros::introspection::VariantMessage> : public MD5Sum<swarmros::introspection::Message> { };
         
         /**
          * @brief Trait to retreive the full data type of the message
          * 
          */
         template<> 
-        struct DataType<swarmros::introspection::AnyMessage> : public DataType<swarmros::introspection::Message> { };
+        struct DataType<swarmros::introspection::VariantMessage> : public DataType<swarmros::introspection::Message> { };
  
         /**
          * @brief Trait to retreive the definition of an Message instance
          * 
          */
         template<> 
-        struct Definition<swarmros::introspection::AnyMessage> : public Definition<swarmros::introspection::Message> { };
+        struct Definition<swarmros::introspection::VariantMessage> : public Definition<swarmros::introspection::Message> { };
     }
 
     namespace serialization
     {
         /**
          * @brief Trait to set up callbacks before 
-         *        deserialization of an AnyMessage
+         *        deserialization of an VariantMessage
          */
         template<>
-        struct PreDeserialize<swarmros::introspection::AnyMessage>
+        struct PreDeserialize<swarmros::introspection::VariantMessage>
         {
             /**
              * @brief Before deserialization, sets the data
-             *        type of an AnyMessage instance
+             *        type of an VariantMessage instance
              * 
              * @param params Deserialization parameters
              */
-            static void notify(const PreDeserializeParams<swarmros::introspection::AnyMessage>& params)
+            static void notify(const PreDeserializeParams<swarmros::introspection::VariantMessage>& params)
             {
                 params.message->SetType((*params.connection_header)["type"]);
             }
@@ -149,10 +149,10 @@ namespace ros
 
         /**
          * @brief Trait to perform the serialization and
-         *        deserialization of an AnyMessage instance
+         *        deserialization of an VariantMessage instance
          */
         template<> 
-        struct Serializer<swarmros::introspection::AnyMessage>
+        struct Serializer<swarmros::introspection::VariantMessage>
         {
             /**
              * @brief Uses the message serializer to calculate the
@@ -161,17 +161,21 @@ namespace ros
              * @param message Message
              * @return uint32_t
              */
-            inline static uint32_t serializedLength(const swarmros::introspection::AnyMessage& message) 
+            inline static uint32_t serializedLength(const swarmros::introspection::VariantMessage& message) 
             {
                 auto serializer = message.GetSerializer();
                 if (serializer != nullptr)
                 {
+                    // Handle header
+                    uint32_t headerLength = Serializer<swarmros::introspection::Message>::serializedLength(message);
+
+                    // Handle contents
                     swarmros::introspection::RootFieldStack stack(serializer->GetFullName());
-                    return serializer->CalculateSerializedLength(message.GetValue(), stack);
+                    return headerLength + serializer->CalculateSerializedLength(message.GetValue(), serializer->HasHeader() ? 1 : 0, stack);
                 }
                 else
                 {
-                    throw swarmio::Exception("Trying to serialize AnyMessage without serializer");
+                    throw Exception("Trying to serialize VariantMessage without serializer");
                 }
             }
 
@@ -184,17 +188,21 @@ namespace ros
              * @param message Message
              */
             template<typename Stream>
-            inline static void write(Stream& stream, const swarmros::introspection::AnyMessage& message) 
+            inline static void write(Stream& stream, const swarmros::introspection::VariantMessage& message) 
             {
                 auto serializer = message.GetSerializer();
                 if (serializer != nullptr)
                 {
+                    // Handle header
+                    Serializer<swarmros::introspection::Message>::write(stream, message);
+
+                    // Handle contents
                     swarmros::introspection::RootFieldStack stack(serializer->GetFullName());
-                    serializer->Serialize(dynamic_cast<ros::serialization::OStream&>(stream), message.GetValue(), stack);
+                    serializer->Serialize(dynamic_cast<ros::serialization::OStream&>(stream), message.GetValue(), serializer->HasHeader() ? 1 : 0, stack);
                 }
                 else
                 {
-                    throw swarmio::Exception("Trying to serialize AnyMessage without serializer");
+                    throw Exception("Trying to serialize VariantMessage without serializer");
                 }
             }
 
@@ -207,17 +215,21 @@ namespace ros
              * @param message Message
              */
             template<typename Stream>
-            inline static void read(Stream& stream, swarmros::introspection::AnyMessage& message)
+            inline static void read(Stream& stream, swarmros::introspection::VariantMessage& message)
             {
                 auto serializer = message.GetSerializer();
                 if (serializer != nullptr)
                 {
+                    // Handle header
+                    Serializer<swarmros::introspection::Message>::read(stream, message);
+
+                    // Handle contents
                     swarmros::introspection::RootFieldStack stack(serializer->GetFullName());
-                    message.SetValue(serializer->Deserialize(dynamic_cast<ros::serialization::IStream&>(stream), stack));
+                    message.SetValue(serializer->Deserialize(dynamic_cast<ros::serialization::IStream&>(stream), serializer->HasHeader() ? 1 : 0, stack));
                 }
                 else
                 {
-                    throw swarmio::Exception("Trying to deserialize AnyMessage without serializer");
+                    throw Exception("Trying to deserialize VariantMessage without serializer");
                 }
             }
         };

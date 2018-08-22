@@ -13,11 +13,10 @@ EventPublisher::EventPublisher(ros::NodeHandle& nodeHandle, const std::string& s
     // Construct topic name
     auto topic = "events/" + suffix;
 
-    // Check header
-    const auto& headerType = _serializer->GetHeaderMessageSerializer().GetFullName();
-    if (headerType != "swarmros/EventHeader")
+    // Check message format
+    if (!EventMessage::IsEventSerializer(*_serializer))
     {
-        throw MessageMismatchException("Invalid header type for event", topic, "swarmros/EventHeader", headerType);
+        throw MessageMismatchException("Message type has no valid event header", topic, "swarmros/EventHeader", _serializer->GetFullName());
     }
 
     // Create publisher
@@ -32,19 +31,17 @@ void EventPublisher::EventWasTriggered(const swarmio::Node* node, const swarmio:
 {
     if (event.name() == _name)
     {
-        introspection::HeadedMessage message;
-        auto& header = *message.GetMutableHeader().mutable_pairs();
-        auto& content = *message.GetMutableContent().mutable_pairs();
+        EventMessage message;
 
         // Set type
         message.SetType(_serializer->GetFullName());
 
         // Fill header                
-        header["node"].set_string_value(node->GetUUID());
-        header["name"].set_string_value(event.name());;
+        message.SetName(event.name());
+        message.SetNode(node->GetUUID());
 
         // Fill parameters
-        content.insert(event.parameters().begin(), event.parameters().end());
+        message.GetMutableParameters().mutable_pairs()->insert(event.parameters().begin(), event.parameters().end());
 
         // Publish message
         _publisher.publish(message);
@@ -59,7 +56,7 @@ swarmio::data::discovery::Schema EventPublisher::DescribeEvent(const std::string
 {
     if (name == _name)
     {
-        return _serializer->GetContentSchemaDescriptor();
+        return _serializer->GetSchemaDescriptor(_serializer->HasHeader() ? 2 : 1);
     }
     else
     {

@@ -115,11 +115,6 @@ if (SWARMIO_BUILD_ROS_NODE)
         message(STATUS "Using ROS installation at ${SWARMIO_ROS_PREFIX}.")
     endif()
 
-    # Strip development scripts from output
-    if (NOT SWARMIO_BUILD_MODE STREQUAL "DEVELOPMENT")
-        list(APPEND SWARMROS_CMAKE_ARGS "-DCATKIN_BUILD_BINARY_PACKAGE=1")
-    endif()
-
     # Build
     ExternalProject_Add(swarmros
         SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/swarmros"
@@ -132,6 +127,7 @@ if (SWARMIO_BUILD_ROS_NODE)
         CMAKE_ARGS  
             ${SWARMROS_CMAKE_ARGS}
             "-DCATKIN_ENABLE_TESTING=OFF"
+            "-DCATKIN_BUILD_BINARY_PACKAGE=1"
             "-DCMAKE_PREFIX_PATH=${SWARMIO_SYSROOT}${SWARMIO_ROS_PREFIX}"
             "-DCMAKE_INSTALL_PREFIX=${SWARMIO_ROS_PREFIX}"
     )

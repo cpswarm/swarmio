@@ -1,11 +1,11 @@
 #include <swarmros/bridge/TelemetryForwarder.h>
 #include <swarmros/bridge/MessageMismatchException.h>
-#include <swarmros/introspection/AnyMessage.h>
+#include <swarmros/introspection/VariantMessage.h>
 
 using namespace swarmros;
 using namespace swarmros::bridge;
 
-void TelemetryForwarder::UpdateReceived(const introspection::AnyMessage::ConstPtr& message)
+void TelemetryForwarder::UpdateReceived(const introspection::VariantMessage::ConstPtr& message)
 {
     if (message->GetType() == _message)
     {
@@ -28,7 +28,7 @@ TelemetryForwarder::TelemetryForwarder(ros::NodeHandle& nodeHandle, const std::s
     _message = serializer.GetFullName();
 
     // Subscribe
-    _subscriber = nodeHandle.subscribe<introspection::AnyMessage>(source, 1, &TelemetryForwarder::UpdateReceived, this);
+    _subscriber = nodeHandle.subscribe<introspection::VariantMessage>(source, 1, &TelemetryForwarder::UpdateReceived, this);
 }
 
 TelemetryForwarder::~TelemetryForwarder()

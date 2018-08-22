@@ -1,8 +1,8 @@
 #pragma once
 
 #include <swarmros/bridge/Pylon.h>
+#include <swarmros/bridge/EventMessage.h>
 #include <swarmros/introspection/MessageSerializer.h>
-#include <swarmros/introspection/HeadedMessage.h>
 #include <swarmio/services/event/Service.h>
 #include <swarmio/services/event/Handler.h>
 #include <ros/ros.h>
