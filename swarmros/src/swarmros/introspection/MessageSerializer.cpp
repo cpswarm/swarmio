@@ -294,7 +294,7 @@ std::string MessageSerializer::CalculateHash()
 
 uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const
 {
-    return CalculateSerializedLength(value, true, fieldStack);
+    return CalculateSerializedLength(value, 0, fieldStack);
 }
 
 uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Variant& value, unsigned skipCount, const FieldStack& fieldStack) const
