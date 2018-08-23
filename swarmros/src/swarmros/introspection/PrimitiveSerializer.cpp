@@ -4,62 +4,10 @@
 #include <swarmros/UnqualifiedException.h>
 #include <swarmio/data/Helper.h>
 #include <limits>
+#include <regex>
 
 using namespace swarmros;
 using namespace swarmros::introspection;
-
-swarmio::data::Variant PrimitiveSerializer::ParseConstant(const std::string& value) const
-{
-    swarmio::data::Variant out;
-    switch (_type)
-    {
-        case PrimitiveType::BOOL:
-            if (value == "true" || value == "1")
-            {
-                out.set_bool_value(true);
-            }
-            else if (value == "false" || value == "0")
-            {
-                out.set_bool_value(false);
-            }
-            else
-            {
-                throw UnqualifiedException("Invalid constant value for bool");
-            }
-            break;
-
-        case PrimitiveType::INT8:
-        case PrimitiveType::INT16:
-        case PrimitiveType::INT32:
-        case PrimitiveType::INT64:
-            out.set_int_value(std::strtoll(value.c_str(), nullptr, 10));
-            break;
-
-        case PrimitiveType::UINT8:
-        case PrimitiveType::UINT16:
-        case PrimitiveType::UINT32:
-        case PrimitiveType::UINT64:
-            out.set_uint_value(std::strtoull(value.c_str(), nullptr, 10));
-            break;
-
-        case PrimitiveType::FLOAT32:
-        case PrimitiveType::FLOAT64:
-            out.set_double_value(std::strtod(value.c_str(), nullptr));
-            break;
-
-        case PrimitiveType::STRING:
-            out.set_string_value(value);
-            break;
-
-        case PrimitiveType::DURATION:
-        case PrimitiveType::TIME:
-            throw UnqualifiedException("Invalid primitive type for constant");
-
-        default:
-            throw Exception("Unknown primitive type");
-    }   
-    return out;
-}
 
 static inline void ThrowTypeMismatchException(swarmio::data::Variant::ValueCase sourceType, PrimitiveType targetPrimitiveType, const FieldStack& fieldStack)
 {

@@ -26,6 +26,41 @@ namespace swarmros::introspection
              */
             std::string _rawValue;
 
+            /**
+             * @brief Parse a boolean value
+             * 
+             * @param value Value
+             */
+            void ParseBool(const std::string& value);
+
+            /**
+             * @brief Parse a floating point value
+             * 
+             * @param value Value
+             */
+            void ParseFloat(const std::string& value);
+
+            /**
+             * @brief Parse a string value
+             * 
+             * @param value Value
+             */
+            void ParseString(const std::string& value);
+
+            /**
+             * @brief Parse a signed integer value
+             * 
+             * @param value Value 
+             */
+            void ParseSigned(const std::string& value);
+
+            /**
+             * @brief Parse an unsigned integer value
+             * 
+             * @param value Value
+             */
+            void ParseUnsigned(const std::string& value);
+
         public:  
 
             /**

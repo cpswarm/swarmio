@@ -55,12 +55,14 @@ namespace swarmros::introspection
                 : Serializer(name), _type(type) { }
 
             /**
-             * @brief Parse a constant string value
+             * @brief Get underlying data type
              * 
-             * @param value String value
-             * @return swarmio::data::Variant 
+             * @return PrimitiveType 
              */
-            swarmio::data::Variant ParseConstant(const std::string& value) const;
+            PrimitiveType GetType() const 
+            {
+                return _type;
+            }
 
             /**
              * @brief Calculate the length of a serialized message in bytes
