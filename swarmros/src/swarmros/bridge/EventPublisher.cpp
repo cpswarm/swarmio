@@ -11,7 +11,7 @@ EventPublisher::EventPublisher(ros::NodeHandle& nodeHandle, const std::string& s
     _serializer = &introspection::MessageSerializer::MessageSerializerForType(message, "swarmros");
 
     // Construct topic name
-    auto topic = "events/" + suffix;
+    auto topic = "bridge/events/" + suffix;
 
     // Check message format
     if (!EventMessage::IsEventSerializer(*_serializer))

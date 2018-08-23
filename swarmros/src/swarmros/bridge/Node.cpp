@@ -10,9 +10,9 @@ using namespace swarmros;
 using namespace swarmros::bridge;
 
 Node::Node(swarmio::Endpoint* endpoint)
-    : MemberProfile(endpoint), _nodeHandle("bridge")
+    : MemberProfile(endpoint)
 {
-    _nodesPublisher = _nodeHandle.advertise<NodeInfo>("nodes", 128, true);
+    _nodesPublisher = _nodeHandle.advertise<NodeInfo>("bridge/nodes", 128, true);
     FinishConstruction();
 }
 

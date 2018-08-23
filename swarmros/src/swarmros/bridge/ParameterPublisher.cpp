@@ -11,7 +11,7 @@ ParameterPublisher::ParameterPublisher(ros::NodeHandle& nodeHandle, const std::s
     _serializer = &introspection::MessageSerializer::MessageSerializerForType(message, "swarmros");
 
     // Create publisher
-    ros::AdvertiseOptions options("parameters/" + suffix, 1, _serializer->GetHash(), _serializer->GetFullName(), _serializer->GetCanonicalDefinition());
+    ros::AdvertiseOptions options("bridge/parameters/" + suffix, 1, _serializer->GetHash(), _serializer->GetFullName(), _serializer->GetCanonicalDefinition());
     options.latch = true;
     _publisher = nodeHandle.advertise(options);
 
