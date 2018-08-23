@@ -150,11 +150,15 @@ void ConstantField::WriteDefinition(std::stringstream& stream, bool forHash) con
     }
 }
 
-uint32_t ConstantField::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const
+uint32_t ConstantField::GetDefaultLength(const FieldStack& fieldStack) const
 {
     return 0;
 }
 
+uint32_t ConstantField::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const
+{
+    return 0;
+}
 
 void ConstantField::Serialize(ros::serialization::OStream& stream, const swarmio::data::Variant& value, const FieldStack& fieldStack) const
 {

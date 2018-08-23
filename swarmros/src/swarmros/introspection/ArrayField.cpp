@@ -21,6 +21,11 @@ void ArrayField::WriteDefinition(std::stringstream& stream, bool forHash) const
     }
 }
 
+uint32_t ArrayField::GetDefaultLength(const FieldStack& fieldStack) const
+{
+    return 4;
+}
+
 uint32_t ArrayField::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const
 {
     KeyedFieldStack current(fieldStack, GetName());

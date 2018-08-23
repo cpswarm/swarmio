@@ -440,6 +440,36 @@ swarmio::data::Variant PrimitiveSerializer::DeserializeArray(ros::serialization:
     return value;
 }
 
+uint32_t PrimitiveSerializer::GetDefaultLength(const FieldStack& fieldStack) const
+{
+    switch (_type)
+    {
+        case PrimitiveType::BOOL:
+        case PrimitiveType::INT8:
+        case PrimitiveType::UINT8:
+            return 1;
+
+        case PrimitiveType::INT16:
+        case PrimitiveType::UINT16:
+            return 2;
+
+        case PrimitiveType::INT32:
+        case PrimitiveType::UINT32:
+        case PrimitiveType::FLOAT32:
+        case PrimitiveType::TIME:
+        case PrimitiveType::DURATION:
+        case PrimitiveType::STRING:
+            return 4;
+
+        case PrimitiveType::INT64:
+        case PrimitiveType::UINT64:
+        case PrimitiveType::FLOAT64:
+            return 8;
+
+        default:
+            throw Exception("Unknown primitive type");
+    }
+}
 
 uint32_t PrimitiveSerializer::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const
 {

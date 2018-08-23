@@ -35,6 +35,12 @@ void Field::WriteTypeName(std::stringstream& stream, bool forHash) const
     }
 }
 
+uint32_t Field::GetDefaultLength(const FieldStack& fieldStack) const
+{
+    KeyedFieldStack current(fieldStack, GetName());
+    return _serializer.GetDefaultLength(current);
+}
+
 uint32_t Field::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const
 {
     if (!swarmio::data::Helper::IsArray(value))

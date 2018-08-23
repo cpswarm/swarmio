@@ -1,5 +1,6 @@
 #include <swarmros/introspection/FixedArrayField.h>
 #include <swarmros/introspection/IndexedFieldStack.h>
+#include <swarmros/introspection/KeyedFieldStack.h>
 #include <swarmros/introspection/MessageSerializer.h>
 #include <swarmros/introspection/CountMismatchException.h>
 #include <swarmio/data/Helper.h>
@@ -19,6 +20,12 @@ void FixedArrayField::WriteDefinition(std::stringstream& stream, bool forHash) c
     {
         stream << _serializer.GetFullName() << "[" << _count << "] " << GetName();
     }
+}
+
+uint32_t FixedArrayField::GetDefaultLength(const FieldStack& fieldStack) const
+{
+    KeyedFieldStack current(fieldStack, GetName());
+    return _serializer.GetDefaultLength(fieldStack) * _count;
 }
 
 uint32_t FixedArrayField::CalculateSerializedLength(const swarmio::data::Variant& value, const FieldStack& fieldStack) const

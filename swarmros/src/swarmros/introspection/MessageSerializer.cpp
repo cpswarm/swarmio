@@ -317,6 +317,16 @@ uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Varia
     }
 }
 
+uint32_t MessageSerializer::GetDefaultLength(const FieldStack& fieldStack) const
+{
+    uint32_t length = 0;
+    for (const auto& field : _fields)
+    {  
+        length += field->GetDefaultLength(fieldStack);
+    }
+    return length;
+}
+
 uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Map& value, unsigned skipCount, const FieldStack& fieldStack) const
 {
     uint32_t length = 0;
@@ -333,7 +343,15 @@ uint32_t MessageSerializer::CalculateSerializedLength(const swarmio::data::Map& 
     while (it != _fields.end())
     {
         auto& field = *it;
-        length += field->CalculateSerializedLength(value.pairs().at(field->GetName()), fieldStack);
+        auto entry = value.pairs().find(field->GetName());
+        if (entry != value.pairs().end())
+        {
+            length += field->CalculateSerializedLength(entry->second, fieldStack);
+        }
+        else
+        {
+            length += field->GetDefaultLength(fieldStack);
+        }    
         ++it;
     }
 

@@ -82,6 +82,14 @@ namespace swarmros::introspection
             virtual void WriteDefinition(std::stringstream& stream, bool forHash) const override;
 
             /**
+             * @brief Get the length of the default value.
+             * 
+             * @param fieldStack Stack of fields to determine location
+             * @return uint32_t 
+             */
+            virtual uint32_t GetDefaultLength(const FieldStack& fieldStack) const override;
+
+            /**
              * @brief Calculate the length of a serialized message in bytes
              * 
              * @param value Value
