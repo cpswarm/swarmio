@@ -3,6 +3,7 @@
 #include <swarmros/introspection/IndexedFieldStack.h>
 #include <swarmros/UnqualifiedException.h>
 #include <swarmio/data/Helper.h>
+#include <boost/numeric/conversion/cast.hpp>
 #include <limits>
 #include <regex>
 
@@ -52,11 +53,11 @@ static inline void ThrowTypeMismatchException(swarmio::data::Variant::ValueCase 
 template<typename T, typename O>
 static inline void SerializeAs(ros::serialization::OStream& stream, O value, const FieldStack& fieldStack)
 {
-    if (value >= std::numeric_limits<T>::min() && value <= std::numeric_limits<T>::max())
+    try
     {
-        stream.next((T)value);
+        stream.next((T)boost::numeric_cast<T>(value));
     }
-    else
+    catch (const boost::numeric::bad_numeric_cast&)
     {
         throw SchemaMismatchException("Integer out-of-range", fieldStack.GetLocation());
     }
