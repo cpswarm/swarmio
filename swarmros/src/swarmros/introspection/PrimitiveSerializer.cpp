@@ -75,6 +75,40 @@ static inline void SerializeAsString(ros::serialization::OStream& stream, const 
     memcpy(stream.advance(size), value.c_str(), size);
 }
 
+template<typename O>
+static void SerializeAsTime(ros::serialization::OStream& stream, O value, const FieldStack& fieldStack)
+{
+    int32_t secs = value / 1000000000;
+    SerializeAs<int32_t>(stream, secs, fieldStack);
+    if (value < 0)
+    {
+        int32_t nsecs = -(-value % 1000000000);
+        SerializeAs<int32_t>(stream, nsecs, fieldStack);
+    }
+    else
+    {
+        int32_t nsecs = value % 1000000000;        
+        SerializeAs<int32_t>(stream, nsecs, fieldStack);
+    }
+
+}
+
+template<typename O>
+static void SerializeAsDuration(ros::serialization::OStream& stream, O value, const FieldStack& fieldStack)
+{
+    if (value < 0)
+    {
+        throw SchemaMismatchException("Integer out-of-range", fieldStack.GetLocation());
+    }
+    else
+    {
+        uint32_t secs = value / 1000000000;
+        SerializeAs<uint32_t>(stream, secs, fieldStack);
+        uint32_t nsecs = value % 1000000000;
+        SerializeAs<uint32_t>(stream, nsecs, fieldStack);
+    }
+}
+
 static inline void SerializeAs(ros::serialization::OStream& stream, int64_t value, PrimitiveType type, const FieldStack& fieldStack)
 {
     switch (type)
@@ -88,7 +122,6 @@ static inline void SerializeAs(ros::serialization::OStream& stream, int64_t valu
             break;
 
         case PrimitiveType::INT32:
-        case PrimitiveType::DURATION:
             SerializeAs<int32_t>(stream, value, fieldStack);
             break;
 
@@ -105,12 +138,19 @@ static inline void SerializeAs(ros::serialization::OStream& stream, int64_t valu
             break;
 
         case PrimitiveType::UINT32:
-        case PrimitiveType::TIME:
             SerializeAs<uint32_t>(stream, value, fieldStack);
             break;
 
         case PrimitiveType::UINT64:
             SerializeAs<uint64_t>(stream, value, fieldStack);
+            break;
+
+        case PrimitiveType::DURATION:
+            SerializeAsDuration(stream, value, fieldStack);
+            break;
+
+        case PrimitiveType::TIME:
+            SerializeAsTime(stream, value, fieldStack);
             break;
 
         default:
@@ -132,7 +172,6 @@ static inline void SerializeAs(ros::serialization::OStream& stream, uint64_t val
             break;
 
         case PrimitiveType::UINT32:
-        case PrimitiveType::TIME:
             SerializeAs<uint32_t>(stream, value, fieldStack);
             break;
 
@@ -149,12 +188,19 @@ static inline void SerializeAs(ros::serialization::OStream& stream, uint64_t val
             break;
 
         case PrimitiveType::INT32:
-        case PrimitiveType::DURATION:
             SerializeAs<int32_t>(stream, value, fieldStack);
             break;
 
         case PrimitiveType::INT64:
             SerializeAs<int64_t>(stream, value, fieldStack);
+            break;
+
+        case PrimitiveType::DURATION:
+            SerializeAsDuration(stream, value, fieldStack);
+            break;
+
+        case PrimitiveType::TIME:
+            SerializeAsTime(stream, value, fieldStack);
             break;
 
         default:
@@ -315,58 +361,78 @@ inline std::string DeserializeAs(ros::serialization::IStream& stream)
     return std::string((const char*)stream.advance(length), length);  
 }
 
+inline uint64_t DeserializeAsTime(ros::serialization::IStream& stream)
+{
+    uint32_t secs = DeserializeAs<uint32_t>(stream);
+    uint32_t nsecs = DeserializeAs<uint32_t>(stream);
+    return secs * 1000000000 + nsecs;
+}
+
+inline int64_t DeserializeAsDuration(ros::serialization::IStream& stream)
+{
+    int32_t secs = DeserializeAs<int32_t>(stream);
+    int32_t nsecs = DeserializeAs<int32_t>(stream);
+    return secs * 1000000000 + nsecs;
+}
+
 swarmio::data::Variant PrimitiveSerializer::Deserialize(ros::serialization::IStream& stream, const FieldStack& fieldStack) const 
 {
     swarmio::data::Variant value;
     switch (_type)
     {
-        case BOOL:
+        case PrimitiveType::BOOL:
             value.set_bool_value(DeserializeAs<bool>(stream));
             break;
 
-        case INT8:
+        case PrimitiveType::INT8:
             value.set_int_value(DeserializeAs<int8_t>(stream));
             break;
 
-        case UINT8:
+        case PrimitiveType::UINT8:
             value.set_uint_value(DeserializeAs<uint8_t>(stream));
             break;
 
-        case INT16:
+        case PrimitiveType::INT16:
             value.set_int_value(DeserializeAs<int16_t>(stream));
             break;
 
-        case UINT16:
+        case PrimitiveType::UINT16:
             value.set_uint_value(DeserializeAs<uint16_t>(stream));
             break;
 
-        case INT32:
-        case DURATION:
+        case PrimitiveType::INT32:
             value.set_int_value(DeserializeAs<int32_t>(stream));
             break;
 
-        case UINT32:
-        case TIME:
+        case PrimitiveType::DURATION:
+            value.set_int_value(DeserializeAsDuration(stream));
+            break;
+
+        case PrimitiveType::UINT32:
             value.set_uint_value(DeserializeAs<uint32_t>(stream));
             break;
 
-        case INT64:
+        case PrimitiveType::TIME:
+            value.set_uint_value(DeserializeAsTime(stream));
+            break;
+
+        case PrimitiveType::INT64:
             value.set_int_value(DeserializeAs<int64_t>(stream));
             break;
 
-        case UINT64:
+        case PrimitiveType::UINT64:
             value.set_uint_value(DeserializeAs<uint64_t>(stream));
             break;
 
-        case FLOAT32:
+        case PrimitiveType::FLOAT32:
             value.set_double_value(DeserializeAs<float>(stream));
             break;
 
-        case FLOAT64:
+        case PrimitiveType::FLOAT64:
             value.set_double_value(DeserializeAs<double>(stream));
             break;
 
-        case STRING:
+        case PrimitiveType::STRING:
             value.set_string_value(DeserializeAs<std::string>(stream));
             break;
 
@@ -383,53 +449,59 @@ swarmio::data::Variant PrimitiveSerializer::DeserializeArray(ros::serialization:
     {
         switch (_type)
         {
-            case BOOL:
+            case PrimitiveType::BOOL:
                 value.mutable_bool_array()->add_elements(DeserializeAs<bool>(stream));
                 break;
 
-            case INT8:
+            case PrimitiveType::INT8:
                 value.mutable_int_array()->add_elements(DeserializeAs<int8_t>(stream));
                 break;
 
-            case UINT8:
+            case PrimitiveType::UINT8:
                 value.mutable_uint_array()->add_elements(DeserializeAs<uint8_t>(stream));
                 break;
 
-            case INT16:
+            case PrimitiveType::INT16:
                 value.mutable_int_array()->add_elements(DeserializeAs<int16_t>(stream));
                 break;
 
-            case UINT16:
+            case PrimitiveType::UINT16:
                 value.mutable_uint_array()->add_elements(DeserializeAs<uint16_t>(stream));
                 break;
 
-            case INT32:
-            case DURATION:
+            case PrimitiveType::INT32:
                 value.mutable_int_array()->add_elements(DeserializeAs<int32_t>(stream));
                 break;
 
-            case UINT32:
-            case TIME:
+            case PrimitiveType::DURATION:
+                value.mutable_int_array()->add_elements(DeserializeAsDuration(stream));
+                break;
+
+            case PrimitiveType::UINT32:
                 value.mutable_uint_array()->add_elements(DeserializeAs<uint32_t>(stream));
                 break;
 
-            case INT64:
+            case PrimitiveType::TIME:
+                value.mutable_uint_array()->add_elements(DeserializeAsTime(stream));
+                break;
+
+            case PrimitiveType::INT64:
                 value.mutable_int_array()->add_elements(DeserializeAs<int64_t>(stream));
                 break;
 
-            case UINT64:
+            case PrimitiveType::UINT64:
                 value.mutable_uint_array()->add_elements(DeserializeAs<uint64_t>(stream));
                 break;
 
-            case FLOAT32:
+            case PrimitiveType::FLOAT32:
                 value.mutable_double_array()->add_elements(DeserializeAs<float>(stream));
                 break;
 
-            case FLOAT64:
+            case PrimitiveType::FLOAT64:
                 value.mutable_double_array()->add_elements(DeserializeAs<double>(stream));
                 break;
 
-            case STRING:
+            case PrimitiveType::STRING:
                 value.mutable_string_array()->add_elements(DeserializeAs<std::string>(stream));
                 break;
 
@@ -456,14 +528,14 @@ uint32_t PrimitiveSerializer::GetDefaultLength(const FieldStack& fieldStack) con
         case PrimitiveType::INT32:
         case PrimitiveType::UINT32:
         case PrimitiveType::FLOAT32:
-        case PrimitiveType::TIME:
-        case PrimitiveType::DURATION:
         case PrimitiveType::STRING:
             return 4;
 
         case PrimitiveType::INT64:
         case PrimitiveType::UINT64:
         case PrimitiveType::FLOAT64:
+        case PrimitiveType::TIME:
+        case PrimitiveType::DURATION:
             return 8;
 
         default:
@@ -504,13 +576,11 @@ uint32_t PrimitiveSerializer::CalculateSerializedLength(const swarmio::data::Var
             break;
 
         case PrimitiveType::INT32:
-        case PrimitiveType::DURATION:
             expectedType = swarmio::data::Variant::ValueCase::kIntValue;
             length = 4;
             break;
 
         case PrimitiveType::UINT32:
-        case PrimitiveType::TIME:
             expectedType = swarmio::data::Variant::ValueCase::kUintValue;
             length = 4;
             break;
@@ -521,11 +591,13 @@ uint32_t PrimitiveSerializer::CalculateSerializedLength(const swarmio::data::Var
             break;
 
         case PrimitiveType::INT64:
+        case PrimitiveType::DURATION:
             expectedType = swarmio::data::Variant::ValueCase::kIntValue;
             length = 8;
             break;
 
         case PrimitiveType::UINT64:
+        case PrimitiveType::TIME:
             expectedType = swarmio::data::Variant::ValueCase::kUintValue;
             length = 8;
             break;
@@ -609,7 +681,11 @@ void PrimitiveSerializer::EmitDefault(ros::serialization::OStream& stream, const
             break;
 
         case PrimitiveType::INT32:
+            SerializeAs<int32_t>(stream, 0, fieldStack);
+            break;
+
         case PrimitiveType::DURATION:
+            SerializeAs<int32_t>(stream, 0, fieldStack);
             SerializeAs<int32_t>(stream, 0, fieldStack);
             break;
 
@@ -626,7 +702,11 @@ void PrimitiveSerializer::EmitDefault(ros::serialization::OStream& stream, const
             break;
 
         case PrimitiveType::UINT32:
+            SerializeAs<uint32_t>(stream, 0, fieldStack);
+            break;
+
         case PrimitiveType::TIME:
+            SerializeAs<uint32_t>(stream, 0, fieldStack);
             SerializeAs<uint32_t>(stream, 0, fieldStack);
             break;
 
