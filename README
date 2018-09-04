@@ -139,7 +139,7 @@ ROS support turned on, targeting Ubuntu Xenial:
 cmake <SOURCE_DIR> -DSWARMIO_BUILD_MODE=PACKAGE
                    -DSWARMIO_TARGET_ARCHITECTURE=armhf
                    -DSWARMIO_MULTISTRAP_CONFIGURATION=xenial-ros
-                   -SWARMIO_BUILD_ROS_NODE=ON
+                   -DSWARMIO_BUILD_ROS_NODE=ON
 cmake --build .
 
 All output packages will be placed into the packages subdirectory.
