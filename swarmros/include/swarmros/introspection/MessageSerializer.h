@@ -2,6 +2,7 @@
 
 #include <swarmros/introspection/Serializer.h>
 #include <swarmros/introspection/Field.h>
+#include <swarmros/introspection/ConstantField.h>
 #include <list>
 #include <functional>
 
@@ -22,10 +23,16 @@ namespace swarmros::introspection
             static std::map<std::string, std::unique_ptr<MessageSerializer>> _messageSerializers;
 
             /**
-             * @brief Message fields
+             * @brief Variable fields
              * 
              */
             std::list<std::unique_ptr<Field>> _fields; 
+
+            /**
+             * @brief Constant fields
+             * 
+             */
+            std::list<ConstantField> _constants; 
 
             /**
              * @brief Whether the message begins  

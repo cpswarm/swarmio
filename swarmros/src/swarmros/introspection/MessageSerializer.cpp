@@ -125,7 +125,7 @@ MessageSerializer::MessageSerializer(const std::string& package, const std::stri
                         const Serializer& serializer = Serializer::SerializerForType(type, package);
 
                         // Add constant field
-                        _fields.push_back(std::make_unique<ConstantField>(name, serializer, value));
+                        _constants.emplace_back(name, serializer, value);
                     }
                     else
                     {
@@ -241,37 +241,31 @@ std::string MessageSerializer::CalculateHash()
     // For the first round, we only take the constant fields
     bool firstLine = true;
     std::stringstream stream;
-    for (const auto& field : _fields)
+    for (const auto& constant : _constants)
     {
-        if (dynamic_cast<const ConstantField*>(field.get()) != nullptr)
+        if (firstLine)
         {
-            if (firstLine)
-            {
-                firstLine = false;
-            }
-            else
-            {
-                stream << std::endl;
-            }
-            field->WriteDefinition(stream, true);
+            firstLine = false;
         }
+        else
+        {
+            stream << std::endl;
+        }
+        constant.WriteDefinition(stream, true);
     }
 
     // For the second round, we only take the dynamic fields
     for (const auto& field : _fields)
     {
-        if (dynamic_cast<const ConstantField*>(field.get()) == nullptr)
+        if (firstLine)
         {
-            if (firstLine)
-            {
-                firstLine = false;
-            }
-            else
-            {
-                stream << std::endl;
-            }
-            field->WriteDefinition(stream, true);
+            firstLine = false;
         }
+        else
+        {
+            stream << std::endl;
+        }
+        field->WriteDefinition(stream, true);
     }
     
     // Calculate hash
