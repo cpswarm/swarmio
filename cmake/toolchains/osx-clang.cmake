@@ -1,0 +1,12 @@
+# Tools
+set(CMAKE_C_COMPILER clang)
+set(CMAKE_CXX_COMPILER clang++)
+
+# Set target architecture
+if (DEFINED SWARMIO_TARGET_ARCHITECTURE)
+    set(CMAKE_C_COMPILER_TARGET ${SWARMIO_TARGET_ARCHITECTURE})
+    set(CMAKE_CXX_COMPILER_TARGET ${SWARMIO_TARGET_ARCHITECTURE})
+endif()
+
+# Include platform definition
+include("${CMAKE_CURRENT_LIST_DIR}/osx.cmake")
