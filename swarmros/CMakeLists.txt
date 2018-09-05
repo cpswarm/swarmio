@@ -187,6 +187,6 @@ install(
 )
 
 install(
-	FILES "${CMAKE_SOURCE_DIR}/resources/swarmros.cfg"
+	FILES "${CMAKE_SOURCE_DIR}/resources/swarmros.cfg.example"
 	DESTINATION ${CATKIN_PACKAGE_ETC_DESTINATION}
 )
