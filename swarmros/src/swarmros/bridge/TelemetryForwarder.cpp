@@ -22,7 +22,9 @@ TelemetryForwarder::TelemetryForwarder(ros::NodeHandle& nodeHandle, const std::s
 {
     // Register schema
     const auto& serializer = introspection::MessageSerializer::MessageSerializerForType(message, "swarmros");
-    _telemetryService.SetFieldDefinitionForKey(name, serializer.GetFieldDescriptor(), includeInStatus);
+    swarmio::data::discovery::Field fieldDescriptor;
+    *fieldDescriptor.mutable_schema() = serializer.GetSchemaDescriptor(serializer.HasHeader() ? 1 : 0);
+    _telemetryService.SetFieldDefinitionForKey(name, fieldDescriptor, includeInStatus);
 
     // Save message type
     _message = serializer.GetFullName();
