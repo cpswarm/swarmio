@@ -30,6 +30,32 @@ if (MSVC)
     else()
         message(FATAL_ERROR "Unknown target architecture: ${SWARMIO_TARGET_ARCHITECTURE}")
     endif()
+    
+elseif (APPLE)
+
+    # Use "native" as the name of the host architecture
+    set(SWARMIO_HOST_ARCHITECTURE "native")
+    
+    # Default to host architecture
+    if (NOT DEFINED SWARMIO_TARGET_ARCHITECTURE)
+        set(SWARMIO_TARGET_ARCHITECTURE ${SWARMIO_HOST_ARCHITECTURE})
+    endif()
+
+    # Use the OSX toolchain
+    set(SWARMIO_TOOLCHAIN "osx-clang")
+    
+    # Add to host subproject args
+    list(APPEND SWARMIO_SUBPROJECT_HOST_ARGS "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/toolchains/${SWARMIO_TOOLCHAIN}.cmake")
+
+    # Determine architecture for toolchain
+    if (SWARMIO_TARGET_ARCHITECTURE STREQUAL "amd64")
+        set(SWARMIO_TOOLCHAIN "${SWARMIO_TOOLCHAIN}-amd64")
+    elseif (NOT SWARMIO_TARGET_ARCHITECTURE STREQUAL "native")
+        message(FATAL_ERROR "Unknown target architecture: ${SWARMIO_TARGET_ARCHITECTURE}")
+    endif()
+    
+    # Add to target subproject args
+    list(APPEND SWARMIO_SUBPROJECT_TARGET_ARGS "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_SOURCE_DIR}/cmake/toolchains/${SWARMIO_TOOLCHAIN}.cmake")
 
 else()
 
