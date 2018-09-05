@@ -445,64 +445,131 @@ swarmio::data::Variant PrimitiveSerializer::Deserialize(ros::serialization::IStr
 swarmio::data::Variant PrimitiveSerializer::DeserializeArray(ros::serialization::IStream& stream, uint32_t count, const FieldStack& fieldStack) const
 {
     swarmio::data::Variant value;
-    for (uint32_t i = 0; i < count; ++i)
+    if (count > 0)
+    {
+        for (uint32_t i = 0; i < count; ++i)
+        {
+            switch (_type)
+            {
+                case PrimitiveType::BOOL:
+                    value.mutable_bool_array()->add_elements(DeserializeAs<bool>(stream));
+                    break;
+
+                case PrimitiveType::INT8:
+                    value.mutable_int_array()->add_elements(DeserializeAs<int8_t>(stream));
+                    break;
+
+                case PrimitiveType::UINT8:
+                    value.mutable_uint_array()->add_elements(DeserializeAs<uint8_t>(stream));
+                    break;
+
+                case PrimitiveType::INT16:
+                    value.mutable_int_array()->add_elements(DeserializeAs<int16_t>(stream));
+                    break;
+
+                case PrimitiveType::UINT16:
+                    value.mutable_uint_array()->add_elements(DeserializeAs<uint16_t>(stream));
+                    break;
+
+                case PrimitiveType::INT32:
+                    value.mutable_int_array()->add_elements(DeserializeAs<int32_t>(stream));
+                    break;
+
+                case PrimitiveType::DURATION:
+                    value.mutable_int_array()->add_elements(DeserializeAsDuration(stream));
+                    break;
+
+                case PrimitiveType::UINT32:
+                    value.mutable_uint_array()->add_elements(DeserializeAs<uint32_t>(stream));
+                    break;
+
+                case PrimitiveType::TIME:
+                    value.mutable_uint_array()->add_elements(DeserializeAsTime(stream));
+                    break;
+
+                case PrimitiveType::INT64:
+                    value.mutable_int_array()->add_elements(DeserializeAs<int64_t>(stream));
+                    break;
+
+                case PrimitiveType::UINT64:
+                    value.mutable_uint_array()->add_elements(DeserializeAs<uint64_t>(stream));
+                    break;
+
+                case PrimitiveType::FLOAT32:
+                    value.mutable_double_array()->add_elements(DeserializeAs<float>(stream));
+                    break;
+
+                case PrimitiveType::FLOAT64:
+                    value.mutable_double_array()->add_elements(DeserializeAs<double>(stream));
+                    break;
+
+                case PrimitiveType::STRING:
+                    value.mutable_string_array()->add_elements(DeserializeAs<std::string>(stream));
+                    break;
+
+                default:
+                    throw Exception("Unknown primitive type");
+            }
+        }
+    }
+    else
     {
         switch (_type)
         {
             case PrimitiveType::BOOL:
-                value.mutable_bool_array()->add_elements(DeserializeAs<bool>(stream));
+                value.mutable_bool_array();
                 break;
 
             case PrimitiveType::INT8:
-                value.mutable_int_array()->add_elements(DeserializeAs<int8_t>(stream));
+                value.mutable_int_array();
                 break;
 
             case PrimitiveType::UINT8:
-                value.mutable_uint_array()->add_elements(DeserializeAs<uint8_t>(stream));
+                value.mutable_uint_array();
                 break;
 
             case PrimitiveType::INT16:
-                value.mutable_int_array()->add_elements(DeserializeAs<int16_t>(stream));
+                value.mutable_int_array();
                 break;
 
             case PrimitiveType::UINT16:
-                value.mutable_uint_array()->add_elements(DeserializeAs<uint16_t>(stream));
+                value.mutable_uint_array();
                 break;
 
             case PrimitiveType::INT32:
-                value.mutable_int_array()->add_elements(DeserializeAs<int32_t>(stream));
+                value.mutable_int_array();
                 break;
 
             case PrimitiveType::DURATION:
-                value.mutable_int_array()->add_elements(DeserializeAsDuration(stream));
+                value.mutable_int_array();
                 break;
 
             case PrimitiveType::UINT32:
-                value.mutable_uint_array()->add_elements(DeserializeAs<uint32_t>(stream));
+                value.mutable_uint_array();
                 break;
 
             case PrimitiveType::TIME:
-                value.mutable_uint_array()->add_elements(DeserializeAsTime(stream));
+                value.mutable_uint_array();
                 break;
 
             case PrimitiveType::INT64:
-                value.mutable_int_array()->add_elements(DeserializeAs<int64_t>(stream));
+                value.mutable_int_array();
                 break;
 
             case PrimitiveType::UINT64:
-                value.mutable_uint_array()->add_elements(DeserializeAs<uint64_t>(stream));
+                value.mutable_uint_array();
                 break;
 
             case PrimitiveType::FLOAT32:
-                value.mutable_double_array()->add_elements(DeserializeAs<float>(stream));
+                value.mutable_double_array();
                 break;
 
             case PrimitiveType::FLOAT64:
-                value.mutable_double_array()->add_elements(DeserializeAs<double>(stream));
+                value.mutable_double_array();
                 break;
 
             case PrimitiveType::STRING:
-                value.mutable_string_array()->add_elements(DeserializeAs<std::string>(stream));
+                value.mutable_string_array();
                 break;
 
             default:
