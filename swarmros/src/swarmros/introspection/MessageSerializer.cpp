@@ -505,7 +505,7 @@ swarmio::data::discovery::Field MessageSerializer::GetFieldDescriptor() const
     else
     {
         swarmio::data::discovery::Field field;
-        *field.mutable_schema() = GetSchemaDescriptor(true);
+        *field.mutable_schema() = GetSchemaDescriptor(0);
         return field;
     }
 }
