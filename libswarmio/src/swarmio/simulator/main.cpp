@@ -33,6 +33,17 @@ int main(int argc, const char* argv[])
         value.set_string_value("And neither will this.");
         device.AddConstantTelemetryValue("static_status_value", value, true);
 
+        // Register complex static telemetry value
+        value.Clear();
+        auto& pairs = *value.mutable_map_value()->mutable_pairs();
+        pairs["key1"].set_string_value("value1");
+        pairs["key2"].set_uint_value(2);
+        pairs["key3"].set_int_value(-3);
+        auto& pairs2 = *pairs["key4"].mutable_map_value()->mutable_pairs();
+        pairs2["embedded1"].set_string_value("subvalue1");
+        pairs2["embedded2"].set_uint_value(2);
+        device.AddConstantTelemetryValue("complex_value", value, false);
+
         // Register some parameters
         swarmio::simulator::InMemoryParameter p1("examples/boolParameter", false);
         device.AddInMemoryParameter(&p1);
