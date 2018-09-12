@@ -21,6 +21,7 @@ void Node::PublishUpdateForNode(const swarmio::Node* node)
     swarmros::NodeInfo message;
     message.uuid = node->GetUUID();
     message.name = node->GetName();
+    message.deviceClass = node->GetDeviceClass();
     message.online = node->IsOnline();
     _nodesPublisher.publish(message);
 }

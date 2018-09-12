@@ -5,6 +5,7 @@
 #include <g3log/logworker.hpp>
 #include <swarmio/tool/LogBuffer.h>
 #include <memory>
+#include <czmq.h>
  
 int main(int argc, const char* argv[])
 {
@@ -18,7 +19,9 @@ int main(int argc, const char* argv[])
     // Wrap to trigger destructors before shutdown
     {
         // Create Zyre endpoint
-        swarmio::transport::zyre::ZyreEndpoint endpoint("tool"); 
+        char* hostname = zsys_hostname();
+        swarmio::transport::zyre::ZyreEndpoint endpoint(hostname, "tool"); 
+        zstr_free(&hostname);
         
         // Print UUID
         std::cout << "Local node started with UUID: " << endpoint.GetUUID() << "\n";   

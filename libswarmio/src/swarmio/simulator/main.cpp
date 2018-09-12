@@ -21,8 +21,10 @@ int main(int argc, const char* argv[])
 
     // Wrap to trigger destructors before shutdown
     {
-        // Create a Zyre endpoint
-        transport::zyre::ZyreEndpoint endpoint("simulator");    
+        // Create Zyre endpoint
+        char* hostname = zsys_hostname();
+        swarmio::transport::zyre::ZyreEndpoint endpoint(hostname, "simulator"); 
+        zstr_free(&hostname);
 
         // Print UUID
         std::cout << "Local node started with UUID: " << endpoint.GetUUID() << "\n";

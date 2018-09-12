@@ -85,6 +85,8 @@ void Loop::ExecuteInfoCommand(const Command& command)
     {  
         // UUID
         std::cout << "UUID: " << _selectedNode->GetUUID() << std::endl;
+        std::cout << "Name: " << _selectedNode->GetName() << std::endl;
+        std::cout << "Device class: " << _selectedNode->GetDeviceClass() << std::endl;
 
         // Send request
         auto awaiter = _discoveryService.CachedQuery(_selectedNode);
@@ -320,12 +322,12 @@ void Loop::ExecuteMembersCommand(const Command& command)
     if (_nodes.size() > 0)
     {
         // Header
-        std::cout << "MID" << "\t" << "UUID" << "\t" << "Name" << std::endl;
+        std::cout << "MID" << "\t" << "UUID" << "\t" << "Class" << "\t" << "Name" << std::endl;
 
         // List nodes
         for (unsigned i = 0; i < _nodes.size(); ++i)
         {
-            std::cout << i << "\t" << _nodes[i]->GetUUID() << "\t" << _nodes[i]->GetName() << "\t" << _nodes[i]->GetDescription() << std::endl;
+            std::cout << i << "\t" << _nodes[i]->GetUUID() << "\t" << _nodes[i]->GetDeviceClass() << "\t" << _nodes[i]->GetName() << "\t" << _nodes[i]->GetDescription() << std::endl;
         }
     }
     else

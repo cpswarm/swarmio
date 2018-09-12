@@ -27,6 +27,13 @@ namespace swarmio
             virtual const std::string& GetName() const = 0;
 
             /**
+             * @brief Get the class of the underlying device
+             * 
+             * @return const std::string& 
+             */
+            virtual const std::string& GetDeviceClass() const = 0;
+
+            /**
              * @brief Get a user-readable description of the node.
              * 
              * @return std::string 

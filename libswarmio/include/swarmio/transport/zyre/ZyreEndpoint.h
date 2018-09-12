@@ -88,9 +88,9 @@ namespace swarmio::transport::zyre
              * @brief Construct a new ZyreEndpoint object
              * 
              * @param name The discoverable name of the endpoint
-             * @param ifname Network interface name
+             * @param deviceClass Device class
              */
-            ZyreEndpoint(const char* name);
+            ZyreEndpoint(const char* name, const char* deviceClass);
 
             /**
              * @brief Set the port used by the endpoint.

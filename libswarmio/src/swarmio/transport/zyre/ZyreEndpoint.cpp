@@ -8,14 +8,21 @@ using namespace swarmio::transport;
 using namespace swarmio::transport::zyre;
 
 #define SWARMIO_ZYRE_GROUP_MESSAGES "messages"
+#define SWARMIO_ZYRE_HEADER_DEVICE_CLASS "X-DeviceClass"
 
-ZyreEndpoint::ZyreEndpoint(const char* name)
+ZyreEndpoint::ZyreEndpoint(const char* name, const char* deviceClass)
 {
     // Create Zyre node
     _zyre = zyre_new(name);
     if (_zyre == NULL)
     {
         throw Exception("Unable to create node");
+    }
+
+    // Set class
+    if (deviceClass != nullptr)
+    {
+        zyre_set_header(_zyre, SWARMIO_ZYRE_HEADER_DEVICE_CLASS, "%s", deviceClass);
     }
 }
 
@@ -260,13 +267,20 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t*>*
                 auto result = _nodes.find(uuid);
                 if (result == _nodes.end())
                 {
+                    // Detect device class
+                    const char* deviceClass = zyre_event_header(event, SWARMIO_ZYRE_HEADER_DEVICE_CLASS);
+                    if (deviceClass == nullptr)
+                    {
+                        deviceClass = "unknown";
+                    }
+
                     // Construct node
                     // (It would be nice to use try_emplace, but there is no way to
                     // get it working with older C++ standard libraries.)
                     auto it = _nodes.emplace(
                         std::piecewise_construct, 
                         std::forward_as_tuple(uuid), 
-                        std::forward_as_tuple(uuid, zyre_event_peer_name(event), zyre_event_peer_addr(event))
+                        std::forward_as_tuple(uuid, zyre_event_peer_name(event), deviceClass, zyre_event_peer_addr(event))
                     );
 
                     // Unlock map

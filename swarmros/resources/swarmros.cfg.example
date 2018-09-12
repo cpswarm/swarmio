@@ -3,6 +3,7 @@
 #
 endpoint = {
     name = "example"        # Possibly non-unique name for the local node
+    deviceClass = "drone"   # Discoverable device class
     type = "zyre"           # Endpoint type
     parameters = {          # Endpoint parameters, which for Zyre endpoints can be:
         # ifname = "eth0"       # Network interface to bind to

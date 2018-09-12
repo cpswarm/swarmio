@@ -87,7 +87,7 @@ int main(int argc, const char* argv[])
         if (type == "zyre")
         {
             // Create endpoint
-            auto zyreEndpoint = std::make_unique<swarmio::transport::zyre::ZyreEndpoint>(config.lookup("endpoint.name"));
+            auto zyreEndpoint = std::make_unique<swarmio::transport::zyre::ZyreEndpoint>(config.lookup("endpoint.name"), config.lookup("endpoint.deviceClass"));
 
             // Apply settings
             if (config.exists("endpoint.port"))

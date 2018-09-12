@@ -56,10 +56,11 @@ namespace swarmio::transport::zyre
              * 
              * @param uuid UUID
              * @param name Discoverable name
+             * @param deviceClass Device class
              * @param address IP address
              */
-            ZyreNode(const std::string& uuid, const std::string& name, const std::string& address)
-                : BasicNode(uuid, name), _address(address), _online(false) { }
+            ZyreNode(const std::string& uuid, const std::string& name, const std::string& deviceClass, const std::string& address)
+                : BasicNode(uuid, name, deviceClass), _address(address), _online(false) { }
 
             /**
              * @brief Is the Node currently online?
