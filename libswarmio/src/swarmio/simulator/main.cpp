@@ -1,10 +1,16 @@
 #include <swarmio/simulator/ExampleDevice.h>
+#include <swarmio/simulator/LinearPathTelemetrySimulator.h>
 #include <swarmio/transport/zyre/ZyreEndpoint.h>
 #include <swarmio/Exception.h>
 #include <czmq.h>
 #include <iostream>
+#include <chrono>
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
+
+using namespace swarmio;
+using namespace swarmio::simulator;
+using namespace std::chrono_literals;
 
 int main(int argc, const char* argv[])
 {
@@ -16,16 +22,16 @@ int main(int argc, const char* argv[])
     // Wrap to trigger destructors before shutdown
     {
         // Create a Zyre endpoint
-        swarmio::transport::zyre::ZyreEndpoint endpoint("simulator");    
+        transport::zyre::ZyreEndpoint endpoint("simulator");    
 
         // Print UUID
         std::cout << "Local node started with UUID: " << endpoint.GetUUID() << "\n";
 
         // Create device
-        swarmio::simulator::ExampleDevice device(&endpoint);
+        ExampleDevice device(&endpoint);
 
         // Register static telemetry value
-        swarmio::data::Variant value;
+        data::Variant value;
         value.set_string_value("This won't ever change.");
         device.AddConstantTelemetryValue("static_value", value, false);
 
@@ -55,25 +61,28 @@ int main(int argc, const char* argv[])
         device.AddConstantTelemetryValue("array_value", value, false);
 
         // Register some parameters
-        swarmio::simulator::InMemoryParameter p1("examples/boolParameter", false);
+        InMemoryParameter p1("examples/boolParameter", false);
         device.AddInMemoryParameter(&p1);
-        swarmio::simulator::InMemoryParameter p2("examples/stringParameter", "unknown");
+        InMemoryParameter p2("examples/stringParameter", "unknown");
         device.AddInMemoryParameter(&p2);
-        swarmio::simulator::InMemoryParameter p3("examples/intParameter", 1024);
+        InMemoryParameter p3("examples/intParameter", 1024);
         device.AddInMemoryParameter(&p3);
-        swarmio::simulator::InMemoryParameter p4("examples/doubleParameter", 2.5);
+        InMemoryParameter p4("examples/doubleParameter", 2.5);
         device.AddInMemoryParameter(&p4);
-        swarmio::simulator::InMemoryParameter p5("examples/readOnlyParameter", "Can't change this", true);
+        InMemoryParameter p5("examples/readOnlyParameter", "Can't change this", true);
         device.AddInMemoryParameter(&p5);
 
         // Register some events
-        swarmio::simulator::FauxEventHandler e1("emergency");
-        e1.AddParameter("where", swarmio::data::discovery::Type::STRING);
-        e1.AddParameter("severity", swarmio::data::discovery::Type::INT);
+        FauxEventHandler e1("emergency");
+        e1.AddParameter("where", data::discovery::Type::STRING);
+        e1.AddParameter("severity", data::discovery::Type::INT);
         device.AddFauxEventHandler(&e1);
-        swarmio::simulator::FauxEventHandler e2("blackHawkDown");
-        e2.AddParameter("really", swarmio::data::discovery::Type::BOOL);
+        FauxEventHandler e2("blackHawkDown");
+        e2.AddParameter("really", data::discovery::Type::BOOL);
         device.AddFauxEventHandler(&e2);
+
+        // Simulate position
+        LinearPathTelemetrySimulator pathSimulator(device.GetTelemetryService(), "location", SimulatedLocation(19.040235, 47.497912, 18.0), SimulatedLocation(48.210033, 16.363449, 23.0), 1h);
 
         // Start sending and receiving
         endpoint.Start();
@@ -83,6 +92,9 @@ int main(int argc, const char* argv[])
 
         // Get a character
         std::cin.get();
+
+        // Stop telemetry
+        pathSimulator.Stop();
 
         // Stop endpoint
         endpoint.Stop();

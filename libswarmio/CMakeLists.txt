@@ -49,6 +49,7 @@ add_library(swarmio SHARED
 # Add simulator executable target
 add_executable(swarmio-simulator
 	"src/swarmio/simulator/main.cpp"
+	"src/swarmio/simulator/LinearPathTelemetrySimulator.cpp"
 	"src/swarmio/simulator/ExampleDevice.cpp"
 )
 

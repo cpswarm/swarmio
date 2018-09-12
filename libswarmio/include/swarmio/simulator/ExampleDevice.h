@@ -13,7 +13,7 @@ namespace swarmio::simulator
      *        an ordinary device.
      * 
      */
-    class ExampleDevice final : private profiles::MemberProfile
+    class ExampleDevice final : public profiles::MemberProfile
     {
         private:
 
