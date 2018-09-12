@@ -44,6 +44,16 @@ int main(int argc, const char* argv[])
         pairs2["embedded2"].set_uint_value(2);
         device.AddConstantTelemetryValue("complex_value", value, false);
 
+        // Register array static telemetry value
+        value.Clear();
+        auto& elements = *value.mutable_int_array();
+        elements.add_elements(30);
+        elements.add_elements(55);
+        elements.add_elements(0);
+        elements.add_elements(-45);
+        elements.add_elements(900);
+        device.AddConstantTelemetryValue("array_value", value, false);
+
         // Register some parameters
         swarmio::simulator::InMemoryParameter p1("examples/boolParameter", false);
         device.AddInMemoryParameter(&p1);
