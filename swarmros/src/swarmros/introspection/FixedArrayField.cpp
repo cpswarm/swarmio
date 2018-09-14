@@ -10,10 +10,11 @@ using namespace swarmros::introspection;
 
 void FixedArrayField::WriteDefinition(std::stringstream& stream, bool forHash) const
 {
-    if (forHash)
+    // Amusingly, array definitions are ignored for hash calculations
+    // But only for complex types. Ouch.
+    // https://github.com/ros/genmsg/issues/50
+    if (forHash && dynamic_cast<const MessageSerializer*>(&_serializer) != nullptr)
     {
-        // Amusingly, array definitions are ignored for hash calculations
-        // https://github.com/ros/genmsg/issues/50
         Field::WriteDefinition(stream, forHash);
     }
     else
