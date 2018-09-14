@@ -24,7 +24,7 @@ std::map<std::string, std::unique_ptr<MessageSerializer>> MessageSerializer::_me
 static const std::regex NamePattern("^(?:([a-zA-Z][\\w|/]*)\\/)?([a-zA-Z]\\w*)$");
 
 // Regex to match an entire definition line against
-static const std::regex LinePattern("^\\s*(?:([^\\s#]+)\\s+([a-zA-Z][a-zA-Z1-9_]*)\\s*(?:=\\s*(.*\\S)\\s*)?)?(?:#.*)?$");
+static const std::regex LinePattern("^\\s*(?:([^\\s#]+)\\s+([a-zA-Z][a-zA-Z0-9_]*)\\s*(?:=\\s*(.*\\S)\\s*)?)?(?:#.*)?\\r?$");
 
 // Regex to match the type against
 static const std::regex TypePattern("^([^\\[]+)(\\[(\\d+)?\\])?$");
