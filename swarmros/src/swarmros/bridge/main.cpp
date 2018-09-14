@@ -64,6 +64,14 @@ int main(int argc, const char* argv[])
                 // Config file remapping
                 configFilePath = current + 2;
             }
+            else if (current[1] == 'D' && current[2] == '\0')
+            {
+                // Enable debug mode
+                if(ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug)) 
+                {
+                    ros::console::notifyLoggerLevelsChanged();
+                }
+            }
             else
             {
                 LOG(FATAL) << "Command line argument " << i << " is unknown";
@@ -134,6 +142,16 @@ int main(int argc, const char* argv[])
             LOG(FATAL) << "Unknown endpoint type specified in configuration file.";
             return -1;
         }
+    }
+    catch (const libconfig::SettingTypeException & e)
+    {
+        LOG(FATAL) << "Invalid type for setting at " << e.getPath() << ".";
+        return -1;
+    }
+    catch (const libconfig::SettingNotFoundException & e)
+    {
+        LOG(FATAL) << "Missing setting at " << e.getPath() << ".";
+        return -1;
     }
     catch (const libconfig::FileIOException& e)
     {
