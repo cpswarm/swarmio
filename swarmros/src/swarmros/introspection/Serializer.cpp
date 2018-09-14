@@ -13,6 +13,8 @@ std::map<std::string, std::unique_ptr<Serializer>> Serializer::_defaultSerialize
 std::map<std::string, std::unique_ptr<Serializer>> Serializer::LoadDefaultSerializers()
 {
     std::map<std::string, std::unique_ptr<Serializer>> map;
+
+    // Primitive types
     map["bool"] = std::make_unique<PrimitiveSerializer>("bool", PrimitiveType::BOOL);
     map["int8"] = std::make_unique<PrimitiveSerializer>("int8", PrimitiveType::INT8);
     map["uint8"] = std::make_unique<PrimitiveSerializer>("uint8", PrimitiveType::UINT8);
@@ -27,6 +29,11 @@ std::map<std::string, std::unique_ptr<Serializer>> Serializer::LoadDefaultSerial
     map["string"] = std::make_unique<PrimitiveSerializer>("string", PrimitiveType::STRING);
     map["time"] = std::make_unique<PrimitiveSerializer>("time", PrimitiveType::TIME);
     map["duration"] = std::make_unique<PrimitiveSerializer>("duration", PrimitiveType::DURATION); 
+
+    // Deprecated aliases
+    map["byte"] = std::make_unique<PrimitiveSerializer>("byte", PrimitiveType::INT8);
+    map["char"] = std::make_unique<PrimitiveSerializer>("char", PrimitiveType::UINT8);
+    
     return map;  
 }
 
