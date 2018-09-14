@@ -71,7 +71,7 @@ void ConstantField::ParseSigned(const std::string& value)
 void ConstantField::ParseFloat(const std::string& value)
 {
     std::smatch match;
-    if (std::regex_match(value, match, SignedPattern))
+    if (std::regex_match(value, match, FloatPattern))
     {
         _value.set_double_value(std::stod(value));
         _rawValue = match[1].str();
