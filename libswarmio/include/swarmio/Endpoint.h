@@ -110,6 +110,13 @@ namespace swarmio
             virtual const Node* NodeForUUID(const std::string& uuid) = 0;
 
             /**
+             * @brief Get the UUID of the local node
+             * 
+             * @return const std::string& 
+             */
+            virtual const std::string& GetUUID() = 0;
+
+            /**
              * @brief Destroy the Endpoint object
              * 
              */

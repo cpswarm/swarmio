@@ -5,6 +5,7 @@
 #include <swarmros/bridge/ParameterPublisher.h>
 #include <swarmros/bridge/ParameterTarget.h>
 #include <swarmros/NodeInfo.h>
+#include <swarmros/String.h>
 
 using namespace swarmros;
 using namespace swarmros::bridge;
@@ -12,7 +13,18 @@ using namespace swarmros::bridge;
 Node::Node(swarmio::Endpoint* endpoint)
     : MemberProfile(endpoint)
 {
-    _nodesPublisher = _nodeHandle.advertise<NodeInfo>("bridge/nodes", 128, true);
+    // Add nodes publisher
+    _nodesPublisher = _nodeHandle.advertise<NodeInfo>("bridge/nodes", 128, false);
+
+    // Add UUID publisher
+    _uuidPublisher = _nodeHandle.advertise<String>("bridge/uuid", 1, true);
+    
+    // Publish UUID
+    String uuidValue;
+    uuidValue.value = endpoint->GetUUID();
+    _uuidPublisher.publish(uuidValue);
+
+    // Finish construction
     FinishConstruction();
 }
 

@@ -58,6 +58,12 @@ namespace swarmio::transport::zyre
             std::thread* _worker = nullptr;
 
             /**
+             * @brief Local UUID
+             * 
+             */
+            std::string _uuid;
+
+            /**
              * @brief Entry point for the worker thread
              * 
              */
@@ -135,7 +141,10 @@ namespace swarmio::transport::zyre
              * 
              * @return std::string UUID
              */
-            std::string GetUUID();
+            virtual const std::string& GetUUID() override
+            {
+                return _uuid;
+            }
 
             /**
              * @brief Get a list of known Nodes

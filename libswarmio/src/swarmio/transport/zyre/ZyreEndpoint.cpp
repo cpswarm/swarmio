@@ -24,6 +24,9 @@ ZyreEndpoint::ZyreEndpoint(const char* name, const char* deviceClass)
     {
         zyre_set_header(_zyre, SWARMIO_ZYRE_HEADER_DEVICE_CLASS, "%s", deviceClass);
     }
+
+    // Get UUID
+    _uuid = zyre_uuid(_zyre);
 }
 
 void ZyreEndpoint::SetPort(uint16_t port)
@@ -373,11 +376,6 @@ std::list<const ZyreNode*> ZyreEndpoint::GetNodes()
 
     // Return copy
     return nodes;
-}
-
-std::string ZyreEndpoint::GetUUID()
-{
-    return zyre_uuid(_zyre);
 }
 
 const Node* ZyreEndpoint::NodeForUUID(const std::string& uuid)

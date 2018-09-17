@@ -39,6 +39,12 @@ namespace swarmros::bridge
             ros::Publisher _nodesPublisher;
 
             /**
+             * @brief The publisher for the uuid topic
+             * 
+             */
+            ros::Publisher _uuidPublisher;
+
+            /**
              * @brief Publish a generic info update for a node
              * 
              * @param node Node
