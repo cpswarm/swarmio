@@ -2,6 +2,7 @@
 #include <swarmio/Exception.h>
 #include <g3log/g3log.hpp>
 #include <memory>
+#include <chrono>
 
 using namespace swarmio;
 using namespace swarmio::transport;
@@ -216,7 +217,12 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* mess
 
 void BasicEndpoint::Tag(data::Message* message)
 {
+    // Set identifier
     message->mutable_header()->set_identifier(_counter++);
+
+    // Set timestamp
+    auto timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
+    message->mutable_header()->set_timestamp(timestamp.count());
 }
 
 void BasicEndpoint::Send(data::Message* message, const Node* node)
