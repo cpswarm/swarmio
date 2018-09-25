@@ -64,7 +64,7 @@ bool Service::ReceiveMessage(const Node* sender, const data::Message* message)
         }
         else
         {
-            LOG(INFO) << "Event '" << message->ev_notification().name() << "' was not handled by any of the registered event handlers";
+            LOG(DBUG) << "Event '" << message->ev_notification().name() << "' was not handled by any of the registered event handlers";
             return false;
         }
     }
