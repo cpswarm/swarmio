@@ -1,11 +1,6 @@
 # Build multistrap environment
 if (NOT "${SWARMIO_MULTISTRAP_CONFIGURATION}" STREQUAL "")
 
-    # Only available when cross-compiling
-    if (SWARMIO_TARGET_ARCHITECTURE STREQUAL SWARMIO_HOST_ARCHITECTURE)
-        message(FATAL_ERROR "Multistrap support is only available when cross-compiling.")
-    endif()
-
     # Ensure that we have the tools
     find_program(TOOL_MULTISTRAP "multistrap")
     if (TOOL_MULTISTRAP STREQUAL "TOOL_MULTISTRAP_NOT_FOUND")
@@ -35,6 +30,13 @@ if (NOT "${SWARMIO_MULTISTRAP_CONFIGURATION}" STREQUAL "")
     # Set sysroot path
     set(MULTISTRAP_DIR "${CMAKE_BINARY_DIR}/sysroot-${SWARMIO_MULTISTRAP_CONFIGURATION}-${SWARMIO_TARGET_ARCHITECTURE}")
     set(MULTISTRAP_CONF "${MULTISTRAP_DIR}.conf")
+
+    # Select Ubuntu source repository
+    if (SWARMIO_TARGET_ARCHITECTURE STREQUAL "amd64")
+        set(MULTISTRAP_SOURCE "http://archive.ubuntu.com/ubuntu")
+    else()
+        set(MULTISTRAP_SOURCE "http://ports.ubuntu.com/ubuntu-ports")
+    endif()
 
     # Set parameters based on selected configuration
     if (SWARMIO_MULTISTRAP_CONFIGURATION STREQUAL "xenial")
