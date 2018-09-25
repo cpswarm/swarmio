@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Set project name
-project(swarmio VERSION 0.7.1)
+project(swarmio VERSION 0.7.2)
 
 # Use ExternalProject for the superbuild
 include(ExternalProject)
