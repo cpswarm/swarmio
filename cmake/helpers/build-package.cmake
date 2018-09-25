@@ -45,7 +45,7 @@ function(swarmio_build_package _target _version _prefix)
 
     # Assemble output file paths
     set(_control_file_path "debian/${_name}-control")
-    set(_output_file_path "packages/${_name}-${SWARMIO_TARGET_ARCHITECTURE}.deb")
+    set(_output_file_path "packages/${_name}-${_version}-${SWARMIO_TARGET_ARCHITECTURE}.deb")
 
     # Generate package descriptor
     configure_file("cmake/templates/control.tpl" ${_control_file_path})
