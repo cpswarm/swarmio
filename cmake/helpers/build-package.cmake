@@ -8,6 +8,14 @@ if (SWARMIO_BUILD_MODE STREQUAL "PACKAGE")
     if (TOOL_FAKEROOT STREQUAL "TOOL_FAKEROOT_NOT_FOUND")
         message(FATAL_ERROR "It seems that fakeroot is not available on your system, install it before trying to build packages.")
     endif()
+    find_program(TOOL_RSYNC "rsync")
+    if (TOOL_RSYNC STREQUAL "TOOL_RSYNC_NOT_FOUND")
+        message(TOOL_RSYNC "It seems that rsync is not available on your system, install it before trying to build packages.")
+    endif()
+    find_program(TOOL_MKDIR "mkdir")
+    if (TOOL_MKDIR STREQUAL "TOOL_MKDIR_NOT_FOUND")
+        message(TOTOOL_MKDIR "It seems that mkdir is not available on your system, install it before trying to build packages.")
+    endif()
 endif()
 
 # Convert a target name to a package name
@@ -55,7 +63,8 @@ function(swarmio_build_package _target _version _prefix)
         DEPENDEES install
         BYPRODUCTS ${_output_file_path}
         COMMAND ${CMAKE_COMMAND} -E remove_directory "<TMP_DIR>/package"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "<INSTALL_DIR>" "<TMP_DIR>/package${_prefix}"
+        COMMAND ${TOOL_MKDIR} -p "<TMP_DIR>/package${_prefix}"
+        COMMAND ${TOOL_RSYNC} -rtvu --delete --links "<INSTALL_DIR>/" "<TMP_DIR>/package${_prefix}"
         COMMAND ${CMAKE_COMMAND} -E copy ${_control_file_path} "<TMP_DIR>/package/DEBIAN/control"
         COMMAND ${TOOL_FAKEROOT} ${TOOL_DPKG_DEB} --build  "<TMP_DIR>/package" 
         COMMAND ${CMAKE_COMMAND} -E copy "<TMP_DIR>/package.deb" ${_output_file_path}
