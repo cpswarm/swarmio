@@ -22,9 +22,16 @@ int main(int argc, const char* argv[])
         char* hostname = zsys_hostname();
         swarmio::transport::zyre::ZyreEndpoint endpoint(hostname, "tool"); 
         zstr_free(&hostname);
+
+        // Assign interface
+        if (argc > 1)
+        {
+            endpoint.SetInterface(argv[1]);
+            std::cout << "Selected interface: " << argv[1] << std::endl;
+        }
         
         // Print UUID
-        std::cout << "Local node started with UUID: " << endpoint.GetUUID() << "\n";   
+        std::cout << "Local node started with UUID: " << endpoint.GetUUID() << std::endl; 
 
         // Start endpoint
         endpoint.Start();
