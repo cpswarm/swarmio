@@ -1,0 +1,34 @@
+actions: []
+authors: ''
+brief: ''
+bugtracker: ''
+depends:
+- rosconsole
+- roslib
+- std_msgs
+- roscpp
+- catkin
+description: SwarmIO communications bridge for ROS
+license: All rights reserved.
+maintainers: "B\xE1lint J\xF3zsef J\xE1nv\xE1ri <balint.janvari@search-lab.hu>"
+msgs:
+- ExampleComplexSubmessage
+- Int
+- ArrayOfString
+- ArrayOfDouble
+- NodeInfo
+- UInt
+- EventHeader
+- SimpleEvent
+- Bool
+- Double
+- ArrayOfInt
+- ArrayOfBool
+- String
+- ArrayOfUInt
+- ExampleEvent
+- ExampleComplexMessage
+package_type: package
+repo_url: ''
+srvs: []
+url: http://www.cpswarm.eu
