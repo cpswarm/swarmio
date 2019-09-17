@@ -1,7 +1,7 @@
 # CPSwarm Communication Library
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/cpswarm/deployment-tool.svg)](https://github.com/cpswarm/swarmio/tags)
 [![Build Status](https://travis-ci.com/cpswarm/deployment-tool.svg?branch=master)](https://travis-ci.com/cpswarm/swarmio)  
-
+The CPSwarm Communication Library provides a unified interface that tools and swarm members can use to interact with each other.
 ## Getting started
 For more information, see the [WIKI](https://github.com/cpswarm/swarmio/wiki).
 
