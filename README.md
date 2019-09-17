@@ -1,9 +1,15 @@
 # CPSwarm Communication Library
-![Build Status](https://pipelines.linksmart.eu/plugins/servlet/wittified/build-status/CPSW-ALS)
-# Documentation
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/cpswarm/deployment-tool.svg)](https://github.com/cpswarm/swarmio/tags)
+[![Build Status](https://travis-ci.com/cpswarm/deployment-tool.svg?branch=master)](https://travis-ci.com/cpswarm/swarmio)  
+
+## Getting started
 For more information, see the [WIKI](https://github.com/cpswarm/swarmio/wiki).
-# Build
-## Building on Linux
+
+## Deployment
+Packages are built continuously with [Bamboo](https://pipelines.linksmart.eu/browse/CPSW-ALS/latest).
+
+## Build
+### Building on Linux
 Build should work on any Linux distribution, but packaging
 and architecture detection will only work on Debian and 
 Ubuntu. By default, everything is compiled for the host 
@@ -113,7 +119,7 @@ Optional parameters:
  same operating system (with a different architecture) is
  used on the host machine. Requires GCC 6 or later.
  
-## Building on Windows
+### Building on Windows
 
 On Windows, only DEVELOPMENT mode is supported. Building the
 ROS node and multistrap environments are not supported. Basic
@@ -138,7 +144,7 @@ Optional parameters:
  Specifies whether to generate 32 or 64 bit builds.
 
 
-## Quick example
+### Quick example
 
 
 If you want to generate packages for an armhf target, with
@@ -151,3 +157,12 @@ ROS support turned on, targeting Ubuntu Xenial:
     cmake --build .
 
 All output packages will be placed into the packages subdirectory.
+
+## Contributing
+Contributions are welcome. 
+
+Please fork, make your changes, and submit a pull request. For major changes, please open an issue first and discuss it with the other authors.
+
+## Affiliation
+![CPSwarm](https://github.com/cpswarm/template/raw/master/cpswarm.png)  
+This work is supported by the European Commission through the [CPSwarm H2020 project](https://cpswarm.eu) under grant no. 731946.
