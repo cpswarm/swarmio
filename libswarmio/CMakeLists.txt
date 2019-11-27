@@ -212,10 +212,9 @@ install(
 	FILES_MATCHING PATTERN "*.h"
 )
 
-
-
-
-
-
-
-
+# Copy test scripts
+file(COPY
+	${CMAKE_CURRENT_SOURCE_DIR}/src/swarmio/test/test_installer.sh
+	${CMAKE_CURRENT_SOURCE_DIR}/src/swarmio/test/logparser.py
+	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+)
