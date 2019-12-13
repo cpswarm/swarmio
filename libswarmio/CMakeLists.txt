@@ -150,7 +150,7 @@ find_package(sodium REQUIRED)
 
 # Link libraries
 target_link_libraries(swarmio PUBLIC
-	-lsodium
+	${SODIUM_LIBRARIES}
 	${PROTOBUF_LIBRARIES}
 	${LIBZMQ_LIBRARIES}
 	${CZMQ_LIBRARIES}
