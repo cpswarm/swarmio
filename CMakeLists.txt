@@ -100,7 +100,7 @@ if (SWARMIO_BUILD_ROS_NODE)
         replxx 
         g3log
         libconfig 
-	    sodium
+	sodium
         libswarmio
     )
 
