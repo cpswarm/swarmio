@@ -158,24 +158,6 @@ ROS support turned on, targeting Ubuntu Xenial:
 
 All output packages will be placed into the packages subdirectory.
 
-### Future plans
-Add security features (Due in November 2019).
-
-The security functionalities are to be provided by libsodium (based on NaCl) Libsodium is a popular solution for crypto library used by e.g.: WordPress, Discord, Secrets, Remembear. 
-All cryptographic functions are based on:
-- Edwards-Curve Digital Signature Algorithm (EdDSA)
-- Encryption: XSalsa20 stream cipher
-- Authentication: Poly1305 MAC
-
-The following security dimensions will be addressed:
-- Deployment tool is able to securely provision new node members (by generating their keys and signing their certificates)
-- Access control is provided for provisioned nodes by certificate checking, using a pre-shared signing key
-- Authentication is provided by signature checking
-- Non-repudiation is provided by signature and timestamp checking for each packet
-- Confidentiality is provided end-to-end by payload encryption 
-- Integrity checking is provided by using a tag for packet integrity
-- Availability is maintained using each nodes security table, which stores valid authentication credentials.
-
 ## Contributing
 Contributions are welcome. 
 
