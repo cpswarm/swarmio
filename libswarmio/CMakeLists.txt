@@ -215,7 +215,6 @@ install(
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	FILES_MATCHING PATTERN "*.h"
 )
-<<<<<<< Updated upstream
 
 # Copy test scripts
 file(COPY
@@ -223,5 +222,3 @@ file(COPY
 	${CMAKE_CURRENT_SOURCE_DIR}/src/swarmio/test/logparser.py
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
 )
-=======
->>>>>>> Stashed changes
