@@ -44,6 +44,7 @@ include("cmake/dependencies/build-readerwriterqueue.cmake")
 include("cmake/dependencies/build-protobuf.cmake")
 include("cmake/dependencies/build-replxx.cmake")
 include("cmake/dependencies/build-g3log.cmake")
+include("cmake/dependencies/build-sodium.cmake")
 
 # Prepare
 swarmio_build_component_start(libswarmio ${PROJECT_VERSION} 
@@ -55,6 +56,7 @@ swarmio_build_component_start(libswarmio ${PROJECT_VERSION}
     protobuf
     replxx 
     g3log
+    sodium
 )
 
 # Build libswarmio
@@ -98,6 +100,7 @@ if (SWARMIO_BUILD_ROS_NODE)
         replxx 
         g3log
         libconfig 
+	    sodium
         libswarmio
     )
 

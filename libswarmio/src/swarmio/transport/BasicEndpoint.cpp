@@ -3,6 +3,7 @@
 #include <g3log/g3log.hpp>
 #include <memory>
 #include <chrono>
+#include <sodium.h>
 
 using namespace swarmio;
 using namespace swarmio::transport;
@@ -19,8 +20,7 @@ void BasicEndpoint::Start()
     else
     {
         // Mark as running
-        _isRunning = true;   
-
+        _isRunning = true;
         // Fire callbacks
         for (auto mailbox : _mailboxes)
         {
@@ -51,7 +51,7 @@ void BasicEndpoint::Stop()
     }
 }
 
-void BasicEndpoint::RegisterMailbox(Mailbox* mailbox)
+void BasicEndpoint::RegisterMailbox(Mailbox *mailbox)
 {
     std::lock_guard<std::recursive_mutex> guard(_mutex);
 
@@ -65,7 +65,7 @@ void BasicEndpoint::RegisterMailbox(Mailbox* mailbox)
     }
 }
 
-void BasicEndpoint::UnregisterMailbox(Mailbox* mailbox)
+void BasicEndpoint::UnregisterMailbox(Mailbox *mailbox)
 {
     std::lock_guard<std::recursive_mutex> guard(_mutex);
 
@@ -79,7 +79,7 @@ void BasicEndpoint::UnregisterMailbox(Mailbox* mailbox)
     _mailboxes.erase(mailbox);
 }
 
-void BasicEndpoint::ReplaceMailbox(Mailbox* oldMailbox, Mailbox* newMailbox)
+void BasicEndpoint::ReplaceMailbox(Mailbox *oldMailbox, Mailbox *newMailbox)
 {
     std::lock_guard<std::recursive_mutex> guard(_mutex);
 
@@ -88,40 +88,40 @@ void BasicEndpoint::ReplaceMailbox(Mailbox* oldMailbox, Mailbox* newMailbox)
     _mailboxes.insert(newMailbox);
 }
 
-void BasicEndpoint::NodeWasDiscovered(const Node* node) noexcept
+void BasicEndpoint::NodeWasDiscovered(const Node *node) noexcept
 {
     std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Fire callbacks
-    for(auto mailbox : _mailboxes)
+    for (auto mailbox : _mailboxes)
     {
         mailbox->NodeWasDiscovered(node);
     }
 }
 
-void BasicEndpoint::NodeDidJoin(const Node* node) noexcept
+void BasicEndpoint::NodeDidJoin(const Node *node) noexcept
 {
     std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Fire callbacks
-    for(auto mailbox : _mailboxes)
+    for (auto mailbox : _mailboxes)
     {
         mailbox->NodeDidJoin(node);
     }
 }
 
-void BasicEndpoint::NodeWillLeave(const Node* node) noexcept
+void BasicEndpoint::NodeWillLeave(const Node *node) noexcept
 {
     std::lock_guard<std::recursive_mutex> guard(_mutex);
 
     // Fire callbacks
-    for(auto mailbox : _mailboxes)
+    for (auto mailbox : _mailboxes)
     {
         mailbox->NodeWillLeave(node);
     }
 }
 
-bool BasicEndpoint::ReceiveMessage(const Node* sender, const void* data, size_t size) noexcept
+bool BasicEndpoint::ReceiveMessage(const Node *sender, const void *data, size_t size) noexcept
 {
     data::Message message;
     if (message.ParseFromArray(data, (int)size))
@@ -135,7 +135,7 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const void* data, size_t 
     }
 }
 
-void BasicEndpoint::ReplyWithError(const Node* sender, const data::Message* message, data::Error error)
+void BasicEndpoint::ReplyWithError(const Node *sender, const data::Message *message, data::Error error)
 {
     try
     {
@@ -145,14 +145,14 @@ void BasicEndpoint::ReplyWithError(const Node* sender, const data::Message* mess
         reply.set_error(error);
         Send(&reply, sender);
     }
-    catch (const Exception& e)
+    catch (const Exception &e)
     {
         // Log and ignore error
         LOG(WARNING) << "An error has occurred while trying to reply to the message received from node [" << sender->GetUUID() << "]: " << e.what();
     }
 }
-            
-bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* message) noexcept
+
+bool BasicEndpoint::ReceiveMessage(const Node *sender, const data::Message *message) noexcept
 {
     // Drop malformed messages without a valid identifier
     if (message->header().identifier() == 0)
@@ -162,7 +162,7 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* mess
 
     // Find mailbox to handle message
     std::unique_lock<std::recursive_mutex> guard(_mutex);
-    for(auto mailbox : _mailboxes)
+    for (auto mailbox : _mailboxes)
     {
         try
         {
@@ -181,7 +181,7 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* mess
                 return true;
             }
         }
-        catch (const Exception& e)
+        catch (const Exception &e)
         {
             // Unlock
             guard.unlock();
@@ -190,7 +190,7 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* mess
             LOG(WARNING) << "An error has occurred while processing the message received from node [" << sender->GetUUID() << "]: " << e.what();
 
             // Send error
-            if (message->header().reliability() == data::Reliability::ACK_REQUESTED || 
+            if (message->header().reliability() == data::Reliability::ACK_REQUESTED ||
                 message->header().reliability() == data::Reliability::NACK_REQUESTED)
             {
                 ReplyWithError(sender, message, data::Error::UNKNOWN);
@@ -205,7 +205,7 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* mess
     guard.unlock();
 
     // Send error
-    if (message->header().reliability() == data::Reliability::ACK_REQUESTED || 
+    if (message->header().reliability() == data::Reliability::ACK_REQUESTED ||
         message->header().reliability() == data::Reliability::NACK_REQUESTED)
     {
         ReplyWithError(sender, message, data::Error::DELIVERY);
@@ -215,7 +215,7 @@ bool BasicEndpoint::ReceiveMessage(const Node* sender, const data::Message* mess
     return false;
 }
 
-void BasicEndpoint::Tag(data::Message* message)
+void BasicEndpoint::Tag(data::Message *message)
 {
     // Set identifier
     message->mutable_header()->set_identifier(_counter++);
@@ -225,7 +225,7 @@ void BasicEndpoint::Tag(data::Message* message)
     message->mutable_header()->set_timestamp(timestamp.count());
 }
 
-void BasicEndpoint::Send(data::Message* message, const Node* node)
+void BasicEndpoint::Send(data::Message *message, const Node *node)
 {
     // Set identifier if missing
     if (!message->has_header() || message->header().identifier() == 0)

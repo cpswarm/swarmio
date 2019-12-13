@@ -27,10 +27,15 @@ int main(int argc, const char* argv[])
         zstr_free(&hostname);
 
         // Assign interface
-        if (argc > 1)
+        if (argc == 2)
         {
-            endpoint.SetInterface(argv[1]);
+            endpoint.SetInterface(argv[1], false);
             std::cout << "Selected interface: " << argv[1] << std::endl;
+        }
+        if (argc == 3)
+        {
+            endpoint.SetInterface(argv[1], true);
+            std::cout << "Security enabled" << std::endl;
         }
 
         // Print UUID

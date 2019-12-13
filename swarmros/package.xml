@@ -5,7 +5,7 @@
   <name>swarmros</name>
   <version>0.3.0</version>
   <description>SwarmIO communications bridge for ROS</description>
-  <maintainer email="balint.janvari@search-lab.hu">Bálint József Jánvári</maintainer>
+  <maintainer email="akos.milankovich@search-lab.hu">Ákos Milánkovich</maintainer>
   <license>All rights reserved.</license>
   <url type="website">http://www.cpswarm.eu</url>
 

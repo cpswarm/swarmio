@@ -28,6 +28,18 @@ namespace swarmio::transport::zyre
             friend ZyreEndpoint;
 
             /**
+             * @brief Message counter as nonce and replay attack
+             * 
+             */
+            unsigned char _message_counter[24];
+
+            /**
+             * @brief Shared key
+             * 
+             */
+            unsigned char _key[32];
+
+            /**
              * @brief IP address of the node
              * 
              */
@@ -38,6 +50,12 @@ namespace swarmio::transport::zyre
              * 
              */
             std::atomic<bool> _online;
+
+            /**
+             * @brief Is the Node verified?
+             * 
+             */
+            std::atomic<bool> _verified;
 
             /**
              * @brief Mark the Node as online or offline
@@ -80,6 +98,72 @@ namespace swarmio::transport::zyre
             const std::string& GetAddress() const
             {
                 return _address;
+            }
+
+            /**
+             * @brief Get the shared cryptographic key of the node
+             * 
+             * @return const unsigned char& 
+             */
+            const unsigned char* GetKey() const
+            {
+                return _key;
+            }
+
+            /**
+             * @brief Set the shared cryptographic key of the node
+             * 
+             */
+            void SetKey(unsigned char* k)
+            {
+                memcpy(_key, k, 32);
+            }
+
+            /**
+             * @brief Get the nonce counter of the node
+             * 
+             * @return unsigned char& 
+             */
+            const unsigned char* GetCtr() const
+            {
+                return _message_counter;
+            }
+
+                        /**
+             * @brief Is the node verified?
+             * 
+             * @return unsigned char& 
+             */
+            const bool GetVerified() const
+            {
+                return _verified;
+            }
+        
+                    /**
+             * @brief Set the verified status of the node
+             * 
+             */
+            void SetVerified()
+            {
+                _verified = true;
+            }
+
+            /**
+             * @brief Increment the nonce counter the node
+             * 
+             */
+            void IncrementCtr() const
+            {
+                for (int i = 23; i >= 0; i--) if (++const_cast <ZyreNode*>(this)->_message_counter[i]) break;
+            }
+
+            /**
+             * @brief Set the nonce (counter)
+             * 
+             */
+            void SetCtr(unsigned char* c) const
+            {
+                memcpy(const_cast <ZyreNode*>(this)->_message_counter, c, 24);
             }
 
             /**

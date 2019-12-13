@@ -25,6 +25,7 @@ add_library(swarmio SHARED
 	"src/swarmio/transport/zyre/ZyreControlSocket.cpp"
 	"src/swarmio/transport/zyre/ZyreEndpoint.cpp"
 	"src/swarmio/transport/BasicEndpoint.cpp"
+	"src/swarmio/transport/base64.cpp"
 
 	# Protobuf messages
 	"proto/swarmio/data/Message.proto"
@@ -145,9 +146,11 @@ find_package(replxx REQUIRED)
 find_package(readerwriterqueue REQUIRED)
 find_package(concurrentqueue REQUIRED)
 find_package(Threads REQUIRED)
+find_package(sodium REQUIRED)
 
 # Link libraries
 target_link_libraries(swarmio PUBLIC
+	-lsodium
 	${PROTOBUF_LIBRARIES}
 	${LIBZMQ_LIBRARIES}
 	${CZMQ_LIBRARIES}
@@ -172,6 +175,7 @@ target_include_directories(swarmio PUBLIC
 	${G3LOG_INCLUDE_DIRS}
 	${READERWRITERQUEUE_INCLUDE_DIRS}
 	${CONCURRENTQUEUE_INCLUDE_DIRS}
+	${SODIUM_INCLUDE_DIRS}
 )
 target_include_directories(swarmio-tool PRIVATE
 	${REPLXX_INCLUDE_DIRS}
@@ -211,6 +215,7 @@ install(
 	DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 	FILES_MATCHING PATTERN "*.h"
 )
+<<<<<<< Updated upstream
 
 # Copy test scripts
 file(COPY
@@ -218,3 +223,5 @@ file(COPY
 	${CMAKE_CURRENT_SOURCE_DIR}/src/swarmio/test/logparser.py
 	DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
 )
+=======
+>>>>>>> Stashed changes
