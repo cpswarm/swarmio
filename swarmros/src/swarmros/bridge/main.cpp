@@ -51,7 +51,7 @@ int main(int argc, const char* argv[])
     auto worker = g3::LogWorker::createLogWorker();
     worker->addSink(std::make_unique<bridge::DebugSink>(), &bridge::DebugSink::ReceiveLogMessage);
     initializeLogging(worker.get());
-
+    bool security = false;
     // Parse the rest of the arguments
     std::string configFilePath = SWARMROS_CONFIG_PATH;
     for (int i = 1; i < argc; ++i)
@@ -111,6 +111,10 @@ int main(int argc, const char* argv[])
                     return -1;
                 }
             }
+            if (config.exists("endpoint.security"))
+            {
+                security = config.lookup("endpoint.security");
+            }
             if (config.exists("endpoint.ifname"))
             {
                 // Get interface name
@@ -120,7 +124,7 @@ int main(int argc, const char* argv[])
                 auto map = GetInterfaceMap();
                 if (map.find(name) != map.end())
                 {
-                    zyreEndpoint->SetInterface(name);
+                    zyreEndpoint->SetInterface(name, security);
                 }
                 else
                 {

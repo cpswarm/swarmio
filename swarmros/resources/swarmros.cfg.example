@@ -8,6 +8,7 @@ endpoint = {
     parameters = {          # Endpoint parameters, which for Zyre endpoints can be:
         # ifname = "eth0"       # Network interface to bind to
         # port = 34000          # Port to use for UDP beacons
+        security = true
     }
 }
 

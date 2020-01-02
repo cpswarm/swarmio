@@ -10,6 +10,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/../cmake/helpers/cxx-standard.cmake")
 # Find required packages
 find_package(swarmio REQUIRED)
 find_package(libconfig REQUIRED)
+find_package(sodium REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
 	roscpp
 	rosconsole
@@ -119,6 +120,7 @@ add_executable(example
 # Link with swarmio
 target_link_libraries(bridge
 	swarmio
+	${SODIUM_LIBRARIES}
 	${LIBCONFIG_LIBRARIES}
 )
 
@@ -147,6 +149,7 @@ target_include_directories(bridge
 		include
 		${LIBCONFIG_INCLUDE_DIRS}
 		${catkin_INCLUDE_DIRS}
+		${SODIUM_INCLUDE_DIRS}
 )
 target_include_directories(example
 	PRIVATE
