@@ -1,9 +1,9 @@
 # Prepare
 swarmio_build_component_start(sodium "1.0.18")
 if("${SWARMIO_TARGET_ARCHITECTURE}" STREQUAL "arm64")
-    set(HOST "--host=aarch64-linux-gnu-gcc")
+    set(HOST "--host=aarch64-linux-gnu-g++")
 elseif("${SWARMIO_TARGET_ARCHITECTURE}" STREQUAL "armhf")
-    set(HOST "--host=arm-linux-gnueabihf-gcc")
+    set(HOST "--host=arm-linux-gnueabihf-g++")
 else()
     set(HOST "")
 endif()
