@@ -40,6 +40,12 @@ namespace swarmio::transport::zyre
             unsigned char _key[32];
 
             /**
+             * @brief Public key
+             * 
+             */
+            unsigned char _pubkey[32];
+
+            /**
              * @brief IP address of the node
              * 
              */
@@ -111,12 +117,23 @@ namespace swarmio::transport::zyre
             }
 
             /**
-             * @brief Set the shared cryptographic key of the node
+             * @brief Get the  public key of the node
+             * 
+             * @return const unsigned char& 
+             */
+            const unsigned char* GetPubKey() const
+            {
+                return _pubkey;
+            }
+
+            /**
+             * @brief Set the shared cryptographic key and the public key of the node
              * 
              */
-            void SetKey(unsigned char* k)
+            void SetKeys(unsigned char* k, unsigned char* pk)
             {
                 memcpy(_key, k, 32);
+                memcpy(_pubkey, pk, 32);
             }
 
             /**

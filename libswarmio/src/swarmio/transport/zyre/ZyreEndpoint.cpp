@@ -67,7 +67,12 @@ void ZyreEndpoint::Start()
     }
 
     // Reading config file
+    #ifndef SWARMROS_CONFIG_PATH
     std::ifstream cFile("config.json");
+    #endif
+    #ifdef SWARMROS_CONFIG_PATH
+    std::ifstream cFile(SWARMROS_CONFIG_PATH);
+    #endif
     if (cFile.is_open())
     {
         std::string line;
@@ -86,15 +91,26 @@ void ZyreEndpoint::Start()
             std::string decoded = base64_decode(value);
             std::cout << name << ": " << value << ", " << decoded << '\n';
 
-            if (strcmp(name.c_str(), "publicKey") == 0) //TODO: add to my_publickey, my_secretkey
+            if (strcmp(name.c_str(), "publicKey") == 0)
             {
-                memcpy(seed1, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_box_SEEDBYTES);
+                memcpy(my_publickey, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_box_SEEDBYTES);
                 security_enabled = true;
+            }
+            if (strcmp(name.c_str(), "privateKey") == 0)
+            {
+                memcpy(my_secretkey, reinterpret_cast<unsigned char *>(const_cast<char *>((decoded.c_str()))), crypto_box_SECRETKEYBYTES);
+                security_enabled = true;
+                if (crypto_sign_ed25519_sk_to_curve25519(my_secretkey, my_secretkey) != 0)
+                {
+                    LOG(WARNING) << "Unable to convert private key";
+                }
             }
             if (strcmp(name.c_str(), "signature") == 0)
                 memcpy(signature, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_sign_SECRETKEYBYTES);
             if (strcmp(name.c_str(), "ca") == 0)
                 memcpy(server_public, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_sign_PUBLICKEYBYTES);
+            if (strcmp(name.c_str(), "interface") == 0)
+                SetInterface(value.c_str(), security_enabled);
         }
     }
     else
@@ -109,9 +125,6 @@ void ZyreEndpoint::Start()
         {
             throw Exception("Unable to init sodium");
         }
-        // For testing purposes always the same keys are generated with the same nonce
-        // TODO: replace this with keys from Deployment tool
-        crypto_box_seed_keypair(my_publickey, my_secretkey, seed1);
         std::cout << 'Me: p: ' << my_publickey << std::endl
                   << ' s: ' << my_secretkey << std::endl;
         // Create broadcast keys
@@ -123,25 +136,29 @@ void ZyreEndpoint::Start()
             std::forward_as_tuple("0"),
             std::forward_as_tuple("0", "broadcast", "broadcast", "0"));
         unsigned char k[crypto_box_BEFORENMBYTES];
-        if (crypto_box_beforenm(k, my_publickey, bcast_secretkey) != 0)
+        if (crypto_box_beforenm(k, my_secretkey, bcast_publickey) != 0)
             throw Exception("Cannot create broadcast keys");
         else
         {
-            _nodes.at("0").SetKey(k);
+            _nodes.at("0").SetKeys(k, bcast_publickey);
             unsigned char n[crypto_box_NONCEBYTES];
             randombytes_buf(n, crypto_box_NONCEBYTES);
             _nodes.at("0").SetCtr(n);
             _nodes.at("0").SetVerified();
         }
         //Test the signed certificate
-        if (crypto_sign_verify_detached(signature, seed1, crypto_sign_PUBLICKEYBYTES, server_public) != 0)
+        if (crypto_sign_verify_detached(signature, my_publickey, crypto_sign_PUBLICKEYBYTES, server_public) != 0)
         {
             throw Exception("Unable to verify own certificate");
         }
         else
         {
-            memcpy(certificate, seed1, crypto_sign_PUBLICKEYBYTES);
+            memcpy(certificate, my_publickey, crypto_sign_PUBLICKEYBYTES);
             memcpy(&certificate[crypto_sign_PUBLICKEYBYTES], signature, crypto_sign_SECRETKEYBYTES);
+            if (crypto_sign_ed25519_pk_to_curve25519(my_publickey, my_publickey) != 0)
+            {
+                LOG(WARNING) << "Unable to convert public key";
+            }
         }
     }
 
@@ -422,11 +439,11 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t *>
                             NodeDidJoin(&result->second);
                             if (security_enabled)
                             {
-                            isJoining = true;
-                            LOG(WARNING) << "Sending certificate to join";
-                            Send(certificate, crypto_box_PUBLICKEYBYTES + crypto_sign_SECRETKEYBYTES, &result->second);
-                            isJoining = false;
-                        }
+                                isJoining = true;
+                                LOG(WARNING) << "Sending certificate to join";
+                                Send(certificate, crypto_box_PUBLICKEYBYTES + crypto_sign_SECRETKEYBYTES, &result->second);
+                                isJoining = false;
+                            }
                         }
                     }
                     else if (strcmp(type, "LEAVE") == 0 && strcmp(zyre_event_group(event), SWARMIO_ZYRE_GROUP_MESSAGES) == 0)
@@ -468,23 +485,28 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t *>
                                     }
                                     else
                                     {
+                                        // Save shared key
                                         unsigned char k[crypto_box_BEFORENMBYTES];
-                                        // TODO: use sent key (after parsing is ok)
-                                        if (crypto_box_beforenm(k, my_publickey, bcast_secretkey) != 0)
+                                        unsigned char p2p_publickey[crypto_box_PUBLICKEYBYTES];
+                                        if (crypto_sign_ed25519_pk_to_curve25519(p2p_publickey, zframe_data(frame)) != 0)
                                         {
-                                            throw Exception("Cannot create broadcast keys");
+                                            LOG(WARNING) << "Unable to convert public key";
+                                        }
+                                        if (crypto_box_beforenm(k, p2p_publickey, my_secretkey) != 0)
+                                        {
+                                            LOG(WARNING) << "Cannot create shared p2p keys";
                                         }
                                         else
                                         {
-                                            ((ZyreNode *)&result->second)->SetKey(k);
+                                            ((ZyreNode *)&result->second)->SetKeys(k, p2p_publickey);
                                             ((ZyreNode *)&result->second)->SetVerified();
                                             LOG(WARNING) << "Adding joining node certificate";
+                                            // Send back own certificate
+                                            isJoining = true;
+                                            LOG(WARNING) << "Sending back own certificate";
+                                            Send(certificate, crypto_box_PUBLICKEYBYTES + crypto_sign_SECRETKEYBYTES, &result->second);
+                                            isJoining = false;
                                         }
-                                        // Send back own certificate
-                                        isJoining = true;
-                                        LOG(WARNING) << "Sending back own certificate";
-                                        Send(certificate, crypto_box_PUBLICKEYBYTES + crypto_sign_SECRETKEYBYTES, &result->second);
-                                        isJoining = false;
                                     }
                                 }
 
@@ -493,7 +515,6 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t *>
                                 {
                                     size_t d_size = zframe_size(frame) - crypto_box_MACBYTES - crypto_box_NONCEBYTES;
                                     unsigned char *decrypted = new unsigned char[d_size];
-                                    //if (crypto_box_open_easy(decrypted, data, d_size + crypto_box_MACBYTES, nonce, alice_publickey, bob_secretkey) != 0)
                                     unsigned char *nonce = &zframe_data(frame)[d_size + crypto_box_MACBYTES];
                                     const ZyreNode *zyreNode = dynamic_cast<const ZyreNode *>(&(result->second));
                                     dynamic_cast<const ZyreNode *>(NodeForUUID(zyreNode->GetUUID()))->IncrementCtr();
@@ -503,16 +524,33 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t *>
                                     }
                                     //Synchronizing nonce
                                     zyreNode->SetCtr(nonce);
-                                    if (crypto_box_open_easy_afternm(decrypted, zframe_data(frame), d_size + crypto_box_MACBYTES, nonce, zyreNode->GetKey()) != 0)
+                                    // Broadcast
+                                    if (strcmp(type, "SHOUT") == 0)
                                     {
-                                        LOG(WARNING) << "Message cannot be decrypted";
+                                        if (crypto_box_open_easy(decrypted, zframe_data(frame), d_size + crypto_box_MACBYTES, nonce, zyreNode->GetPubKey(), bcast_secretkey) != 0)
+                                        {
+                                            LOG(WARNING) << "Bcast Message cannot be decrypted";
+                                        }
+                                        else
+                                        {
+                                            LOG(WARNING) << "Bcast Message successfully decrypted";
+                                            ReceiveMessage(&result->second, decrypted, d_size);
+                                        }
+                                        delete[] decrypted;
                                     }
                                     else
                                     {
-                                        LOG(WARNING) << "Message successfully decrypted";
-                                        ReceiveMessage(&result->second, decrypted, d_size);
+                                        if (crypto_box_open_easy_afternm(decrypted, zframe_data(frame), d_size + crypto_box_MACBYTES, nonce, zyreNode->GetKey()) != 0)
+                                        {
+                                            LOG(WARNING) << "Message cannot be decrypted";
+                                        }
+                                        else
+                                        {
+                                            LOG(WARNING) << "Message successfully decrypted";
+                                            ReceiveMessage(&result->second, decrypted, d_size);
+                                        }
+                                        delete[] decrypted;
                                     }
-                                    delete[] decrypted;
                                 }
                                 else
                                 {

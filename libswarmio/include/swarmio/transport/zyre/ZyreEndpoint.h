@@ -80,7 +80,6 @@ private:
     unsigned char my_secretkey[crypto_box_SECRETKEYBYTES];
     unsigned char bcast_publickey[crypto_box_PUBLICKEYBYTES];
     unsigned char bcast_secretkey[crypto_box_SECRETKEYBYTES];
-    unsigned char seed1[crypto_box_SEEDBYTES];
     unsigned char signature[crypto_sign_SECRETKEYBYTES];
     unsigned char server_public[crypto_sign_PUBLICKEYBYTES];
     unsigned char certificate[crypto_box_PUBLICKEYBYTES + crypto_sign_SECRETKEYBYTES];
