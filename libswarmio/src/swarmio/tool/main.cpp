@@ -26,13 +26,8 @@ int main(int argc, const char* argv[])
         // Assign interface
         if (argc == 2)
         {
-            endpoint.SetInterface(argv[1], false);
+            endpoint.SetInterface(argv[1]);
             std::cout << "Selected interface: " << argv[1] << std::endl;
-        }
-        if (argc == 3)
-        {
-            endpoint.SetInterface(argv[1], true);
-            std::cout << "Security enabled" << std::endl;
         }
         
         // Print UUID

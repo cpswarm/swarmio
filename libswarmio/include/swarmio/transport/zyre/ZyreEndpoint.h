@@ -69,7 +69,7 @@ private:
              * @brief Security enabled bit (if true, communication is secure)
              * 
              */
-    bool security_enabled;
+    bool security_enabled = false;
     /**
              * @brief Secret key
              * 
@@ -134,7 +134,7 @@ public:
              * 
              * @param ifname Interface name
              */
-    void SetInterface(const char *ifname, bool security);
+    void SetInterface(const char *ifname);
 
     /**
              * @brief Start the background thread, announce the 

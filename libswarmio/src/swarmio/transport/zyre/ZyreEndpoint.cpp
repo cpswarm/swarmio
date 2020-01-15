@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <libconfig.h++>
 
 using namespace swarmio;
 using namespace swarmio::transport;
@@ -34,6 +35,32 @@ ZyreEndpoint::ZyreEndpoint(const char *name, const char *deviceClass)
     _uuid = zyre_uuid(_zyre);
 }
 
+/**
+ * @brief Get a map of interface names and addresses
+ * 
+ * @return stld::map<std::string, std::string> Interfaces
+ */
+static std::map<std::string, std::string> GetInterfaceMap()
+{
+    std::map<std::string, std::string> map;
+
+    // Get list of interfaces
+    ziflist_t *ifaces = ziflist_new();
+    if (ifaces != nullptr)
+    {
+        // Store interface names and current addresses
+        for (const char *current = ziflist_first(ifaces); current != nullptr; current = ziflist_next(ifaces))
+        {
+            map[current] = ziflist_address(ifaces);
+        }
+
+        // Free list of interfaces
+        ziflist_destroy(&ifaces);
+    }
+
+    return map;
+}
+
 void ZyreEndpoint::SetPort(uint16_t port)
 {
     // Check if we are already running
@@ -46,7 +73,7 @@ void ZyreEndpoint::SetPort(uint16_t port)
     zyre_set_port(_zyre, port);
 }
 
-void ZyreEndpoint::SetInterface(const char *ifname, bool security)
+void ZyreEndpoint::SetInterface(const char *ifname)
 {
     // Check if we are already running
     if (_worker != nullptr)
@@ -65,62 +92,133 @@ void ZyreEndpoint::Start()
     {
         throw Exception("Node is already running");
     }
+// Reading config file
+#ifndef SWARMROS_CONFIG_PATH
+    std::string configFilePath = "config.cfg";
+#endif
+#ifdef SWARMROS_CONFIG_PATH
+    std::string configFilePath = SWARMROS_CONFIG_PATH;
+#endif
 
-    // Reading config file
-    #ifndef SWARMROS_CONFIG_PATH
-    std::ifstream cFile("config.json");
-    #endif
-    #ifdef SWARMROS_CONFIG_PATH
-    std::ifstream cFile(SWARMROS_CONFIG_PATH);
-    #endif
-    if (cFile.is_open())
+    // Load configuration and establish endpoint
+    libconfig::Config config;
+    std::unique_ptr<swarmio::Endpoint> endpoint;
+    try
     {
-        std::string line;
-        while (getline(cFile, line))
+        config.readFile(configFilePath.c_str());
+        std::string type = (const char *)config.lookup("endpoint.type");
+        if (type == "zyre")
         {
-            line.erase(std::remove_if(line.begin(), line.end(), isspace),
-                       line.end());
-            if (line[0] == '#' || line.empty() || line[0] == '{' || line[0] == '}')
-                continue;
-            auto first = line.find('\"');
-            auto second = line.find('\"', first + 1);
-            auto third = line.find('\"', second + 1);
-            auto fourth = line.find('\"', third + 1);
-            auto name = line.substr(first + 1, second - first - 1);
-            auto value = line.substr(third + 1, fourth - third - 1);
-            std::string decoded = base64_decode(value);
-            std::cout << name << ": " << value << ", " << decoded << '\n';
+            // Create endpoint
+            auto zyreEndpoint = std::make_unique<swarmio::transport::zyre::ZyreEndpoint>(config.lookup("endpoint.name"), config.lookup("endpoint.deviceClass"));
 
-            if (strcmp(name.c_str(), "publicKey") == 0)
+            // Apply settings
+            if (config.exists("endpoint.parameters.port"))
             {
-                memcpy(my_publickey, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_box_SEEDBYTES);
-                security_enabled = true;
-            }
-            if (strcmp(name.c_str(), "privateKey") == 0)
-            {
-                memcpy(my_secretkey, reinterpret_cast<unsigned char *>(const_cast<char *>((decoded.c_str()))), crypto_box_SECRETKEYBYTES);
-                security_enabled = true;
-                if (crypto_sign_ed25519_sk_to_curve25519(my_secretkey, my_secretkey) != 0)
+                unsigned port = config.lookup("endpoint.parameters.port");
+                if (port <= UINT16_MAX)
                 {
-                    LOG(WARNING) << "Unable to convert private key";
+                    zyreEndpoint->SetPort((uint16_t)port);
+                }
+                else
+                {
+                    LOG(FATAL) << "Port is out of range.";
                 }
             }
-            if (strcmp(name.c_str(), "signature") == 0)
-                memcpy(signature, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_sign_SECRETKEYBYTES);
-            if (strcmp(name.c_str(), "ca") == 0)
-                memcpy(server_public, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_sign_PUBLICKEYBYTES);
-            if (strcmp(name.c_str(), "interface") == 0)
-                SetInterface(value.c_str(), security_enabled);
+            if (config.exists("endpoint.parameters.ifname"))
+                {
+                    // Get interface name
+                    const char *name = config.lookup("endpoint.parameters.ifname");
+
+                    // Check that it exists
+                    auto map = GetInterfaceMap();
+                    if (map.find(name) != map.end())
+                    {
+                        zyreEndpoint->SetInterface(name);
+                    }
+                    else
+                    {
+                        LOG(DBUG) << "Available interfaces:";
+                        for (auto &pair : map)
+                        {
+                            LOG(DBUG) << " - " << pair.first << " (" << pair.second << ")";
+                        }
+                        LOG(FATAL) << "An invalid interface name has been specified.";
+                    }
+                }
+            if (config.exists("endpoint.parameters.security"))
+            {
+                security_enabled = config.lookup("endpoint.parameters.security");
+                {
+                    if (config.exists("endpoint.parameters.privateKey"))
+                    {
+                        std::string decoded = base64_decode(config.lookup("endpoint.parameters.privateKey"));
+                        memcpy(my_secretkey, reinterpret_cast<unsigned char *>(const_cast<char *>((decoded.c_str()))), crypto_box_SECRETKEYBYTES);
+                        if (crypto_sign_ed25519_sk_to_curve25519(my_secretkey, my_secretkey) != 0)
+                        {
+                            LOG(WARNING) << "Unable to convert private key";
+                            security_enabled = false;
+                        }
+                    }
+                    if (config.exists("endpoint.parameters.publicKey"))
+                    {
+                        std::string decoded = base64_decode(config.lookup("endpoint.parameters.publicKey"));
+                        memcpy(my_publickey, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_box_PUBLICKEYBYTES);
+                    }
+                    else
+                    {
+                        security_enabled = false;
+                    }
+                    if (config.exists("endpoint.parameters.signature"))
+                    {
+                        std::string decoded = base64_decode(config.lookup("endpoint.parameters.signature"));
+                        memcpy(signature, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_sign_SECRETKEYBYTES);
+                    }
+                    else
+                    {
+                        security_enabled = false;
+                    }
+                    if (config.exists("endpoint.parameters.ca"))
+                    {
+                        std::string decoded = base64_decode(config.lookup("endpoint.parameters.ca"));
+                        memcpy(server_public, reinterpret_cast<unsigned char *>(const_cast<char *>(decoded.c_str())), crypto_sign_PUBLICKEYBYTES);
+                    }
+                    else
+                    {
+                        security_enabled = false;
+                    }
+                }
+            }
         }
     }
-    else
+    catch (const libconfig::SettingTypeException &e)
     {
-        std::cerr << "Couldn't open config file for reading.\n";
+        LOG(FATAL) << "Invalid type for setting at " << e.getPath() << ".";
+    }
+    catch (const libconfig::SettingNotFoundException &e)
+    {
+        LOG(FATAL) << "Missing setting at " << e.getPath() << ".";
+    }
+    catch (const libconfig::FileIOException &e)
+    {
+        LOG(DBUG) << e.what();
+        LOG(DBUG) << "An exception has occurred while trying to read the configuration file.";
+    }
+    catch (const libconfig::ParseException &e)
+    {
+        LOG(DBUG) << e.getError();
+        LOG(FATAL) << "An exception has occurred while trying to parse the configuration file (line " << e.getLine() << ").";
+    }
+    catch (const swarmio::Exception &e)
+    {
+        LOG(DBUG) << e.what();
+        LOG(FATAL) << "An exception has occurred while trying to initialize the endpoint.";
     }
 
     // Start crypto
     if (security_enabled)
     {
+        LOG(WARNING) << "Configuring secure mode.";
         if (sodium_init() < 0)
         {
             throw Exception("Unable to init sodium");
@@ -136,7 +234,7 @@ void ZyreEndpoint::Start()
             std::forward_as_tuple("0"),
             std::forward_as_tuple("0", "broadcast", "broadcast", "0"));
         unsigned char k[crypto_box_BEFORENMBYTES];
-        if (crypto_box_beforenm(k, my_secretkey, bcast_publickey) != 0)
+        if (crypto_box_beforenm(k, bcast_publickey, bcast_secretkey) != 0)
             throw Exception("Cannot create broadcast keys");
         else
         {
@@ -157,7 +255,7 @@ void ZyreEndpoint::Start()
             memcpy(&certificate[crypto_sign_PUBLICKEYBYTES], signature, crypto_sign_SECRETKEYBYTES);
             if (crypto_sign_ed25519_pk_to_curve25519(my_publickey, my_publickey) != 0)
             {
-                LOG(WARNING) << "Unable to convert public key";
+                throw Exception("Unable to convert public key");
             }
         }
     }
@@ -515,7 +613,7 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t *>
                                 {
                                     size_t d_size = zframe_size(frame) - crypto_box_MACBYTES - crypto_box_NONCEBYTES;
                                     unsigned char *decrypted = new unsigned char[d_size];
-                                    unsigned char *nonce = &zframe_data(frame)[d_size + crypto_box_MACBYTES];
+                                    unsigned char *nonce = &zframe_data(frame)[zframe_size(frame) - crypto_box_NONCEBYTES];
                                     const ZyreNode *zyreNode = dynamic_cast<const ZyreNode *>(&(result->second));
                                     dynamic_cast<const ZyreNode *>(NodeForUUID(zyreNode->GetUUID()))->IncrementCtr();
                                     if (memcmp(nonce, zyreNode->GetCtr(), crypto_box_NONCEBYTES) < 0)
@@ -527,7 +625,7 @@ void ZyreEndpoint::Deliver(moodycamel::BlockingReaderWriterQueue<zyre_event_t *>
                                     // Broadcast
                                     if (strcmp(type, "SHOUT") == 0)
                                     {
-                                        if (crypto_box_open_easy(decrypted, zframe_data(frame), d_size + crypto_box_MACBYTES, nonce, zyreNode->GetPubKey(), bcast_secretkey) != 0)
+                                        if (crypto_box_open_easy(decrypted, zframe_data(frame), d_size + crypto_box_MACBYTES, nonce, bcast_publickey, bcast_secretkey) != 0)
                                         {
                                             LOG(WARNING) << "Bcast Message cannot be decrypted";
                                         }

@@ -93,7 +93,8 @@
 			"optional": "cpp",
 			"string_view": "cpp",
 			"cinttypes": "cpp",
-			"typeindex": "cpp"
+			"typeindex": "cpp",
+			"concepts": "cpp"
 		}
 	}
 }

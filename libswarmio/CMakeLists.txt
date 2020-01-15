@@ -146,6 +146,7 @@ find_package(replxx REQUIRED)
 find_package(readerwriterqueue REQUIRED)
 find_package(concurrentqueue REQUIRED)
 find_package(Threads REQUIRED)
+find_package(libconfig REQUIRED)
 find_package(sodium REQUIRED)
 
 # Link libraries
@@ -156,6 +157,7 @@ target_link_libraries(swarmio PUBLIC
 	${CZMQ_LIBRARIES}
 	${ZYRE_LIBRARIES}
 	${G3LOG_LIBRARIES}
+	${LIBCONFIG_LIBRARIES}
 	Threads::Threads
 )
 target_link_libraries(swarmio-tool PRIVATE
@@ -176,6 +178,7 @@ target_include_directories(swarmio PUBLIC
 	${READERWRITERQUEUE_INCLUDE_DIRS}
 	${CONCURRENTQUEUE_INCLUDE_DIRS}
 	${SODIUM_INCLUDE_DIRS}
+	${LIBCONFIG_INCLUDE_DIRS}
 )
 target_include_directories(swarmio-tool PRIVATE
 	${REPLXX_INCLUDE_DIRS}

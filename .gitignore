@@ -2,3 +2,4 @@
 /build
 .DS_Store
 swarmio-simulator.g3log.*.log
+cswarm_workspace.code-workspace
