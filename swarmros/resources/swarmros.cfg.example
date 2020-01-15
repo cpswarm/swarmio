@@ -10,9 +10,9 @@ endpoint = {
         # port = 34000          # Port to use for UDP beacons
         security = true
         privateKey= "edKFMPh+t2gmqaFzCuvzYXqZj+5PVSFDnNbdtBagAp8B2ThBor8DvfettHVafxnDZgEgaymv43qmfhl+UBPIpQ=="
-	    publicKey = "Adk4QaK/A733rbR1Wn8Zw2YBIGspr+N6pn4ZflATyKU="
-	    signature = "kgJnRa/7/KrErXZ1lobmV/XVcacE94A1+KwWfxF4zjbroafwrU0PYkEZEC0C5afT6XJDNS/q3TjZun3F6gxXBA=="
-	    ca = "utGq0AIAV+c3JmwOsS5/h2T6mp331GD8WQhMzcPyzGs="
+	publicKey = "Adk4QaK/A733rbR1Wn8Zw2YBIGspr+N6pn4ZflATyKU="
+	signature = "kgJnRa/7/KrErXZ1lobmV/XVcacE94A1+KwWfxF4zjbroafwrU0PYkEZEC0C5afT6XJDNS/q3TjZun3F6gxXBA=="
+	ca = "utGq0AIAV+c3JmwOsS5/h2T6mp331GD8WQhMzcPyzGs="
     }
 }
 
