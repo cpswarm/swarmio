@@ -88,9 +88,6 @@ if (SWARMIO_BUILD_ROS_NODE)
         message(FATAL_ERROR "Building the ROS node is not supported with the MSVC compiler.")
     endif()
 
-    # BUild libconfig
-    include("cmake/dependencies/build-libconfig.cmake")
-
     # Prepare
     swarmio_build_component_start(swarmros ${PROJECT_VERSION} 
         libzmq 
