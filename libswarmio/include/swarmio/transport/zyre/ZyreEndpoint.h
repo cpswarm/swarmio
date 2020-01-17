@@ -75,7 +75,7 @@ private:
              * 
              */
 
-    // For testing purposes, keys are generated here
+    // Keys
     unsigned char my_publickey[crypto_box_PUBLICKEYBYTES];
     unsigned char my_secretkey[crypto_box_SECRETKEYBYTES];
     unsigned char bcast_publickey[crypto_box_PUBLICKEYBYTES];
@@ -83,8 +83,9 @@ private:
     unsigned char signature[crypto_sign_SECRETKEYBYTES];
     unsigned char server_public[crypto_sign_PUBLICKEYBYTES];
     unsigned char certificate[crypto_box_PUBLICKEYBYTES + crypto_sign_SECRETKEYBYTES];
-    bool isJoining = false;
 
+    bool isJoining = false;
+    std::string configFilePath = "config.cfg";
     /**
              * @brief Entry point for the worker thread
              * 
@@ -135,6 +136,13 @@ public:
              * @param ifname Interface name
              */
     void SetInterface(const char *ifname);
+
+    /**
+             * @brief Set the config file path.
+             *              * 
+             * @param cfg Config file path
+             */
+    void SetConfig(std::string cfg);
 
     /**
              * @brief Start the background thread, announce the 

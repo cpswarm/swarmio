@@ -85,6 +85,11 @@ void ZyreEndpoint::SetInterface(const char *ifname)
     zyre_set_interface(_zyre, ifname);
 }
 
+void ZyreEndpoint::SetConfig(std::string cfg)
+{
+    this->configFilePath = cfg;
+}
+
 void ZyreEndpoint::Start()
 {
     // Check if we are already running
@@ -92,13 +97,9 @@ void ZyreEndpoint::Start()
     {
         throw Exception("Node is already running");
     }
-// Reading config file
-#ifndef SWARMROS_CONFIG_PATH
-    std::string configFilePath = "config.cfg";
-#endif
-#ifdef SWARMROS_CONFIG_PATH
-    std::string configFilePath = SWARMROS_CONFIG_PATH;
-#endif
+    #ifdef SWARMROS_CONFIG_PATH
+        std::string configFilePath = SWARMROS_CONFIG_PATH;
+    #endif
 
     // Load configuration and establish endpoint
     libconfig::Config config;
@@ -126,26 +127,26 @@ void ZyreEndpoint::Start()
                 }
             }
             if (config.exists("endpoint.parameters.ifname"))
-                {
-                    // Get interface name
-                    const char *name = config.lookup("endpoint.parameters.ifname");
+            {
+                // Get interface name
+                const char *name = config.lookup("endpoint.parameters.ifname");
 
-                    // Check that it exists
-                    auto map = GetInterfaceMap();
-                    if (map.find(name) != map.end())
-                    {
-                        zyreEndpoint->SetInterface(name);
-                    }
-                    else
-                    {
-                        LOG(DBUG) << "Available interfaces:";
-                        for (auto &pair : map)
-                        {
-                            LOG(DBUG) << " - " << pair.first << " (" << pair.second << ")";
-                        }
-                        LOG(FATAL) << "An invalid interface name has been specified.";
-                    }
+                // Check that it exists
+                auto map = GetInterfaceMap();
+                if (map.find(name) != map.end())
+                {
+                    zyreEndpoint->SetInterface(name);
                 }
+                else
+                {
+                    LOG(DBUG) << "Available interfaces:";
+                    for (auto &pair : map)
+                    {
+                        LOG(DBUG) << " - " << pair.first << " (" << pair.second << ")";
+                    }
+                    LOG(FATAL) << "An invalid interface name has been specified.";
+                }
+            }
             if (config.exists("endpoint.parameters.security"))
             {
                 security_enabled = config.lookup("endpoint.parameters.security");

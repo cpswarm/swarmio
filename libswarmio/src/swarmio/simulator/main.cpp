@@ -12,25 +12,42 @@ using namespace swarmio;
 using namespace swarmio::simulator;
 using namespace std::chrono_literals;
 
-int main(int argc, const char* argv[])
+int main(int argc, const char *argv[])
 {
-    // Initialize logging
-    auto worker = g3::LogWorker::createLogWorker();
-    worker->addDefaultLogger("swarmio-simulator", ".");
-    initializeLogging(worker.get());
-
     // Wrap to trigger destructors before shutdown
     {
         // Create Zyre endpoint
-        char* hostname = zsys_hostname();
-        swarmio::transport::zyre::ZyreEndpoint endpoint(hostname, "simulator"); 
+        char *hostname = zsys_hostname();
+        swarmio::transport::zyre::ZyreEndpoint endpoint(hostname, "simulator");
         zstr_free(&hostname);
 
-        // Assign interface
-        if (argc == 2)
+        // Initialize logging
+        auto worker = g3::LogWorker::createLogWorker();
+        worker->addDefaultLogger("swarmio-simulator", ".");
+        initializeLogging(worker.get());
+        std::string configFilePath = "";
+        for (int i = 1; i < argc; ++i)
         {
-            endpoint.SetInterface(argv[1]);
-            std::cout << "Selected interface: " << argv[1] << std::endl;
+            const char *current = argv[i];
+            if (current[0] == '-')
+            {
+                if (current[1] == 'C')
+                {
+                    // Config file remapping
+                    configFilePath = current + 2;
+                    endpoint.SetConfig(configFilePath);
+                }
+                else
+                {
+                    LOG(FATAL) << "Command line argument " << i << " is unknown";
+                    return -10;
+                }
+            }
+            else
+            {
+                LOG(FATAL) << "Command line argument " << i << " cannot be processed";
+                return -10;
+            }
         }
 
         // Print UUID
@@ -50,18 +67,18 @@ int main(int argc, const char* argv[])
 
         // Register complex static telemetry value
         value.Clear();
-        auto& pairs = *value.mutable_map_value()->mutable_pairs();
+        auto &pairs = *value.mutable_map_value()->mutable_pairs();
         pairs["key1"].set_string_value("value1");
         pairs["key2"].set_uint_value(2);
         pairs["key3"].set_int_value(-3);
-        auto& pairs2 = *pairs["key4"].mutable_map_value()->mutable_pairs();
+        auto &pairs2 = *pairs["key4"].mutable_map_value()->mutable_pairs();
         pairs2["embedded1"].set_string_value("subvalue1");
         pairs2["embedded2"].set_uint_value(2);
         device.AddConstantTelemetryValue("complex_value", value, false);
 
         // Register array static telemetry value
         value.Clear();
-        auto& elements = *value.mutable_int_array();
+        auto &elements = *value.mutable_int_array();
         elements.add_elements(30);
         elements.add_elements(55);
         elements.add_elements(0);
@@ -97,7 +114,8 @@ int main(int argc, const char* argv[])
         endpoint.Start();
 
         // Loop endlessly
-        std::cout << "Press ENTER to stop the simulator." << "\n";
+        std::cout << "Press ENTER to stop the simulator."
+                  << "\n";
 
         // Get a character
         std::cin.get();

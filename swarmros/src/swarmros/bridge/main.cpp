@@ -25,7 +25,6 @@ int main(int argc, const char *argv[])
     auto worker = g3::LogWorker::createLogWorker();
     worker->addSink(std::make_unique<bridge::DebugSink>(), &bridge::DebugSink::ReceiveLogMessage);
     initializeLogging(worker.get());
-    bool security = false;
     // Parse the rest of the arguments
     std::string configFilePath = SWARMROS_CONFIG_PATH;
     for (int i = 1; i < argc; ++i)
@@ -71,6 +70,7 @@ int main(int argc, const char *argv[])
             // Create endpoint
             auto zyreEndpoint = std::make_unique<swarmio::transport::zyre::ZyreEndpoint>(config.lookup("endpoint.name"), config.lookup("endpoint.deviceClass"));
             endpoint = std::move(zyreEndpoint);
+            endpoint.SetConfig(configFilePath);
         }
         else
         {
