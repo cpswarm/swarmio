@@ -69,8 +69,8 @@ int main(int argc, const char *argv[])
         {
             // Create endpoint
             auto zyreEndpoint = std::make_unique<swarmio::transport::zyre::ZyreEndpoint>(config.lookup("endpoint.name"), config.lookup("endpoint.deviceClass"));
+            zyreEndpoint->SetConfig(configFilePath);
             endpoint = std::move(zyreEndpoint);
-            endpoint.SetConfig(configFilePath);
         }
         else
         {
