@@ -1,0 +1,32 @@
+
+<?xml version="1.0"?>
+<package format="2">
+
+  <!-- Package info -->
+  <name>swarmros</name>
+  <version>0.9.2</version>
+  <description>SwarmIO communications bridge for ROS</description>
+  <maintainer email="akos.milankovich@search-lab.hu">Ákos Milánkovich</maintainer>
+  <license>Apache 2.0</license>
+  <url type="website">http://www.cpswarm.eu</url>
+
+  <!-- Dependencies -->
+  <buildtool_depend>cmake</buildtool_depend>
+  <build_export_depend>roscpp</build_export_depend>
+  <build_export_depend>rosconsole</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <build_export_depend>roslib</build_export_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>rosconsole</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>roslib</build_depend>
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>rosconsole</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>roslib</exec_depend>
+  <run_depend>catkin</run_depend>
+
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>
