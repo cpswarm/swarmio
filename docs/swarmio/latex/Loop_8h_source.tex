@@ -1,0 +1,76 @@
+\hypertarget{Loop_8h_source}{}\doxysection{Loop.\+h}
+\label{Loop_8h_source}\index{include/swarmio/tool/Loop.h@{include/swarmio/tool/Loop.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <mutex>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <replxx.hxx>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <swarmio/tool/Command.h>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <swarmio/tool/LogBuffer.h>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <swarmio/profiles/ClientProfile.h>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <swarmio/transport/zyre/ZyreEndpoint.h>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <swarmio/services/telemetry/UpdateAwaiter.h>}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include <swarmio/data/Variant.pb.h>}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{keyword}{namespace }swarmio::tool }
+\DoxyCodeLine{14 \{}
+\DoxyCodeLine{19     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1tool_1_1Loop}{Loop}} final : \textcolor{keyword}{private} \mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile}{profiles::ClientProfile}}}
+\DoxyCodeLine{20     \{}
+\DoxyCodeLine{21         \textcolor{keyword}{private}:}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{27             replxx::Replxx \_repl;}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{33             \textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* \_selectedNode = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{39             \mbox{\hyperlink{classswarmio_1_1tool_1_1LogBuffer}{LogBuffer}}* \_logBuffer = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{46             std::string GetPrompt();}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{52             std::vector<const Node*> \_nodes;}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{58             std::list<services::telemetry::UpdateAwaiter> \_subscriptions;}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{64             std::mutex \_mutex;}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{71             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} NodeWasDiscovered(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{noexcept} \textcolor{keyword}{override};}
+\DoxyCodeLine{72 }
+\DoxyCodeLine{79             data::Variant ConvertToVariant(\textcolor{keyword}{const} std::string\& value);}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{87             \textcolor{keywordtype}{bool} ExecuteCommand(\textcolor{keyword}{const} std::string\& command);}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{94             \textcolor{keywordtype}{void} ExecuteMembersCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{101             \textcolor{keywordtype}{void} ExecuteSelectCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{108             \textcolor{keywordtype}{void} ExecutePingCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{115             \textcolor{keywordtype}{void} ExecuteInfoCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{122             \textcolor{keywordtype}{void} ExecuteEventCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{123 }
+\DoxyCodeLine{129             \textcolor{keywordtype}{void} ExecuteSetCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{130 }
+\DoxyCodeLine{136             \textcolor{keywordtype}{void} ExecuteGetCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{143             \textcolor{keywordtype}{void} ExecuteRediscoverCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{150             \textcolor{keywordtype}{void} ExecuteSubscriptionsCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{157             \textcolor{keywordtype}{void} ExecuteSubscribeCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{164             \textcolor{keywordtype}{void} ExecuteUnsubscribeCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{165 }
+\DoxyCodeLine{171             \textcolor{keywordtype}{void} ExecuteLogCommand(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}\& command);}
+\DoxyCodeLine{172 }
+\DoxyCodeLine{173         \textcolor{keyword}{public}:}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{181             \mbox{\hyperlink{classswarmio_1_1tool_1_1Loop_ab14f4e218f958933a3e54637212cb69b}{Loop}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint, \mbox{\hyperlink{classswarmio_1_1tool_1_1LogBuffer}{LogBuffer}}* logBuffer);}
+\DoxyCodeLine{182 }
+\DoxyCodeLine{187             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1tool_1_1Loop_a1e524950748997f4973529e19587b95c}{Run}}();}
+\DoxyCodeLine{188     \};}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190 \}}
+
+\end{DoxyCode}

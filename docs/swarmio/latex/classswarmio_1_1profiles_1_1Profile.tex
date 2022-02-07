@@ -1,0 +1,116 @@
+\hypertarget{classswarmio_1_1profiles_1_1Profile}{}\doxysection{swarmio\+::profiles\+::Profile Class Reference}
+\label{classswarmio_1_1profiles_1_1Profile}\index{swarmio::profiles::Profile@{swarmio::profiles::Profile}}
+
+
+Base class for profiles.  
+
+
+
+
+{\ttfamily \#include $<$Profile.\+h$>$}
+
+Inheritance diagram for swarmio\+::profiles\+::Profile\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classswarmio_1_1profiles_1_1Profile}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+swarmio\+::services\+::discovery\+::\+Service \& \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_ae95147386a579e46755e01d87603ba67}{Get\+Discovery\+Service}} ()
+\begin{DoxyCompactList}\small\item\em Get a reference for the Discovery service. \end{DoxyCompactList}\item 
+swarmio\+::services\+::ping\+::\+Service \& \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a87efac4663dbf9327c0d60739275c733}{Get\+Ping\+Service}} ()
+\begin{DoxyCompactList}\small\item\em Get a reference for the Ping service. \end{DoxyCompactList}\item 
+swarmio\+::services\+::telemetry\+::\+Service \& \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a318df1dc2f8b34c52859e25a546e1b8c}{Get\+Telemetry\+Service}} ()
+\begin{DoxyCompactList}\small\item\em Get a reference for the Telemetry service. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_a36ee00c294a6ed1058601a47a9848c94}\label{classswarmio_1_1profiles_1_1Profile_a36ee00c294a6ed1058601a47a9848c94}} 
+virtual {\bfseries $\sim$\+Profile} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a75c1db8d917a0d20cec6d626c16cc907}{Profile}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint, bool perform\+Active\+Discovery)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}\label{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}} 
+swarmio\+::services\+::discovery\+::\+Service {\bfseries \+\_\+discovery\+Service}
+\begin{DoxyCompactList}\small\item\em Discovery service. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_afcb8624130b54f21c2ca5fe52ca755c8}\label{classswarmio_1_1profiles_1_1Profile_afcb8624130b54f21c2ca5fe52ca755c8}} 
+swarmio\+::services\+::ping\+::\+Service {\bfseries \+\_\+ping\+Service}
+\begin{DoxyCompactList}\small\item\em Ping service. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_a78f03c8fd676e5d95988166442620ccb}\label{classswarmio_1_1profiles_1_1Profile_a78f03c8fd676e5d95988166442620ccb}} 
+swarmio\+::services\+::telemetry\+::\+Service {\bfseries \+\_\+telemetry\+Service}
+\begin{DoxyCompactList}\small\item\em Telemetry service. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Base class for profiles. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_a75c1db8d917a0d20cec6d626c16cc907}\label{classswarmio_1_1profiles_1_1Profile_a75c1db8d917a0d20cec6d626c16cc907}} 
+\index{swarmio::profiles::Profile@{swarmio::profiles::Profile}!Profile@{Profile}}
+\index{Profile@{Profile}!swarmio::profiles::Profile@{swarmio::profiles::Profile}}
+\doxysubsubsection{\texorpdfstring{Profile()}{Profile()}}
+{\footnotesize\ttfamily swarmio\+::profiles\+::\+Profile\+::\+Profile (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint,  }\item[{bool}]{perform\+Active\+Discovery }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Construct a new \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} to use \\
+\hline
+{\em perform\+Active\+Discovery} & Enable active discovery for the Discovery service \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_ae95147386a579e46755e01d87603ba67}\label{classswarmio_1_1profiles_1_1Profile_ae95147386a579e46755e01d87603ba67}} 
+\index{swarmio::profiles::Profile@{swarmio::profiles::Profile}!GetDiscoveryService@{GetDiscoveryService}}
+\index{GetDiscoveryService@{GetDiscoveryService}!swarmio::profiles::Profile@{swarmio::profiles::Profile}}
+\doxysubsubsection{\texorpdfstring{GetDiscoveryService()}{GetDiscoveryService()}}
+{\footnotesize\ttfamily swarmio\+::services\+::discovery\+::\+Service \& swarmio\+::profiles\+::\+Profile\+::\+Get\+Discovery\+Service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a reference for the Discovery service. 
+
+\begin{DoxyReturn}{Returns}
+swarmio\+::services\+::discovery\+::\+Service\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_a87efac4663dbf9327c0d60739275c733}\label{classswarmio_1_1profiles_1_1Profile_a87efac4663dbf9327c0d60739275c733}} 
+\index{swarmio::profiles::Profile@{swarmio::profiles::Profile}!GetPingService@{GetPingService}}
+\index{GetPingService@{GetPingService}!swarmio::profiles::Profile@{swarmio::profiles::Profile}}
+\doxysubsubsection{\texorpdfstring{GetPingService()}{GetPingService()}}
+{\footnotesize\ttfamily swarmio\+::services\+::ping\+::\+Service \& swarmio\+::profiles\+::\+Profile\+::\+Get\+Ping\+Service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a reference for the Ping service. 
+
+\begin{DoxyReturn}{Returns}
+swarmio\+::services\+::ping\+::\+Service\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1Profile_a318df1dc2f8b34c52859e25a546e1b8c}\label{classswarmio_1_1profiles_1_1Profile_a318df1dc2f8b34c52859e25a546e1b8c}} 
+\index{swarmio::profiles::Profile@{swarmio::profiles::Profile}!GetTelemetryService@{GetTelemetryService}}
+\index{GetTelemetryService@{GetTelemetryService}!swarmio::profiles::Profile@{swarmio::profiles::Profile}}
+\doxysubsubsection{\texorpdfstring{GetTelemetryService()}{GetTelemetryService()}}
+{\footnotesize\ttfamily swarmio\+::services\+::telemetry\+::\+Service \& swarmio\+::profiles\+::\+Profile\+::\+Get\+Telemetry\+Service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a reference for the Telemetry service. 
+
+\begin{DoxyReturn}{Returns}
+swarmio\+::services\+::telemetry\+::\+Service\& 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/profiles/Profile.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,231 @@
+\hypertarget{classswarmio_1_1Endpoint}{}\doxysection{swarmio\+::Endpoint Class Reference}
+\label{classswarmio_1_1Endpoint}\index{swarmio::Endpoint@{swarmio::Endpoint}}
+
+
+Abstract base class for \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} implementations.  
+
+
+
+
+{\ttfamily \#include $<$Endpoint.\+h$>$}
+
+Inheritance diagram for swarmio\+::Endpoint\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classswarmio_1_1Endpoint}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Endpoint_a40aadb641489fe7f732cbbd96408cf72}{Start}} ()=0
+\begin{DoxyCompactList}\small\item\em Start a background thread and begin processing messages on this endpoint. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Endpoint_ac5bf6a0bbb583c53accc32fa62ad0452}{Stop}} ()=0
+\begin{DoxyCompactList}\small\item\em Send a termination signal and wait until the endpoint finished processing messages. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Endpoint_a3a1b444ccac5658016a6237eed2e6d33}{Tag}} (data\+::\+Message $\ast$message)=0
+\begin{DoxyCompactList}\small\item\em Set the message identifier for a message. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Endpoint_aa032ec0eb27b96258cc4075f89fb1c19}{Send}} (data\+::\+Message $\ast$message, const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node)=0
+\begin{DoxyCompactList}\small\item\em Send a message to a specific member of the swarm. Call with node set to nullptr to send a message to all members of the swarm. \end{DoxyCompactList}\item 
+virtual const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$ \mbox{\hyperlink{classswarmio_1_1Endpoint_a07c1c5c39900e83524b80f4ec5990a10}{Node\+For\+UUID}} (const std\+::string \&uuid)=0
+\begin{DoxyCompactList}\small\item\em Retreive a node by its UUID. \end{DoxyCompactList}\item 
+virtual const std\+::string \& \mbox{\hyperlink{classswarmio_1_1Endpoint_aad4323f953164c89c05a9a89dffa7863}{Get\+UUID}} ()=0
+\begin{DoxyCompactList}\small\item\em Get the UUID of the local node. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_a8bec097c75a55ad9f64ee561202d7484}\label{classswarmio_1_1Endpoint_a8bec097c75a55ad9f64ee561202d7484}} 
+virtual {\bfseries $\sim$\+Endpoint} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Endpoint_aa196e8b770938692910ca94fae454b82}{Register\+Mailbox}} (\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$mailbox)=0
+\begin{DoxyCompactList}\small\item\em Register a \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} to receive messages. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Endpoint_a19bed7c2d285f19c4418a3af14f4453a}{Unregister\+Mailbox}} (\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$mailbox)=0
+\begin{DoxyCompactList}\small\item\em Unregister a \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} from receiving messages. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Endpoint_a9b5e98fad1dda275b1723af982b95c64}{Replace\+Mailbox}} (\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$old\+Mailbox, \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$new\+Mailbox)=0
+\begin{DoxyCompactList}\small\item\em Relocate a mailbox to another in-\/memory location. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_aeda64f6d3d604eaa9bd3d10c6a06d577}\label{classswarmio_1_1Endpoint_aeda64f6d3d604eaa9bd3d10c6a06d577}} 
+friend {\bfseries Mailbox}
+\begin{DoxyCompactList}\small\item\em Allow Mailboxes to register themselves. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class for \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} implementations. 
+
+When an \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} is created and started, it announces itself to all members of the swarm and start sending and receiving messages. Different implementations might provide different services for discovery, authentication, authorization and encryption. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_aad4323f953164c89c05a9a89dffa7863}\label{classswarmio_1_1Endpoint_aad4323f953164c89c05a9a89dffa7863}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!GetUUID@{GetUUID}}
+\index{GetUUID@{GetUUID}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{GetUUID()}{GetUUID()}}
+{\footnotesize\ttfamily virtual const std\+::string \& swarmio\+::\+Endpoint\+::\+Get\+UUID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the UUID of the local node. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_a07c1c5c39900e83524b80f4ec5990a10}\label{classswarmio_1_1Endpoint_a07c1c5c39900e83524b80f4ec5990a10}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!NodeForUUID@{NodeForUUID}}
+\index{NodeForUUID@{NodeForUUID}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{NodeForUUID()}{NodeForUUID()}}
+{\footnotesize\ttfamily virtual const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$ swarmio\+::\+Endpoint\+::\+Node\+For\+UUID (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{uuid }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Retreive a node by its UUID. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em uuid} & UUID \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+const Node$\ast$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_aa196e8b770938692910ca94fae454b82}\label{classswarmio_1_1Endpoint_aa196e8b770938692910ca94fae454b82}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!RegisterMailbox@{RegisterMailbox}}
+\index{RegisterMailbox@{RegisterMailbox}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{RegisterMailbox()}{RegisterMailbox()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Endpoint\+::\+Register\+Mailbox (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$}]{mailbox }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Register a \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} to receive messages. 
+
+Each registered \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} receives each message sent to the endpoint, and can choose to handle it or ignore it.
+
+Thread-\/safe. Messages will be delivered on a separate thread.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mailbox} & \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} to register. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a23e525d9306249b78821a02022093a15}{swarmio\+::transport\+::\+Basic\+Endpoint}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_a9b5e98fad1dda275b1723af982b95c64}\label{classswarmio_1_1Endpoint_a9b5e98fad1dda275b1723af982b95c64}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!ReplaceMailbox@{ReplaceMailbox}}
+\index{ReplaceMailbox@{ReplaceMailbox}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{ReplaceMailbox()}{ReplaceMailbox()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Endpoint\+::\+Replace\+Mailbox (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$}]{old\+Mailbox,  }\item[{\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$}]{new\+Mailbox }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Relocate a mailbox to another in-\/memory location. 
+
+Supports thread-\/safe move operations on Mailboxes.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mailbox} & \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} to register. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a05cf49c6ddf5df68dabc2a393646a646}{swarmio\+::transport\+::\+Basic\+Endpoint}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_aa032ec0eb27b96258cc4075f89fb1c19}\label{classswarmio_1_1Endpoint_aa032ec0eb27b96258cc4075f89fb1c19}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!Send@{Send}}
+\index{Send@{Send}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{Send()}{Send()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Endpoint\+::\+Send (\begin{DoxyParamCaption}\item[{data\+::\+Message $\ast$}]{message,  }\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Send a message to a specific member of the swarm. Call with node set to nullptr to send a message to all members of the swarm. 
+
+Thread-\/safe.
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & Message \\
+\hline
+{\em node} & \mbox{\hyperlink{classswarmio_1_1Node}{Node}} the message will be sent to \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a20f4fac961c7efa9779fbf668187431d}{swarmio\+::transport\+::\+Basic\+Endpoint}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_a40aadb641489fe7f732cbbd96408cf72}\label{classswarmio_1_1Endpoint_a40aadb641489fe7f732cbbd96408cf72}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!Start@{Start}}
+\index{Start@{Start}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Endpoint\+::\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Start a background thread and begin processing messages on this endpoint. 
+
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_abd0a3499a9fd2a2af16ff52719020ac9}{swarmio\+::transport\+::\+Basic\+Endpoint}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_ac5bf6a0bbb583c53accc32fa62ad0452}\label{classswarmio_1_1Endpoint_ac5bf6a0bbb583c53accc32fa62ad0452}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!Stop@{Stop}}
+\index{Stop@{Stop}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{Stop()}{Stop()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Endpoint\+::\+Stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Send a termination signal and wait until the endpoint finished processing messages. 
+
+Thread-\/safe. 
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a8085f1e1f4d650d64ce37d1962c3377e}{swarmio\+::transport\+::\+Basic\+Endpoint}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_a3a1b444ccac5658016a6237eed2e6d33}\label{classswarmio_1_1Endpoint_a3a1b444ccac5658016a6237eed2e6d33}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!Tag@{Tag}}
+\index{Tag@{Tag}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{Tag()}{Tag()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Endpoint\+::\+Tag (\begin{DoxyParamCaption}\item[{data\+::\+Message $\ast$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Set the message identifier for a message. 
+
+Thread safe.
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & Message \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_ae39e0a3e28948ea43b73ae2ae9c69554}{swarmio\+::transport\+::\+Basic\+Endpoint}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Endpoint_a19bed7c2d285f19c4418a3af14f4453a}\label{classswarmio_1_1Endpoint_a19bed7c2d285f19c4418a3af14f4453a}} 
+\index{swarmio::Endpoint@{swarmio::Endpoint}!UnregisterMailbox@{UnregisterMailbox}}
+\index{UnregisterMailbox@{UnregisterMailbox}!swarmio::Endpoint@{swarmio::Endpoint}}
+\doxysubsubsection{\texorpdfstring{UnregisterMailbox()}{UnregisterMailbox()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Endpoint\+::\+Unregister\+Mailbox (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$}]{mailbox }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Unregister a \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} from receiving messages. 
+
+Thread-\/safe.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mailbox} & \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} to unregister. \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a95ccd53dedf18c7aeb384f25b2fc7422}{swarmio\+::transport\+::\+Basic\+Endpoint}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/Endpoint.\+h\end{DoxyCompactItemize}

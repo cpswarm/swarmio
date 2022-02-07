@@ -1,0 +1,28 @@
+\hypertarget{ErrorAwaiter_8h_source}{}\doxysection{Error\+Awaiter.\+h}
+\label{ErrorAwaiter_8h_source}\index{include/swarmio/services/ErrorAwaiter.h@{include/swarmio/services/ErrorAwaiter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/services/Awaiter.h>}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{keyword}{namespace }swarmio::services }
+\DoxyCodeLine{6 \{}
+\DoxyCodeLine{11     \textcolor{keyword}{class }SWARMIO\_API \mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter}{ErrorAwaiter}} final : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}}<bool>}
+\DoxyCodeLine{12     \{}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14         \textcolor{keyword}{protected}:}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{22             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter_a3c785634899c2085275f0b232c3b3df2}{ExtractResponse}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node, \textcolor{keyword}{const} data::Message* message) \textcolor{keyword}{override};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24         \textcolor{keyword}{public}:}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{32             \mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter_ad6fb5e9d48c21e5a900033e5c7ead077}{ErrorAwaiter}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint, uint64\_t requestIdentifier)}
+\DoxyCodeLine{33                 : \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}}(endpoint, requestIdentifier)}
+\DoxyCodeLine{34             \{}
+\DoxyCodeLine{35                 FinishConstruction();}
+\DoxyCodeLine{36             \}}
+\DoxyCodeLine{37     \};}
+\DoxyCodeLine{38 \}}
+
+\end{DoxyCode}

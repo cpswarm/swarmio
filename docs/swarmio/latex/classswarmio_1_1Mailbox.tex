@@ -1,0 +1,228 @@
+\hypertarget{classswarmio_1_1Mailbox}{}\doxysection{swarmio\+::Mailbox Class Reference}
+\label{classswarmio_1_1Mailbox}\index{swarmio::Mailbox@{swarmio::Mailbox}}
+
+
+Abstract base class for \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} implementations.  
+
+
+
+
+{\ttfamily \#include $<$Mailbox.\+h$>$}
+
+Inheritance diagram for swarmio\+::Mailbox\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.064516cm]{classswarmio_1_1Mailbox}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a052baf07f9aecb4e25aae0a3192b57e0}\label{classswarmio_1_1Mailbox_a052baf07f9aecb4e25aae0a3192b57e0}} 
+{\bfseries Mailbox} (const \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Remove copy constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} \& \mbox{\hyperlink{classswarmio_1_1Mailbox_a9bfb528e06b2fc65c73c57041c485336}{operator=}} (const \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Remove assignment operator. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1Mailbox_a3b0333451a105645c1004657c9a61dcf}{Receive\+Message}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$sender, const data\+::\+Message $\ast$message)
+\begin{DoxyCompactList}\small\item\em Delivery point of all messages. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Mailbox_a93f8e1fd18d2b387205d706bdac1b067}{Node\+Was\+Discovered}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node) noexcept
+\begin{DoxyCompactList}\small\item\em Called when a new \mbox{\hyperlink{classswarmio_1_1Node}{Node}} has been discovered. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Mailbox_a7035862ff7eac2b41d3ffc6dcf611087}{Node\+Did\+Join}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node) noexcept
+\begin{DoxyCompactList}\small\item\em Called when a new \mbox{\hyperlink{classswarmio_1_1Node}{Node}} has joined the group. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Mailbox_a9ed6a277858df39d9f6892edc974a124}{Node\+Will\+Leave}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node) noexcept
+\begin{DoxyCompactList}\small\item\em Called when a \mbox{\hyperlink{classswarmio_1_1Node}{Node}} signals that it will leave. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Mailbox_adc622cdabdf0bc69fce7154844a888fb}{Mailbox\+Was\+Connected}} () noexcept
+\begin{DoxyCompactList}\small\item\em Called when the mailbox is attached to an already running endpoint or if the attached endpoint has just started. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1Mailbox_a1786933cbbf34efde877a7519ae652dc}{Mailbox\+Will\+Be\+Disconnected}} () noexcept
+\begin{DoxyCompactList}\small\item\em Called right before the mailbox is disconnected from its endpoint or if the attached endpoint is about to stop. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$ \mbox{\hyperlink{classswarmio_1_1Mailbox_a304311c5d7c2ad2702347b01235de4e7}{Get\+Endpoint}} ()
+\begin{DoxyCompactList}\small\item\em Get the associated \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a22564085dff971c8186e5ec9ac1d0fc3}\label{classswarmio_1_1Mailbox_a22564085dff971c8186e5ec9ac1d0fc3}} 
+virtual void {\bfseries Disconnect} ()
+\begin{DoxyCompactList}\small\item\em Disconnect this \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} from the \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a3fb75f3f72f4b43773bed7319fc17915}\label{classswarmio_1_1Mailbox_a3fb75f3f72f4b43773bed7319fc17915}} 
+virtual {\bfseries $\sim$\+Mailbox} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_abb041e3537419666ad82d4a309e0eb0c}\label{classswarmio_1_1Mailbox_abb041e3537419666ad82d4a309e0eb0c}} 
+{\bfseries Mailbox} ()
+\begin{DoxyCompactList}\small\item\em Construct a disconnected \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1Mailbox_ac608039bc97bd1e7c2e72990c47f173c}{Mailbox}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} object. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a0e8adc7bc315b1376339ec45b4935a48}\label{classswarmio_1_1Mailbox_a0e8adc7bc315b1376339ec45b4935a48}} 
+void {\bfseries Finish\+Construction} ()
+\begin{DoxyCompactList}\small\item\em Called when the last constructor has finished its job. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_aacf0693dd9d159836b6f7950aa59f90d}\label{classswarmio_1_1Mailbox_aacf0693dd9d159836b6f7950aa59f90d}} 
+{\bfseries Mailbox} (\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move a \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classswarmio_1_1Mailbox_a471e72d0b1bac4c65ee8a60f5f4c2f21}{Finish\+Moving\+To}} (\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$other)
+\begin{DoxyCompactList}\small\item\em Called when message handling should be passed onto the new instance. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Abstract base class for \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} implementations. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_ac608039bc97bd1e7c2e72990c47f173c}\label{classswarmio_1_1Mailbox_ac608039bc97bd1e7c2e72990c47f173c}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!Mailbox@{Mailbox}}
+\index{Mailbox@{Mailbox}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{Mailbox()}{Mailbox()}}
+{\footnotesize\ttfamily swarmio\+::\+Mailbox\+::\+Mailbox (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Construct a new \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a471e72d0b1bac4c65ee8a60f5f4c2f21}\label{classswarmio_1_1Mailbox_a471e72d0b1bac4c65ee8a60f5f4c2f21}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!FinishMovingTo@{FinishMovingTo}}
+\index{FinishMovingTo@{FinishMovingTo}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{FinishMovingTo()}{FinishMovingTo()}}
+{\footnotesize\ttfamily void swarmio\+::\+Mailbox\+::\+Finish\+Moving\+To (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} $\ast$}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Called when message handling should be passed onto the new instance. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & New \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a304311c5d7c2ad2702347b01235de4e7}\label{classswarmio_1_1Mailbox_a304311c5d7c2ad2702347b01235de4e7}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!GetEndpoint@{GetEndpoint}}
+\index{GetEndpoint@{GetEndpoint}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{GetEndpoint()}{GetEndpoint()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$ swarmio\+::\+Mailbox\+::\+Get\+Endpoint (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the associated \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}. 
+
+\begin{DoxyReturn}{Returns}
+Endpoint$\ast$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_adc622cdabdf0bc69fce7154844a888fb}\label{classswarmio_1_1Mailbox_adc622cdabdf0bc69fce7154844a888fb}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!MailboxWasConnected@{MailboxWasConnected}}
+\index{MailboxWasConnected@{MailboxWasConnected}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{MailboxWasConnected()}{MailboxWasConnected()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Mailbox\+::\+Mailbox\+Was\+Connected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Called when the mailbox is attached to an already running endpoint or if the attached endpoint has just started. 
+
+
+
+Reimplemented in \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a7fe36b4cfe985134ad5a56b1c13190c9}{swarmio\+::services\+::\+Periodic\+Service}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a1786933cbbf34efde877a7519ae652dc}\label{classswarmio_1_1Mailbox_a1786933cbbf34efde877a7519ae652dc}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!MailboxWillBeDisconnected@{MailboxWillBeDisconnected}}
+\index{MailboxWillBeDisconnected@{MailboxWillBeDisconnected}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{MailboxWillBeDisconnected()}{MailboxWillBeDisconnected()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Mailbox\+::\+Mailbox\+Will\+Be\+Disconnected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Called right before the mailbox is disconnected from its endpoint or if the attached endpoint is about to stop. 
+
+
+
+Reimplemented in \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a06cb5b60b4598afd92fdc7a94fe87656}{swarmio\+::services\+::\+Periodic\+Service}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a7035862ff7eac2b41d3ffc6dcf611087}\label{classswarmio_1_1Mailbox_a7035862ff7eac2b41d3ffc6dcf611087}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!NodeDidJoin@{NodeDidJoin}}
+\index{NodeDidJoin@{NodeDidJoin}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{NodeDidJoin()}{NodeDidJoin()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Mailbox\+::\+Node\+Did\+Join (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Called when a new \mbox{\hyperlink{classswarmio_1_1Node}{Node}} has joined the group. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & The node that has been discovered \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a93f8e1fd18d2b387205d706bdac1b067}\label{classswarmio_1_1Mailbox_a93f8e1fd18d2b387205d706bdac1b067}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!NodeWasDiscovered@{NodeWasDiscovered}}
+\index{NodeWasDiscovered@{NodeWasDiscovered}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{NodeWasDiscovered()}{NodeWasDiscovered()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Mailbox\+::\+Node\+Was\+Discovered (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Called when a new \mbox{\hyperlink{classswarmio_1_1Node}{Node}} has been discovered. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & The node that has been discovered \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a9ed6a277858df39d9f6892edc974a124}\label{classswarmio_1_1Mailbox_a9ed6a277858df39d9f6892edc974a124}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!NodeWillLeave@{NodeWillLeave}}
+\index{NodeWillLeave@{NodeWillLeave}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{NodeWillLeave()}{NodeWillLeave()}}
+{\footnotesize\ttfamily virtual void swarmio\+::\+Mailbox\+::\+Node\+Will\+Leave (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Called when a \mbox{\hyperlink{classswarmio_1_1Node}{Node}} signals that it will leave. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & The node that has left \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a9bfb528e06b2fc65c73c57041c485336}\label{classswarmio_1_1Mailbox_a9bfb528e06b2fc65c73c57041c485336}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!operator=@{operator=}}
+\index{operator=@{operator=}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{operator=()}{operator=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} \& swarmio\+::\+Mailbox\+::operator= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Remove assignment operator. 
+
+\begin{DoxyReturn}{Returns}
+Awaiter\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1Mailbox_a3b0333451a105645c1004657c9a61dcf}\label{classswarmio_1_1Mailbox_a3b0333451a105645c1004657c9a61dcf}} 
+\index{swarmio::Mailbox@{swarmio::Mailbox}!ReceiveMessage@{ReceiveMessage}}
+\index{ReceiveMessage@{ReceiveMessage}!swarmio::Mailbox@{swarmio::Mailbox}}
+\doxysubsubsection{\texorpdfstring{ReceiveMessage()}{ReceiveMessage()}}
+{\footnotesize\ttfamily virtual bool swarmio\+::\+Mailbox\+::\+Receive\+Message (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{sender,  }\item[{const data\+::\+Message $\ast$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Delivery point of all messages. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The node that has sent the message \\
+\hline
+{\em message} & The message itself \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the message had been processed and should not be forwarded to other mailboxes 
+\end{DoxyReturn}
+
+
+Reimplemented in \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a0e5b416e648c9af0db2f5a5f3e284970}{swarmio\+::services\+::\+Awaiter$<$ T $>$}}, \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a0e5b416e648c9af0db2f5a5f3e284970}{swarmio\+::services\+::\+Awaiter$<$ bool $>$}}, and \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a226be843725344ef513148e86ba61fc2}{swarmio\+::simulator\+::\+Example\+Device}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/Mailbox.\+h\end{DoxyCompactItemize}

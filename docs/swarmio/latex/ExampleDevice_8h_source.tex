@@ -1,0 +1,41 @@
+\hypertarget{ExampleDevice_8h_source}{}\doxysection{Example\+Device.\+h}
+\label{ExampleDevice_8h_source}\index{include/swarmio/simulator/ExampleDevice.h@{include/swarmio/simulator/ExampleDevice.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/profiles/MemberProfile.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/simulator/FauxEventHandler.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <swarmio/simulator/InMemoryParameter.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{keyword}{namespace }swarmio::simulator }
+\DoxyCodeLine{9 \{}
+\DoxyCodeLine{16     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice}{ExampleDevice}} final : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile}{profiles::MemberProfile}}}
+\DoxyCodeLine{17     \{}
+\DoxyCodeLine{18         \textcolor{keyword}{private}:}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{24             uint32\_t \_messageCounter = 0;}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{30             std::list<FauxEventHandler*> \_eventHandlers;}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{36             std::list<InMemoryParameter*> \_parameters;}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{38         \textcolor{keyword}{public}:}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{45             \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a35d2ad67fd0964162ed743eead09f814}{ExampleDevice}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint);}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{52             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a45a83f3c7309ba5ba37cb785d9e71416}{AddFauxEventHandler}}(\mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler}{FauxEventHandler}}* eventHandler);}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{59             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a78e4eccca8a4570312e0699179f79daf}{AddInMemoryParameter}}(\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter}{InMemoryParameter}}* parameter);}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{69             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a88ad756097f3f66ed4540338e173bd32}{AddConstantTelemetryValue}}(\textcolor{keyword}{const} std::string\& key, \textcolor{keyword}{const} data::Variant\& value, \textcolor{keywordtype}{bool} includeInStatus = \textcolor{keyword}{false});}
+\DoxyCodeLine{70 }
+\DoxyCodeLine{79             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a226be843725344ef513148e86ba61fc2}{ReceiveMessage}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* sender, \textcolor{keyword}{const} data::Message* message) \textcolor{keyword}{override};}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{85             \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_ab6042a6f4978a368f1ae39c4ceb264b1}{\string~ExampleDevice}}() \textcolor{keyword}{override};}
+\DoxyCodeLine{86     \};}
+\DoxyCodeLine{87 \}}
+\DoxyCodeLine{88 }
+
+\end{DoxyCode}

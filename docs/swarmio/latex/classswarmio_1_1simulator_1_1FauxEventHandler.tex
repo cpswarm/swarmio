@@ -1,0 +1,121 @@
+\hypertarget{classswarmio_1_1simulator_1_1FauxEventHandler}{}\doxysection{swarmio\+::simulator\+::Faux\+Event\+Handler Class Reference}
+\label{classswarmio_1_1simulator_1_1FauxEventHandler}\index{swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}}
+
+
+A special event handler that serves discovery information and ignores the event itself.  
+
+
+
+
+{\ttfamily \#include $<$Faux\+Event\+Handler.\+h$>$}
+
+Inheritance diagram for swarmio\+::simulator\+::Faux\+Event\+Handler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classswarmio_1_1simulator_1_1FauxEventHandler}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_ad5f31096f90edadfd45ed51a6dd67075}{Faux\+Event\+Handler}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Create a new fake event handler. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_ae0248e1a1f99e713f83139f111937383}{Add\+Parameter}} (const std\+::string \&key, data\+::discovery\+::\+Type type)
+\begin{DoxyCompactList}\small\item\em Add a new parameter to serve for discovery. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_afe6b7145590f4e973a5b6644a26b2adb}{Event\+Was\+Triggered}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node, const data\+::event\+::\+Notification \&event) override
+\begin{DoxyCompactList}\small\item\em Handlers are notified using this method when an event has been triggered. \end{DoxyCompactList}\item 
+virtual data\+::discovery\+::\+Schema \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_a1425c316d2d5b354c570b2a383ed4631}{Describe\+Event}} (const std\+::string \&name) override
+\begin{DoxyCompactList}\small\item\em Handlers may add parameter descriptors to the event descriptor when asked to do so by overriding this method. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_aa1b6b09a5cf4617864bba1f2f9021094}{Get\+Name}} () const
+\begin{DoxyCompactList}\small\item\em Get the name of the event. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A special event handler that serves discovery information and ignores the event itself. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1FauxEventHandler_ad5f31096f90edadfd45ed51a6dd67075}\label{classswarmio_1_1simulator_1_1FauxEventHandler_ad5f31096f90edadfd45ed51a6dd67075}} 
+\index{swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}!FauxEventHandler@{FauxEventHandler}}
+\index{FauxEventHandler@{FauxEventHandler}!swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}}
+\doxysubsubsection{\texorpdfstring{FauxEventHandler()}{FauxEventHandler()}}
+{\footnotesize\ttfamily swarmio\+::simulator\+::\+Faux\+Event\+Handler\+::\+Faux\+Event\+Handler (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new fake event handler. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Event name \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1FauxEventHandler_ae0248e1a1f99e713f83139f111937383}\label{classswarmio_1_1simulator_1_1FauxEventHandler_ae0248e1a1f99e713f83139f111937383}} 
+\index{swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}!AddParameter@{AddParameter}}
+\index{AddParameter@{AddParameter}!swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}}
+\doxysubsubsection{\texorpdfstring{AddParameter()}{AddParameter()}}
+{\footnotesize\ttfamily void swarmio\+::simulator\+::\+Faux\+Event\+Handler\+::\+Add\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key,  }\item[{data\+::discovery\+::\+Type}]{type }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Add a new parameter to serve for discovery. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & Parameter name \\
+\hline
+{\em type} & Parameter type \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1FauxEventHandler_a1425c316d2d5b354c570b2a383ed4631}\label{classswarmio_1_1simulator_1_1FauxEventHandler_a1425c316d2d5b354c570b2a383ed4631}} 
+\index{swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}!DescribeEvent@{DescribeEvent}}
+\index{DescribeEvent@{DescribeEvent}!swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}}
+\doxysubsubsection{\texorpdfstring{DescribeEvent()}{DescribeEvent()}}
+{\footnotesize\ttfamily virtual data\+::discovery\+::\+Schema swarmio\+::simulator\+::\+Faux\+Event\+Handler\+::\+Describe\+Event (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Handlers may add parameter descriptors to the event descriptor when asked to do so by overriding this method. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1FauxEventHandler_afe6b7145590f4e973a5b6644a26b2adb}\label{classswarmio_1_1simulator_1_1FauxEventHandler_afe6b7145590f4e973a5b6644a26b2adb}} 
+\index{swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}!EventWasTriggered@{EventWasTriggered}}
+\index{EventWasTriggered@{EventWasTriggered}!swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}}
+\doxysubsubsection{\texorpdfstring{EventWasTriggered()}{EventWasTriggered()}}
+{\footnotesize\ttfamily virtual void swarmio\+::simulator\+::\+Faux\+Event\+Handler\+::\+Event\+Was\+Triggered (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node,  }\item[{const data\+::event\+::\+Notification \&}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Handlers are notified using this method when an event has been triggered. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Source node \\
+\hline
+{\em event} & Event \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1FauxEventHandler_aa1b6b09a5cf4617864bba1f2f9021094}\label{classswarmio_1_1simulator_1_1FauxEventHandler_aa1b6b09a5cf4617864bba1f2f9021094}} 
+\index{swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}!GetName@{GetName}}
+\index{GetName@{GetName}!swarmio::simulator::FauxEventHandler@{swarmio::simulator::FauxEventHandler}}
+\doxysubsubsection{\texorpdfstring{GetName()}{GetName()}}
+{\footnotesize\ttfamily const std\+::string \& swarmio\+::simulator\+::\+Faux\+Event\+Handler\+::\+Get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the name of the event. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/simulator/Faux\+Event\+Handler.\+h\end{DoxyCompactItemize}

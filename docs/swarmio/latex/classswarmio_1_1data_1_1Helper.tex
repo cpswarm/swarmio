@@ -1,0 +1,310 @@
+\hypertarget{classswarmio_1_1data_1_1Helper}{}\doxysection{swarmio\+::data\+::Helper Class Reference}
+\label{classswarmio_1_1data_1_1Helper}\index{swarmio::data::Helper@{swarmio::data::Helper}}
+
+
+This \mbox{\hyperlink{classswarmio_1_1data_1_1Helper}{Helper}} class contains commonly used function to manipulate protobuf objects.  
+
+
+
+
+{\ttfamily \#include $<$Helper.\+h$>$}
+
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a2e74caaa349c0cfe49447b72d503b756}{Is\+Array}} (const Variant \&value)
+\begin{DoxyCompactList}\small\item\em Check whether the variant contains an array type. \end{DoxyCompactList}\item 
+static size\+\_\+t \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_af82941313cae7f5b5b553088439d0dbb}{Get\+Count}} (const Variant \&value)
+\begin{DoxyCompactList}\small\item\em Get the item count of the variant array, or 1 if it is not an array. \end{DoxyCompactList}\item 
+static Variant\+::\+Value\+Case \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a7f18f7595d40c5662b024a406e7dce96}{Get\+Base\+Type}} (const Variant \&value)
+\begin{DoxyCompactList}\small\item\em Get the base type of the variant array, or its type if it is not an array. \end{DoxyCompactList}\item 
+static discovery\+::\+Schema \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a7c58b46f91227bdab47a9f128ec73b81}{Get\+Schema\+Descriptor}} (const Map \&value, bool include\+Array\+Sizes=false)
+\begin{DoxyCompactList}\small\item\em Get the schema for an existing map. \end{DoxyCompactList}\item 
+static discovery\+::\+Field \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a1bc7634ca9fbd66254707382747657b2}{Get\+Field\+Descriptor}} (const Variant \&value, bool include\+Array\+Sizes=false)
+\begin{DoxyCompactList}\small\item\em Get the schema for an existing map. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a139d6d80b38134ba90dd0a1dfca9b257}{To\+String}} (const discovery\+::\+Schema \&value, bool pretty\+Print=true)
+\begin{DoxyCompactList}\small\item\em Get a string representation of a schema. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a3d1098fbb7bc362b9b93776fd6a595de}{To\+String}} (const Variant \&value, bool pretty\+Print=true)
+\begin{DoxyCompactList}\small\item\em Get a string representation of a variant. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_ae07ac4cdc41ba415722625c43f74728b}{To\+String}} (const Map \&value, bool pretty\+Print=true)
+\begin{DoxyCompactList}\small\item\em Get a string representation of a map. \end{DoxyCompactList}\item 
+static std\+::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_ae6e2f4b2921e062e7cb03d5fbddf9b78}{To\+String}} (const google\+::protobuf\+::\+Map$<$ std\+::string, swarmio\+::data\+::\+Variant $>$ \&value, bool pretty\+Print=true)
+\begin{DoxyCompactList}\small\item\em Get a string representation of a map. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a7c7fe1b62dbea18702612b1622a23d3b}{Write\+To\+Stream}} (std\+::ostream \&stream, const Variant \&value, bool pretty\+Print=true, int indentation\+Level=0)
+\begin{DoxyCompactList}\small\item\em Write a string representation of a variant to the stream. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_af5d0086a0e006bd5a6c1f32157cc9d99}{Write\+To\+Stream}} (std\+::ostream \&stream, const Map \&value, bool pretty\+Print=true, int indentation\+Level=0)
+\begin{DoxyCompactList}\small\item\em Write a string representation of a map to the stream. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_ae07e57160e68486926185ead72774dea}{Write\+To\+Stream}} (std\+::ostream \&stream, const google\+::protobuf\+::\+Map$<$ std\+::string, swarmio\+::data\+::\+Variant $>$ \&value, bool pretty\+Print=true, int indentation\+Level=0)
+\begin{DoxyCompactList}\small\item\em Write a string representation of a map to the stream. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_aa11c894675757746e84999956cc89fec}{Write\+To\+Stream}} (std\+::ostream \&stream, const discovery\+::\+Schema \&value, bool pretty\+Print=true, int indentation\+Level=0)
+\begin{DoxyCompactList}\small\item\em Write a string representation of a schema to the stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+This \mbox{\hyperlink{classswarmio_1_1data_1_1Helper}{Helper}} class contains commonly used function to manipulate protobuf objects. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_a7f18f7595d40c5662b024a406e7dce96}\label{classswarmio_1_1data_1_1Helper_a7f18f7595d40c5662b024a406e7dce96}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!GetBaseType@{GetBaseType}}
+\index{GetBaseType@{GetBaseType}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{GetBaseType()}{GetBaseType()}}
+{\footnotesize\ttfamily static Variant\+::\+Value\+Case swarmio\+::data\+::\+Helper\+::\+Get\+Base\+Type (\begin{DoxyParamCaption}\item[{const Variant \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get the base type of the variant array, or its type if it is not an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Variant \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Variant\+::\+Value\+Case 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_af82941313cae7f5b5b553088439d0dbb}\label{classswarmio_1_1data_1_1Helper_af82941313cae7f5b5b553088439d0dbb}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!GetCount@{GetCount}}
+\index{GetCount@{GetCount}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{GetCount()}{GetCount()}}
+{\footnotesize\ttfamily static size\+\_\+t swarmio\+::data\+::\+Helper\+::\+Get\+Count (\begin{DoxyParamCaption}\item[{const Variant \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get the item count of the variant array, or 1 if it is not an array. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Variant \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+size\+\_\+t 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_a1bc7634ca9fbd66254707382747657b2}\label{classswarmio_1_1data_1_1Helper_a1bc7634ca9fbd66254707382747657b2}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!GetFieldDescriptor@{GetFieldDescriptor}}
+\index{GetFieldDescriptor@{GetFieldDescriptor}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{GetFieldDescriptor()}{GetFieldDescriptor()}}
+{\footnotesize\ttfamily static discovery\+::\+Field swarmio\+::data\+::\+Helper\+::\+Get\+Field\+Descriptor (\begin{DoxyParamCaption}\item[{const Variant \&}]{value,  }\item[{bool}]{include\+Array\+Sizes = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get the schema for an existing map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+{\em include\+Array\+Sizes} & Mark arrays as fixed size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+discovery\+::\+Field 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_a7c58b46f91227bdab47a9f128ec73b81}\label{classswarmio_1_1data_1_1Helper_a7c58b46f91227bdab47a9f128ec73b81}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!GetSchemaDescriptor@{GetSchemaDescriptor}}
+\index{GetSchemaDescriptor@{GetSchemaDescriptor}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{GetSchemaDescriptor()}{GetSchemaDescriptor()}}
+{\footnotesize\ttfamily static discovery\+::\+Schema swarmio\+::data\+::\+Helper\+::\+Get\+Schema\+Descriptor (\begin{DoxyParamCaption}\item[{const Map \&}]{value,  }\item[{bool}]{include\+Array\+Sizes = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get the schema for an existing map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+{\em include\+Array\+Sizes} & Mark arrays as fixed size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+discovery\+::\+Schema 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_a2e74caaa349c0cfe49447b72d503b756}\label{classswarmio_1_1data_1_1Helper_a2e74caaa349c0cfe49447b72d503b756}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!IsArray@{IsArray}}
+\index{IsArray@{IsArray}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{IsArray()}{IsArray()}}
+{\footnotesize\ttfamily static bool swarmio\+::data\+::\+Helper\+::\+Is\+Array (\begin{DoxyParamCaption}\item[{const Variant \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Check whether the variant contains an array type. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Variant \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the variant is an array 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_a139d6d80b38134ba90dd0a1dfca9b257}\label{classswarmio_1_1data_1_1Helper_a139d6d80b38134ba90dd0a1dfca9b257}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!ToString@{ToString}}
+\index{ToString@{ToString}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{ToString()}{ToString()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily static std\+::string swarmio\+::data\+::\+Helper\+::\+To\+String (\begin{DoxyParamCaption}\item[{const discovery\+::\+Schema \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get a string representation of a schema. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Schema \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string ~\newline
+ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_ae6e2f4b2921e062e7cb03d5fbddf9b78}\label{classswarmio_1_1data_1_1Helper_ae6e2f4b2921e062e7cb03d5fbddf9b78}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!ToString@{ToString}}
+\index{ToString@{ToString}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{ToString()}{ToString()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily static std\+::string swarmio\+::data\+::\+Helper\+::\+To\+String (\begin{DoxyParamCaption}\item[{const google\+::protobuf\+::\+Map$<$ std\+::string, swarmio\+::data\+::\+Variant $>$ \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get a string representation of a map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Map \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_ae07ac4cdc41ba415722625c43f74728b}\label{classswarmio_1_1data_1_1Helper_ae07ac4cdc41ba415722625c43f74728b}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!ToString@{ToString}}
+\index{ToString@{ToString}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{ToString()}{ToString()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily static std\+::string swarmio\+::data\+::\+Helper\+::\+To\+String (\begin{DoxyParamCaption}\item[{const Map \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get a string representation of a map. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Map \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_a3d1098fbb7bc362b9b93776fd6a595de}\label{classswarmio_1_1data_1_1Helper_a3d1098fbb7bc362b9b93776fd6a595de}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!ToString@{ToString}}
+\index{ToString@{ToString}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{ToString()}{ToString()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily static std\+::string swarmio\+::data\+::\+Helper\+::\+To\+String (\begin{DoxyParamCaption}\item[{const Variant \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get a string representation of a variant. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Variant \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_aa11c894675757746e84999956cc89fec}\label{classswarmio_1_1data_1_1Helper_aa11c894675757746e84999956cc89fec}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!WriteToStream@{WriteToStream}}
+\index{WriteToStream@{WriteToStream}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{WriteToStream()}{WriteToStream()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily static void swarmio\+::data\+::\+Helper\+::\+Write\+To\+Stream (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream,  }\item[{const discovery\+::\+Schema \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true},  }\item[{int}]{indentation\+Level = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Write a string representation of a schema to the stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & Stream \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+{\em indentation\+Level} & Current indentation level \\
+\hline
+{\em value} & Schema \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_ae07e57160e68486926185ead72774dea}\label{classswarmio_1_1data_1_1Helper_ae07e57160e68486926185ead72774dea}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!WriteToStream@{WriteToStream}}
+\index{WriteToStream@{WriteToStream}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{WriteToStream()}{WriteToStream()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily static void swarmio\+::data\+::\+Helper\+::\+Write\+To\+Stream (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream,  }\item[{const google\+::protobuf\+::\+Map$<$ std\+::string, swarmio\+::data\+::\+Variant $>$ \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true},  }\item[{int}]{indentation\+Level = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Write a string representation of a map to the stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & Stream \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+{\em indentation\+Level} & Current indentation level \\
+\hline
+{\em value} & Map \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_af5d0086a0e006bd5a6c1f32157cc9d99}\label{classswarmio_1_1data_1_1Helper_af5d0086a0e006bd5a6c1f32157cc9d99}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!WriteToStream@{WriteToStream}}
+\index{WriteToStream@{WriteToStream}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{WriteToStream()}{WriteToStream()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily static void swarmio\+::data\+::\+Helper\+::\+Write\+To\+Stream (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream,  }\item[{const Map \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true},  }\item[{int}]{indentation\+Level = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Write a string representation of a map to the stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & Stream \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+{\em indentation\+Level} & Current indentation level \\
+\hline
+{\em value} & Map \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1data_1_1Helper_a7c7fe1b62dbea18702612b1622a23d3b}\label{classswarmio_1_1data_1_1Helper_a7c7fe1b62dbea18702612b1622a23d3b}} 
+\index{swarmio::data::Helper@{swarmio::data::Helper}!WriteToStream@{WriteToStream}}
+\index{WriteToStream@{WriteToStream}!swarmio::data::Helper@{swarmio::data::Helper}}
+\doxysubsubsection{\texorpdfstring{WriteToStream()}{WriteToStream()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily static void swarmio\+::data\+::\+Helper\+::\+Write\+To\+Stream (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream,  }\item[{const Variant \&}]{value,  }\item[{bool}]{pretty\+Print = {\ttfamily true},  }\item[{int}]{indentation\+Level = {\ttfamily 0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Write a string representation of a variant to the stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & Stream \\
+\hline
+{\em pretty\+Print} & Add indentation and spacing \\
+\hline
+{\em indentation\+Level} & Current indentation level \\
+\hline
+{\em value} & Variant \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/data/Helper.\+h\end{DoxyCompactItemize}

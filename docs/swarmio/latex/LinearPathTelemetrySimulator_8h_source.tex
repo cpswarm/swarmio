@@ -1,0 +1,58 @@
+\hypertarget{LinearPathTelemetrySimulator_8h_source}{}\doxysection{Linear\+Path\+Telemetry\+Simulator.\+h}
+\label{LinearPathTelemetrySimulator_8h_source}\index{include/swarmio/simulator/LinearPathTelemetrySimulator.h@{include/swarmio/simulator/LinearPathTelemetrySimulator.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/simulator/SimulatedLocation.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/services/telemetry/Service.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <chrono>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <thread>}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{namespace }swarmio::simulator }
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{16     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1simulator_1_1LinearPathTelemetrySimulator}{LinearPathTelemetrySimulator}} final}
+\DoxyCodeLine{17     \{}
+\DoxyCodeLine{18         \textcolor{keyword}{private}:}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{24             std::unique\_ptr<std::thread> \_thread;}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{30             std::atomic<bool> \_shouldStop;}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{36             services::telemetry::Service\& \_telemetryService;}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{42             std::string \_name;}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{48             \mbox{\hyperlink{classswarmio_1_1simulator_1_1SimulatedLocation}{SimulatedLocation}} \_firstPoint;}
+\DoxyCodeLine{49 }
+\DoxyCodeLine{54             \mbox{\hyperlink{classswarmio_1_1simulator_1_1SimulatedLocation}{SimulatedLocation}} \_secondPoint;}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{60             std::chrono::seconds \_duration;}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{66             \textcolor{keywordtype}{void} Worker();}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68         \textcolor{keyword}{public}:}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{79             \mbox{\hyperlink{classswarmio_1_1simulator_1_1LinearPathTelemetrySimulator_aa81c3cf5a183ead86ad054f26d7abc3b}{LinearPathTelemetrySimulator}}(services::telemetry::Service\& telemetryService, \textcolor{keyword}{const} std::string\& name, \mbox{\hyperlink{classswarmio_1_1simulator_1_1SimulatedLocation}{SimulatedLocation}} firstPoint, \mbox{\hyperlink{classswarmio_1_1simulator_1_1SimulatedLocation}{SimulatedLocation}} secondPoint, std::chrono::seconds duration);}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{85             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1simulator_1_1LinearPathTelemetrySimulator_a51420fdd3e9fd1d501b7ba41630efdc9}{Stop}}()}
+\DoxyCodeLine{86             \{}
+\DoxyCodeLine{87                 \textcolor{keywordflow}{if} (\_thread)}
+\DoxyCodeLine{88                 \{}
+\DoxyCodeLine{89                     \_shouldStop = \textcolor{keyword}{true};}
+\DoxyCodeLine{90                     \_thread-\/>join();}
+\DoxyCodeLine{91                     \_thread.reset();}
+\DoxyCodeLine{92                 \}}
+\DoxyCodeLine{93             \}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{99             \mbox{\hyperlink{classswarmio_1_1simulator_1_1LinearPathTelemetrySimulator_a02b6f2e07413c9a0520faf004027639b}{\string~LinearPathTelemetrySimulator}}()}
+\DoxyCodeLine{100             \{}
+\DoxyCodeLine{101                 \mbox{\hyperlink{classswarmio_1_1simulator_1_1LinearPathTelemetrySimulator_a51420fdd3e9fd1d501b7ba41630efdc9}{Stop}}();}
+\DoxyCodeLine{102                 \_telemetryService.RemoveFieldDefinitionForKey(\_name);}
+\DoxyCodeLine{103                 \_telemetryService.RemoveValue(\_name);}
+\DoxyCodeLine{104             \}}
+\DoxyCodeLine{105     \};}
+\DoxyCodeLine{106 \}}
+
+\end{DoxyCode}

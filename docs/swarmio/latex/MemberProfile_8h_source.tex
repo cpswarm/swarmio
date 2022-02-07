@@ -1,0 +1,49 @@
+\hypertarget{MemberProfile_8h_source}{}\doxysection{Member\+Profile.\+h}
+\label{MemberProfile_8h_source}\index{include/swarmio/profiles/MemberProfile.h@{include/swarmio/profiles/MemberProfile.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/profiles/Profile.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/services/event/Service.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <swarmio/services/keyvalue/Service.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <swarmio/services/telemetry/Service.h>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{keyword}{namespace }swarmio::profiles }
+\DoxyCodeLine{9 \{}
+\DoxyCodeLine{14     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile}{MemberProfile}} : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}}}
+\DoxyCodeLine{15     \{}
+\DoxyCodeLine{16         \textcolor{keyword}{protected}:}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{22             swarmio::services::keyvalue::Service \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a8c5348b2721ef8385b7b8a2f247568ac}{\_keyvalueService}};}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{28             swarmio::services::event::Service \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_afda1698b2202141a38c3834430546904}{\_eventService}};}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30         \textcolor{keyword}{public}:}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{37             \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a3fdf21673d47cf0cad9d90bc6b4d09d4}{MemberProfile}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint)}
+\DoxyCodeLine{38                 : \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}}(endpoint, false), \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a8c5348b2721ef8385b7b8a2f247568ac}{\_keyvalueService}}(endpoint), \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_afda1698b2202141a38c3834430546904}{\_eventService}}(endpoint)}
+\DoxyCodeLine{39             \{}
+\DoxyCodeLine{40                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.RegisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_afda1698b2202141a38c3834430546904}{\_eventService}});}
+\DoxyCodeLine{41                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.RegisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a8c5348b2721ef8385b7b8a2f247568ac}{\_keyvalueService}});}
+\DoxyCodeLine{42             \}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{49             swarmio::services::event::Service\& \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a5881ba60663719a9a9dc699841971d3b}{GetEventService}}()}
+\DoxyCodeLine{50             \{}
+\DoxyCodeLine{51                 \textcolor{keywordflow}{return} \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_afda1698b2202141a38c3834430546904}{\_eventService}};}
+\DoxyCodeLine{52             \}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{59             swarmio::services::keyvalue::Service\& \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a21fa8da51c606f5fb08ae673e919e365}{GetKeyValueService}}()}
+\DoxyCodeLine{60             \{}
+\DoxyCodeLine{61                 \textcolor{keywordflow}{return} \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a8c5348b2721ef8385b7b8a2f247568ac}{\_keyvalueService}};}
+\DoxyCodeLine{62             \}}
+\DoxyCodeLine{63    }
+\DoxyCodeLine{68             \textcolor{keyword}{virtual} \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_aea68b83edd666129d649e3d71ddc92fc}{\string~MemberProfile}}()}
+\DoxyCodeLine{69             \{}
+\DoxyCodeLine{70                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.UnregisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a8c5348b2721ef8385b7b8a2f247568ac}{\_keyvalueService}});}
+\DoxyCodeLine{71                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.UnregisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_afda1698b2202141a38c3834430546904}{\_eventService}});}
+\DoxyCodeLine{72             \}}
+\DoxyCodeLine{73     \};}
+\DoxyCodeLine{74 \}}
+
+\end{DoxyCode}

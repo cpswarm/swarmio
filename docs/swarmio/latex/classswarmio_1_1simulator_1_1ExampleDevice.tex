@@ -1,0 +1,136 @@
+\hypertarget{classswarmio_1_1simulator_1_1ExampleDevice}{}\doxysection{swarmio\+::simulator\+::Example\+Device Class Reference}
+\label{classswarmio_1_1simulator_1_1ExampleDevice}\index{swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}}
+
+
+Represents a collection of standard services that can be used to simulate an ordinary device.  
+
+
+
+
+{\ttfamily \#include $<$Example\+Device.\+h$>$}
+
+Inheritance diagram for swarmio\+::simulator\+::Example\+Device\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classswarmio_1_1simulator_1_1ExampleDevice}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a35d2ad67fd0964162ed743eead09f814}{Example\+Device}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint)
+\begin{DoxyCompactList}\small\item\em Construct a new Example Device object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a45a83f3c7309ba5ba37cb785d9e71416}{Add\+Faux\+Event\+Handler}} (\mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler}{Faux\+Event\+Handler}} $\ast$event\+Handler)
+\begin{DoxyCompactList}\small\item\em Add an event handler and register it. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a78e4eccca8a4570312e0699179f79daf}{Add\+In\+Memory\+Parameter}} (\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter}{In\+Memory\+Parameter}} $\ast$parameter)
+\begin{DoxyCompactList}\small\item\em Add an In-\/\+Memory Parameter and register it. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a88ad756097f3f66ed4540338e173bd32}{Add\+Constant\+Telemetry\+Value}} (const std\+::string \&key, const data\+::\+Variant \&value, bool include\+In\+Status=false)
+\begin{DoxyCompactList}\small\item\em Add a constant telemetry value. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1simulator_1_1ExampleDevice_a226be843725344ef513148e86ba61fc2}{Receive\+Message}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$sender, const data\+::\+Message $\ast$message) override
+\begin{DoxyCompactList}\small\item\em Delivery point of all messages. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1ExampleDevice_ab6042a6f4978a368f1ae39c4ceb264b1}\label{classswarmio_1_1simulator_1_1ExampleDevice_ab6042a6f4978a368f1ae39c4ceb264b1}} 
+{\bfseries $\sim$\+Example\+Device} () override
+\begin{DoxyCompactList}\small\item\em Destroy the Example Device object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Represents a collection of standard services that can be used to simulate an ordinary device. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1ExampleDevice_a35d2ad67fd0964162ed743eead09f814}\label{classswarmio_1_1simulator_1_1ExampleDevice_a35d2ad67fd0964162ed743eead09f814}} 
+\index{swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}!ExampleDevice@{ExampleDevice}}
+\index{ExampleDevice@{ExampleDevice}!swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}}
+\doxysubsubsection{\texorpdfstring{ExampleDevice()}{ExampleDevice()}}
+{\footnotesize\ttfamily swarmio\+::simulator\+::\+Example\+Device\+::\+Example\+Device (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint }\end{DoxyParamCaption})}
+
+
+
+Construct a new Example Device object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} to use \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1ExampleDevice_a88ad756097f3f66ed4540338e173bd32}\label{classswarmio_1_1simulator_1_1ExampleDevice_a88ad756097f3f66ed4540338e173bd32}} 
+\index{swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}!AddConstantTelemetryValue@{AddConstantTelemetryValue}}
+\index{AddConstantTelemetryValue@{AddConstantTelemetryValue}!swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}}
+\doxysubsubsection{\texorpdfstring{AddConstantTelemetryValue()}{AddConstantTelemetryValue()}}
+{\footnotesize\ttfamily void swarmio\+::simulator\+::\+Example\+Device\+::\+Add\+Constant\+Telemetry\+Value (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{key,  }\item[{const data\+::\+Variant \&}]{value,  }\item[{bool}]{include\+In\+Status = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Add a constant telemetry value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & Key \\
+\hline
+{\em value} & Value \\
+\hline
+{\em include\+In\+Status} & True if the value should be broadcast in the status descriptor \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1ExampleDevice_a45a83f3c7309ba5ba37cb785d9e71416}\label{classswarmio_1_1simulator_1_1ExampleDevice_a45a83f3c7309ba5ba37cb785d9e71416}} 
+\index{swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}!AddFauxEventHandler@{AddFauxEventHandler}}
+\index{AddFauxEventHandler@{AddFauxEventHandler}!swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}}
+\doxysubsubsection{\texorpdfstring{AddFauxEventHandler()}{AddFauxEventHandler()}}
+{\footnotesize\ttfamily void swarmio\+::simulator\+::\+Example\+Device\+::\+Add\+Faux\+Event\+Handler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler}{Faux\+Event\+Handler}} $\ast$}]{event\+Handler }\end{DoxyParamCaption})}
+
+
+
+Add an event handler and register it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em event\+Handler} & Event handler \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1ExampleDevice_a78e4eccca8a4570312e0699179f79daf}\label{classswarmio_1_1simulator_1_1ExampleDevice_a78e4eccca8a4570312e0699179f79daf}} 
+\index{swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}!AddInMemoryParameter@{AddInMemoryParameter}}
+\index{AddInMemoryParameter@{AddInMemoryParameter}!swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}}
+\doxysubsubsection{\texorpdfstring{AddInMemoryParameter()}{AddInMemoryParameter()}}
+{\footnotesize\ttfamily void swarmio\+::simulator\+::\+Example\+Device\+::\+Add\+In\+Memory\+Parameter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter}{In\+Memory\+Parameter}} $\ast$}]{parameter }\end{DoxyParamCaption})}
+
+
+
+Add an In-\/\+Memory Parameter and register it. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parameter} & Parameter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1ExampleDevice_a226be843725344ef513148e86ba61fc2}\label{classswarmio_1_1simulator_1_1ExampleDevice_a226be843725344ef513148e86ba61fc2}} 
+\index{swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}!ReceiveMessage@{ReceiveMessage}}
+\index{ReceiveMessage@{ReceiveMessage}!swarmio::simulator::ExampleDevice@{swarmio::simulator::ExampleDevice}}
+\doxysubsubsection{\texorpdfstring{ReceiveMessage()}{ReceiveMessage()}}
+{\footnotesize\ttfamily virtual bool swarmio\+::simulator\+::\+Example\+Device\+::\+Receive\+Message (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{sender,  }\item[{const data\+::\+Message $\ast$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Delivery point of all messages. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The node that has sent the message \\
+\hline
+{\em message} & The message itself \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the message had been processed and should not be forwarded to other mailboxes 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classswarmio_1_1Mailbox_a3b0333451a105645c1004657c9a61dcf}{swarmio\+::\+Mailbox}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/simulator/Example\+Device.\+h\end{DoxyCompactItemize}

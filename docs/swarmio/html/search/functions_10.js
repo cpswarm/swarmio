@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['tag_0',['Tag',['../classswarmio_1_1Endpoint.html#a3a1b444ccac5658016a6237eed2e6d33',1,'swarmio::Endpoint::Tag()'],['../classswarmio_1_1transport_1_1BasicEndpoint.html#ae39e0a3e28948ea43b73ae2ae9c69554',1,'swarmio::transport::BasicEndpoint::Tag()']]],
+  ['tostring_1',['ToString',['../classswarmio_1_1data_1_1Helper.html#a139d6d80b38134ba90dd0a1dfca9b257',1,'swarmio::data::Helper::ToString(const discovery::Schema &amp;value, bool prettyPrint=true)'],['../classswarmio_1_1data_1_1Helper.html#a3d1098fbb7bc362b9b93776fd6a595de',1,'swarmio::data::Helper::ToString(const Variant &amp;value, bool prettyPrint=true)'],['../classswarmio_1_1data_1_1Helper.html#ae07ac4cdc41ba415722625c43f74728b',1,'swarmio::data::Helper::ToString(const Map &amp;value, bool prettyPrint=true)'],['../classswarmio_1_1data_1_1Helper.html#ae6e2f4b2921e062e7cb03d5fbddf9b78',1,'swarmio::data::Helper::ToString(const google::protobuf::Map&lt; std::string, swarmio::data::Variant &gt; &amp;value, bool prettyPrint=true)']]]
+];

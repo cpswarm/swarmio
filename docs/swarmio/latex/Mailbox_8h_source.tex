@@ -1,0 +1,91 @@
+\hypertarget{Mailbox_8h_source}{}\doxysection{Mailbox.\+h}
+\label{Mailbox_8h_source}\index{include/swarmio/Mailbox.h@{include/swarmio/Mailbox.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/Node.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/Endpoint.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <swarmio/data/Message.pb.h>}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{namespace }swarmio}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{13     \textcolor{keyword}{class }SWARMIO\_API \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}}
+\DoxyCodeLine{14     \{}
+\DoxyCodeLine{15         \textcolor{keyword}{private}:}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{21             \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* \_endpoint;}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{23         \textcolor{keyword}{protected}:}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{29             \mbox{\hyperlink{classswarmio_1_1Mailbox_abb041e3537419666ad82d4a309e0eb0c}{Mailbox}}()}
+\DoxyCodeLine{30                 : \_endpoint(nullptr) \{ \}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{37             \mbox{\hyperlink{classswarmio_1_1Mailbox_ac608039bc97bd1e7c2e72990c47f173c}{Mailbox}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint)}
+\DoxyCodeLine{38             \{}
+\DoxyCodeLine{39                 \_endpoint = endpoint;}
+\DoxyCodeLine{40             \}}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{46             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_a0e8adc7bc315b1376339ec45b4935a48}{FinishConstruction}}()}
+\DoxyCodeLine{47             \{}
+\DoxyCodeLine{48                 \textcolor{keywordflow}{if} (\_endpoint != \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{49                 \{}
+\DoxyCodeLine{50                     \_endpoint-\/>\mbox{\hyperlink{classswarmio_1_1Endpoint_aa196e8b770938692910ca94fae454b82}{RegisterMailbox}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{51                 \}}
+\DoxyCodeLine{52             \}}
+\DoxyCodeLine{53             }
+\DoxyCodeLine{58             \mbox{\hyperlink{classswarmio_1_1Mailbox_aacf0693dd9d159836b6f7950aa59f90d}{Mailbox}}(\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}\&\& other)}
+\DoxyCodeLine{59             \{}
+\DoxyCodeLine{60                 \textcolor{comment}{// Copy over endpoint reference}}
+\DoxyCodeLine{61                 \_endpoint = other.GetEndpoint();}
+\DoxyCodeLine{62             \}}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{70             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_a471e72d0b1bac4c65ee8a60f5f4c2f21}{FinishMovingTo}}(\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}* other)}
+\DoxyCodeLine{71             \{}
+\DoxyCodeLine{72                 \textcolor{keywordflow}{if} (\_endpoint != \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{73                 \{}
+\DoxyCodeLine{74                     \_endpoint-\/>\mbox{\hyperlink{classswarmio_1_1Endpoint_a9b5e98fad1dda275b1723af982b95c64}{ReplaceMailbox}}(\textcolor{keyword}{this}, other);}
+\DoxyCodeLine{75                     \_endpoint = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{76                 \}}
+\DoxyCodeLine{77             \}}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{79         \textcolor{keyword}{public}:}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{85             \mbox{\hyperlink{classswarmio_1_1Mailbox_a052baf07f9aecb4e25aae0a3192b57e0}{Mailbox}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{92             \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}\& \mbox{\hyperlink{classswarmio_1_1Mailbox_a9bfb528e06b2fc65c73c57041c485336}{operator=}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}\&) = \textcolor{keyword}{delete};}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{102             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1Mailbox_a3b0333451a105645c1004657c9a61dcf}{ReceiveMessage}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* sender, \textcolor{keyword}{const} data::Message* message) \{ \textcolor{keywordflow}{return} \textcolor{keyword}{false}; \}}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{109             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_a93f8e1fd18d2b387205d706bdac1b067}{NodeWasDiscovered}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{noexcept} \{ \}}
+\DoxyCodeLine{110 }
+\DoxyCodeLine{116             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_a7035862ff7eac2b41d3ffc6dcf611087}{NodeDidJoin}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{noexcept} \{ \}}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{123             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_a9ed6a277858df39d9f6892edc974a124}{NodeWillLeave}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{noexcept} \{ \}}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{130             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_adc622cdabdf0bc69fce7154844a888fb}{MailboxWasConnected}}() noexcept \{ \}}
+\DoxyCodeLine{131 }
+\DoxyCodeLine{137             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_a1786933cbbf34efde877a7519ae652dc}{MailboxWillBeDisconnected}}() noexcept \{ \}}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{144             \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* \mbox{\hyperlink{classswarmio_1_1Mailbox_a304311c5d7c2ad2702347b01235de4e7}{GetEndpoint}}()}
+\DoxyCodeLine{145             \{}
+\DoxyCodeLine{146                 \textcolor{keywordflow}{return} \_endpoint;}
+\DoxyCodeLine{147             \}}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{153             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1Mailbox_a22564085dff971c8186e5ec9ac1d0fc3}{Disconnect}}()}
+\DoxyCodeLine{154             \{}
+\DoxyCodeLine{155                 \textcolor{keywordflow}{if} (\_endpoint != \textcolor{keyword}{nullptr})}
+\DoxyCodeLine{156                 \{}
+\DoxyCodeLine{157                     \_endpoint-\/>\mbox{\hyperlink{classswarmio_1_1Endpoint_a19bed7c2d285f19c4418a3af14f4453a}{UnregisterMailbox}}(\textcolor{keyword}{this});}
+\DoxyCodeLine{158                     \_endpoint = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{159                 \}}
+\DoxyCodeLine{160             \}}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{165             \textcolor{keyword}{virtual} \mbox{\hyperlink{classswarmio_1_1Mailbox_a3fb75f3f72f4b43773bed7319fc17915}{\string~Mailbox}}() }
+\DoxyCodeLine{166             \{}
+\DoxyCodeLine{167                 Disconnect();}
+\DoxyCodeLine{168             \}}
+\DoxyCodeLine{169     \};}
+\DoxyCodeLine{170 \}}
+
+\end{DoxyCode}

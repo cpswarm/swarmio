@@ -1,0 +1,43 @@
+\hypertarget{BasicNode_8h_source}{}\doxysection{Basic\+Node.\+h}
+\label{BasicNode_8h_source}\index{include/swarmio/transport/BasicNode.h@{include/swarmio/transport/BasicNode.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/Node.h>}}
+\DoxyCodeLine{4 }
+\DoxyCodeLine{5 \textcolor{keyword}{namespace }swarmio::transport}
+\DoxyCodeLine{6 \{}
+\DoxyCodeLine{11     \textcolor{keyword}{class }SWARMIO\_API \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode}{BasicNode}} : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}}
+\DoxyCodeLine{12     \{}
+\DoxyCodeLine{13         \textcolor{keyword}{private}:}
+\DoxyCodeLine{14 }
+\DoxyCodeLine{19             std::string \_uuid;}
+\DoxyCodeLine{20 }
+\DoxyCodeLine{25             std::string \_name;}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{31             std::string \_deviceClass;}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{33         \textcolor{keyword}{public}:}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{42             \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_ad10eef49fcc6535da3ef0fed3651dcb3}{BasicNode}}(\textcolor{keyword}{const} std::string\& uuid, \textcolor{keyword}{const} std::string\& name, \textcolor{keyword}{const} std::string\& deviceClass)}
+\DoxyCodeLine{43                 : \_uuid(uuid), \_name(name), \_deviceClass(deviceClass) \{ \}}
+\DoxyCodeLine{44 }
+\DoxyCodeLine{50             \textcolor{keyword}{virtual} \textcolor{keyword}{const} std::string\& \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a3c890bf5a4a05ded21eea92f808b3ad5}{GetUUID}}()\textcolor{keyword}{ const override}}
+\DoxyCodeLine{51 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{52                 \textcolor{keywordflow}{return} \_uuid;}
+\DoxyCodeLine{53             \}}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{60             \textcolor{keyword}{virtual} \textcolor{keyword}{const} std::string\& \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a11cc187a7bdcd039dcd7a07e1af6efe1}{GetName}}()\textcolor{keyword}{ const override}}
+\DoxyCodeLine{61 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{62                 \textcolor{keywordflow}{return} \_name;}
+\DoxyCodeLine{63             \}}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{70             \textcolor{keyword}{virtual} \textcolor{keyword}{const} std::string\& \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a274fd871c3b523f2e8af27579e732c9d}{GetDeviceClass}}()\textcolor{keyword}{ const override}}
+\DoxyCodeLine{71 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{72                 \textcolor{keywordflow}{return} \_deviceClass;}
+\DoxyCodeLine{73             \}}
+\DoxyCodeLine{74     \};}
+\DoxyCodeLine{75 \}}
+
+\end{DoxyCode}

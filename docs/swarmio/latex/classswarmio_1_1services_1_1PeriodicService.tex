@@ -1,0 +1,89 @@
+\hypertarget{classswarmio_1_1services_1_1PeriodicService}{}\doxysection{swarmio\+::services\+::Periodic\+Service Class Reference}
+\label{classswarmio_1_1services_1_1PeriodicService}\index{swarmio::services::PeriodicService@{swarmio::services::PeriodicService}}
+
+
+A service that uses a periodic background worker to perform its work.  
+
+
+
+
+{\ttfamily \#include $<$Periodic\+Service.\+h$>$}
+
+Inheritance diagram for swarmio\+::services\+::Periodic\+Service\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classswarmio_1_1services_1_1PeriodicService}
+\end{center}
+\end{figure}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a3e563f0682bc42d8282b136bc8647831}{Periodic\+Service}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint, std\+::chrono\+::milliseconds period)
+\begin{DoxyCompactList}\small\item\em Construct a new Periodic Service object. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a7fe36b4cfe985134ad5a56b1c13190c9}{Mailbox\+Was\+Connected}} () noexcept override
+\begin{DoxyCompactList}\small\item\em Called when the mailbox is attached to an already running endpoint or if the attached endpoint has just started. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a06cb5b60b4598afd92fdc7a94fe87656}{Mailbox\+Will\+Be\+Disconnected}} () noexcept override
+\begin{DoxyCompactList}\small\item\em Called right before the mailbox is disconnected from its endpoint or if the attached endpoint is about to stop. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1services_1_1PeriodicService_a4902d21c3526f8cd549785e14c0e8cd9}\label{classswarmio_1_1services_1_1PeriodicService_a4902d21c3526f8cd549785e14c0e8cd9}} 
+virtual void {\bfseries Update} ()=0
+\begin{DoxyCompactList}\small\item\em Called periodically to perform work. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+A service that uses a periodic background worker to perform its work. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1PeriodicService_a3e563f0682bc42d8282b136bc8647831}\label{classswarmio_1_1services_1_1PeriodicService_a3e563f0682bc42d8282b136bc8647831}} 
+\index{swarmio::services::PeriodicService@{swarmio::services::PeriodicService}!PeriodicService@{PeriodicService}}
+\index{PeriodicService@{PeriodicService}!swarmio::services::PeriodicService@{swarmio::services::PeriodicService}}
+\doxysubsubsection{\texorpdfstring{PeriodicService()}{PeriodicService()}}
+{\footnotesize\ttfamily swarmio\+::services\+::\+Periodic\+Service\+::\+Periodic\+Service (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint,  }\item[{std\+::chrono\+::milliseconds}]{period }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Construct a new Periodic Service object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} \\
+\hline
+{\em period} & Background worker period \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1PeriodicService_a7fe36b4cfe985134ad5a56b1c13190c9}\label{classswarmio_1_1services_1_1PeriodicService_a7fe36b4cfe985134ad5a56b1c13190c9}} 
+\index{swarmio::services::PeriodicService@{swarmio::services::PeriodicService}!MailboxWasConnected@{MailboxWasConnected}}
+\index{MailboxWasConnected@{MailboxWasConnected}!swarmio::services::PeriodicService@{swarmio::services::PeriodicService}}
+\doxysubsubsection{\texorpdfstring{MailboxWasConnected()}{MailboxWasConnected()}}
+{\footnotesize\ttfamily virtual void swarmio\+::services\+::\+Periodic\+Service\+::\+Mailbox\+Was\+Connected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Called when the mailbox is attached to an already running endpoint or if the attached endpoint has just started. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classswarmio_1_1Mailbox_adc622cdabdf0bc69fce7154844a888fb}{swarmio\+::\+Mailbox}}.
+
+\mbox{\Hypertarget{classswarmio_1_1services_1_1PeriodicService_a06cb5b60b4598afd92fdc7a94fe87656}\label{classswarmio_1_1services_1_1PeriodicService_a06cb5b60b4598afd92fdc7a94fe87656}} 
+\index{swarmio::services::PeriodicService@{swarmio::services::PeriodicService}!MailboxWillBeDisconnected@{MailboxWillBeDisconnected}}
+\index{MailboxWillBeDisconnected@{MailboxWillBeDisconnected}!swarmio::services::PeriodicService@{swarmio::services::PeriodicService}}
+\doxysubsubsection{\texorpdfstring{MailboxWillBeDisconnected()}{MailboxWillBeDisconnected()}}
+{\footnotesize\ttfamily virtual void swarmio\+::services\+::\+Periodic\+Service\+::\+Mailbox\+Will\+Be\+Disconnected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Called right before the mailbox is disconnected from its endpoint or if the attached endpoint is about to stop. 
+
+
+
+Reimplemented from \mbox{\hyperlink{classswarmio_1_1Mailbox_a1786933cbbf34efde877a7519ae652dc}{swarmio\+::\+Mailbox}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/services/Periodic\+Service.\+h\end{DoxyCompactItemize}

@@ -1,0 +1,79 @@
+\hypertarget{classswarmio_1_1services_1_1ErrorAwaiter}{}\doxysection{swarmio\+::services\+::Error\+Awaiter Class Reference}
+\label{classswarmio_1_1services_1_1ErrorAwaiter}\index{swarmio::services::ErrorAwaiter@{swarmio::services::ErrorAwaiter}}
+
+
+An \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}} that checks whether the operation was a success.  
+
+
+
+
+{\ttfamily \#include $<$Error\+Awaiter.\+h$>$}
+
+Inheritance diagram for swarmio\+::services\+::Error\+Awaiter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classswarmio_1_1services_1_1ErrorAwaiter}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter_ad6fb5e9d48c21e5a900033e5c7ead077}{Error\+Awaiter}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint, uint64\+\_\+t request\+Identifier)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter}{Error\+Awaiter}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter_a3c785634899c2085275f0b232c3b3df2}{Extract\+Response}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node, const data\+::\+Message $\ast$message) override
+\begin{DoxyCompactList}\small\item\em Called when a response for the original message has been received. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+An \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}} that checks whether the operation was a success. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1ErrorAwaiter_ad6fb5e9d48c21e5a900033e5c7ead077}\label{classswarmio_1_1services_1_1ErrorAwaiter_ad6fb5e9d48c21e5a900033e5c7ead077}} 
+\index{swarmio::services::ErrorAwaiter@{swarmio::services::ErrorAwaiter}!ErrorAwaiter@{ErrorAwaiter}}
+\index{ErrorAwaiter@{ErrorAwaiter}!swarmio::services::ErrorAwaiter@{swarmio::services::ErrorAwaiter}}
+\doxysubsubsection{\texorpdfstring{ErrorAwaiter()}{ErrorAwaiter()}}
+{\footnotesize\ttfamily swarmio\+::services\+::\+Error\+Awaiter\+::\+Error\+Awaiter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint,  }\item[{uint64\+\_\+t}]{request\+Identifier }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter}{Error\+Awaiter}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} \\
+\hline
+{\em request\+Identifier} & Original message identifier \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1ErrorAwaiter_a3c785634899c2085275f0b232c3b3df2}\label{classswarmio_1_1services_1_1ErrorAwaiter_a3c785634899c2085275f0b232c3b3df2}} 
+\index{swarmio::services::ErrorAwaiter@{swarmio::services::ErrorAwaiter}!ExtractResponse@{ExtractResponse}}
+\index{ExtractResponse@{ExtractResponse}!swarmio::services::ErrorAwaiter@{swarmio::services::ErrorAwaiter}}
+\doxysubsubsection{\texorpdfstring{ExtractResponse()}{ExtractResponse()}}
+{\footnotesize\ttfamily virtual bool swarmio\+::services\+::\+Error\+Awaiter\+::\+Extract\+Response (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node,  }\item[{const data\+::\+Message $\ast$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Called when a response for the original message has been received. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Sender node \\
+\hline
+{\em message} & Message \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aad62709180c5196148d9740e10dca89f}{swarmio\+::services\+::\+Awaiter$<$ bool $>$}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/services/Error\+Awaiter.\+h\end{DoxyCompactItemize}

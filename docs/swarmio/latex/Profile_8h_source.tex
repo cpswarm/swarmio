@@ -1,0 +1,60 @@
+\hypertarget{Profile_8h_source}{}\doxysection{Profile.\+h}
+\label{Profile_8h_source}\index{include/swarmio/profiles/Profile.h@{include/swarmio/profiles/Profile.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/Endpoint.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/Mailbox.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <swarmio/services/discovery/Service.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <swarmio/services/keyvalue/Service.h>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <swarmio/services/telemetry/Service.h>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <swarmio/services/ping/Service.h>}}
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 \textcolor{keyword}{namespace }swarmio::profiles }
+\DoxyCodeLine{11 \{}
+\DoxyCodeLine{16     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}} : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}}
+\DoxyCodeLine{17     \{}
+\DoxyCodeLine{18         \textcolor{keyword}{protected}:}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{24             swarmio::services::discovery::Service \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}};}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{30             swarmio::services::ping::Service \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_afcb8624130b54f21c2ca5fe52ca755c8}{\_pingService}};}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{36             swarmio::services::telemetry::Service \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a78f03c8fd676e5d95988166442620ccb}{\_telemetryService}};}
+\DoxyCodeLine{37 }
+\DoxyCodeLine{45             \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a75c1db8d917a0d20cec6d626c16cc907}{Profile}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint, \textcolor{keywordtype}{bool} performActiveDiscovery)}
+\DoxyCodeLine{46                 : \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}(endpoint), }
+\DoxyCodeLine{47                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}(endpoint, performActiveDiscovery), }
+\DoxyCodeLine{48                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_afcb8624130b54f21c2ca5fe52ca755c8}{\_pingService}}(endpoint), \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a78f03c8fd676e5d95988166442620ccb}{\_telemetryService}}(endpoint)}
+\DoxyCodeLine{49             \{}
+\DoxyCodeLine{50                  \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.RegisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_afcb8624130b54f21c2ca5fe52ca755c8}{\_pingService}});}
+\DoxyCodeLine{51                  \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.RegisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a78f03c8fd676e5d95988166442620ccb}{\_telemetryService}});}
+\DoxyCodeLine{52             \}}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54         \textcolor{keyword}{public}:}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{61             swarmio::services::discovery::Service\& \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_ae95147386a579e46755e01d87603ba67}{GetDiscoveryService}}()}
+\DoxyCodeLine{62             \{}
+\DoxyCodeLine{63                 \textcolor{keywordflow}{return} \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}};}
+\DoxyCodeLine{64             \}}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{71             swarmio::services::ping::Service\& \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a87efac4663dbf9327c0d60739275c733}{GetPingService}}()}
+\DoxyCodeLine{72             \{}
+\DoxyCodeLine{73                 \textcolor{keywordflow}{return} \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_afcb8624130b54f21c2ca5fe52ca755c8}{\_pingService}};}
+\DoxyCodeLine{74             \}}
+\DoxyCodeLine{75 }
+\DoxyCodeLine{81             swarmio::services::telemetry::Service\& \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a318df1dc2f8b34c52859e25a546e1b8c}{GetTelemetryService}}()}
+\DoxyCodeLine{82             \{}
+\DoxyCodeLine{83                 \textcolor{keywordflow}{return} \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a78f03c8fd676e5d95988166442620ccb}{\_telemetryService}};}
+\DoxyCodeLine{84             \}}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{90             \textcolor{keyword}{virtual} \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a36ee00c294a6ed1058601a47a9848c94}{\string~Profile}}()}
+\DoxyCodeLine{91             \{}
+\DoxyCodeLine{92                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.UnregisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a78f03c8fd676e5d95988166442620ccb}{\_telemetryService}});}
+\DoxyCodeLine{93                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_a83daaa8b196b18d98f432a652e73a2e0}{\_discoveryService}}.UnregisterDiscoverable(\&\mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_afcb8624130b54f21c2ca5fe52ca755c8}{\_pingService}});}
+\DoxyCodeLine{94             \}}
+\DoxyCodeLine{95     \};}
+\DoxyCodeLine{96 \}}
+
+\end{DoxyCode}

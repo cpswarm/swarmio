@@ -1,0 +1,121 @@
+\hypertarget{classswarmio_1_1Node}{}\doxysection{swarmio\+::Node Class Reference}
+\label{classswarmio_1_1Node}\index{swarmio::Node@{swarmio::Node}}
+
+
+Represents a \mbox{\hyperlink{classswarmio_1_1Node}{Node}} the \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} knows about and can send messages to.  
+
+
+
+
+{\ttfamily \#include $<$Node.\+h$>$}
+
+Inheritance diagram for swarmio\+::Node\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classswarmio_1_1Node}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual const std\+::string \& \mbox{\hyperlink{classswarmio_1_1Node_ad2acd95e920d917d335e32565a82a393}{Get\+UUID}} () const =0
+\begin{DoxyCompactList}\small\item\em Returns the unique identifier of the node. \end{DoxyCompactList}\item 
+virtual const std\+::string \& \mbox{\hyperlink{classswarmio_1_1Node_a2bc2e65769f8d0e8271d6fe2d10e44e1}{Get\+Name}} () const =0
+\begin{DoxyCompactList}\small\item\em Returns the (possibly non-\/unique) name of the node. \end{DoxyCompactList}\item 
+virtual const std\+::string \& \mbox{\hyperlink{classswarmio_1_1Node_ab42f6650d87f177d045cd915352d9b41}{Get\+Device\+Class}} () const =0
+\begin{DoxyCompactList}\small\item\em Get the class of the underlying device. \end{DoxyCompactList}\item 
+virtual std\+::string \mbox{\hyperlink{classswarmio_1_1Node_acd521c1bdd3920ccbb94e783e34cf0c5}{Get\+Description}} () const =0
+\begin{DoxyCompactList}\small\item\em Get a user-\/readable description of the node. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1Node_a6846a306976c01f68e648f03516aa7c5}{Is\+Online}} () const =0
+\begin{DoxyCompactList}\small\item\em Checks whether the \mbox{\hyperlink{classswarmio_1_1Node}{Node}} is reachable. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1Node_a688fe6fdbe09d2f1ea2e5632ab5a5c0f}\label{classswarmio_1_1Node_a688fe6fdbe09d2f1ea2e5632ab5a5c0f}} 
+virtual {\bfseries $\sim$\+Node} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classswarmio_1_1Node}{Node}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Represents a \mbox{\hyperlink{classswarmio_1_1Node}{Node}} the \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} knows about and can send messages to. 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1Node_acd521c1bdd3920ccbb94e783e34cf0c5}\label{classswarmio_1_1Node_acd521c1bdd3920ccbb94e783e34cf0c5}} 
+\index{swarmio::Node@{swarmio::Node}!GetDescription@{GetDescription}}
+\index{GetDescription@{GetDescription}!swarmio::Node@{swarmio::Node}}
+\doxysubsubsection{\texorpdfstring{GetDescription()}{GetDescription()}}
+{\footnotesize\ttfamily virtual std\+::string swarmio\+::\+Node\+::\+Get\+Description (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get a user-\/readable description of the node. 
+
+\begin{DoxyReturn}{Returns}
+std\+::string 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1Node_ab42f6650d87f177d045cd915352d9b41}\label{classswarmio_1_1Node_ab42f6650d87f177d045cd915352d9b41}} 
+\index{swarmio::Node@{swarmio::Node}!GetDeviceClass@{GetDeviceClass}}
+\index{GetDeviceClass@{GetDeviceClass}!swarmio::Node@{swarmio::Node}}
+\doxysubsubsection{\texorpdfstring{GetDeviceClass()}{GetDeviceClass()}}
+{\footnotesize\ttfamily virtual const std\+::string \& swarmio\+::\+Node\+::\+Get\+Device\+Class (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Get the class of the underlying device. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a274fd871c3b523f2e8af27579e732c9d}{swarmio\+::transport\+::\+Basic\+Node}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Node_a2bc2e65769f8d0e8271d6fe2d10e44e1}\label{classswarmio_1_1Node_a2bc2e65769f8d0e8271d6fe2d10e44e1}} 
+\index{swarmio::Node@{swarmio::Node}!GetName@{GetName}}
+\index{GetName@{GetName}!swarmio::Node@{swarmio::Node}}
+\doxysubsubsection{\texorpdfstring{GetName()}{GetName()}}
+{\footnotesize\ttfamily virtual const std\+::string \& swarmio\+::\+Node\+::\+Get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Returns the (possibly non-\/unique) name of the node. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a11cc187a7bdcd039dcd7a07e1af6efe1}{swarmio\+::transport\+::\+Basic\+Node}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Node_ad2acd95e920d917d335e32565a82a393}\label{classswarmio_1_1Node_ad2acd95e920d917d335e32565a82a393}} 
+\index{swarmio::Node@{swarmio::Node}!GetUUID@{GetUUID}}
+\index{GetUUID@{GetUUID}!swarmio::Node@{swarmio::Node}}
+\doxysubsubsection{\texorpdfstring{GetUUID()}{GetUUID()}}
+{\footnotesize\ttfamily virtual const std\+::string \& swarmio\+::\+Node\+::\+Get\+UUID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Returns the unique identifier of the node. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a3c890bf5a4a05ded21eea92f808b3ad5}{swarmio\+::transport\+::\+Basic\+Node}}.
+
+\mbox{\Hypertarget{classswarmio_1_1Node_a6846a306976c01f68e648f03516aa7c5}\label{classswarmio_1_1Node_a6846a306976c01f68e648f03516aa7c5}} 
+\index{swarmio::Node@{swarmio::Node}!IsOnline@{IsOnline}}
+\index{IsOnline@{IsOnline}!swarmio::Node@{swarmio::Node}}
+\doxysubsubsection{\texorpdfstring{IsOnline()}{IsOnline()}}
+{\footnotesize\ttfamily virtual bool swarmio\+::\+Node\+::\+Is\+Online (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Checks whether the \mbox{\hyperlink{classswarmio_1_1Node}{Node}} is reachable. 
+
+\begin{DoxyReturn}{Returns}
+True if the \mbox{\hyperlink{classswarmio_1_1Node}{Node}} is online. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/Node.\+h\end{DoxyCompactItemize}

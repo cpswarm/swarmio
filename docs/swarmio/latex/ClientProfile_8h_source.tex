@@ -1,0 +1,31 @@
+\hypertarget{ClientProfile_8h_source}{}\doxysection{Client\+Profile.\+h}
+\label{ClientProfile_8h_source}\index{include/swarmio/profiles/ClientProfile.h@{include/swarmio/profiles/ClientProfile.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/profiles/Profile.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/services/discovery/Observer.h>}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{keyword}{namespace }swarmio::profiles }
+\DoxyCodeLine{7 \{}
+\DoxyCodeLine{12     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile}{ClientProfile}} : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}}, \textcolor{keyword}{public} services::discovery::Observer}
+\DoxyCodeLine{13     \{}
+\DoxyCodeLine{14         \textcolor{keyword}{public}:}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{21             \mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile_a5ec5461fba90ceb7cd2723fccabf9a3d}{ClientProfile}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint)}
+\DoxyCodeLine{22                 : \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile}{Profile}}(endpoint, true)}
+\DoxyCodeLine{23             \{}
+\DoxyCodeLine{24                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_ae95147386a579e46755e01d87603ba67}{GetDiscoveryService}}().RegisterObserver(\textcolor{keyword}{this});}
+\DoxyCodeLine{25             \}}
+\DoxyCodeLine{26 }
+\DoxyCodeLine{33             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile_a325c7a354c107182b58a1bc6932ed191}{CachedDiscoveryResponseWasUpdated}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node, \textcolor{keyword}{const} data::discovery::Response\& response)\textcolor{keyword}{ override }\{ \}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{39             \textcolor{keyword}{virtual} \mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile_a4ee8e368b5e4a51ed477299f730be392}{\string~ClientProfile}}()\textcolor{keyword}{ override}}
+\DoxyCodeLine{40 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{41                 \mbox{\hyperlink{classswarmio_1_1profiles_1_1Profile_ae95147386a579e46755e01d87603ba67}{GetDiscoveryService}}().UnregisterObserver(\textcolor{keyword}{this});}
+\DoxyCodeLine{42             \}}
+\DoxyCodeLine{43     \};}
+\DoxyCodeLine{44 \}}
+
+\end{DoxyCode}

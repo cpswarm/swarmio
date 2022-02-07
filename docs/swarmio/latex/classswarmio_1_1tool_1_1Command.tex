@@ -1,0 +1,163 @@
+\hypertarget{classswarmio_1_1tool_1_1Command}{}\doxysection{swarmio\+::tool\+::Command Class Reference}
+\label{classswarmio_1_1tool_1_1Command}\index{swarmio::tool::Command@{swarmio::tool::Command}}
+
+
+Parser for commands of the default form.  
+
+
+
+
+{\ttfamily \#include $<$Command.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_abd9ed9a380b00723443f4ab2acc3dcf8}{Is}} (const char $\ast$pattern) const
+\begin{DoxyCompactList}\small\item\em Do a case insensitive regex match on the verb. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a97a331c8e67415b3ab65618a2dfa6dca}{Has\+Path}} () const
+\begin{DoxyCompactList}\small\item\em Does the command have a path specified? \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a9e8175f2e6e18d5d20fd877205533025}{Has\+Parameters}} () const
+\begin{DoxyCompactList}\small\item\em Does the command have parameters? \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_add47fb1fd5322c79e26f96048c76e4a6}{Get\+Verb}} () const
+\begin{DoxyCompactList}\small\item\em Get the verb. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a76691764e4238e5da9eb8e93a4a2630d}{Get\+Path}} () const
+\begin{DoxyCompactList}\small\item\em Get the path. \end{DoxyCompactList}\item 
+const std\+::map$<$ std\+::string, std\+::string $>$ \& \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_aefe976a996f22fd83e7475c1e76af5a0}{Get\+Parameters}} () const
+\begin{DoxyCompactList}\small\item\em Get the map of parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a9bc5a3c606ee8c60e496eff1e4bc2019}{Parse}} (std\+::string command)
+\begin{DoxyCompactList}\small\item\em Parse a string as a command. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_afbd32524a07d99f486911786caa7046a}{Highlighter\+Callback}} (const std\+::string \&input, replxx\+::\+Replxx\+::colors\+\_\+t \&colors, void $\ast$unused)
+\begin{DoxyCompactList}\small\item\em Highlighter callback for commands. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Parser for commands of the default form. 
+
+Basic format is\+: VERB \mbox{[}PATH\mbox{]} \mbox{[}NAME=VALUE\mbox{]}... 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_aefe976a996f22fd83e7475c1e76af5a0}\label{classswarmio_1_1tool_1_1Command_aefe976a996f22fd83e7475c1e76af5a0}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!GetParameters@{GetParameters}}
+\index{GetParameters@{GetParameters}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{GetParameters()}{GetParameters()}}
+{\footnotesize\ttfamily const std\+::map$<$ std\+::string, std\+::string $>$ \& swarmio\+::tool\+::\+Command\+::\+Get\+Parameters (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the map of parameters. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::map\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_a76691764e4238e5da9eb8e93a4a2630d}\label{classswarmio_1_1tool_1_1Command_a76691764e4238e5da9eb8e93a4a2630d}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!GetPath@{GetPath}}
+\index{GetPath@{GetPath}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{GetPath()}{GetPath()}}
+{\footnotesize\ttfamily const std\+::string \& swarmio\+::tool\+::\+Command\+::\+Get\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the path. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_add47fb1fd5322c79e26f96048c76e4a6}\label{classswarmio_1_1tool_1_1Command_add47fb1fd5322c79e26f96048c76e4a6}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!GetVerb@{GetVerb}}
+\index{GetVerb@{GetVerb}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{GetVerb()}{GetVerb()}}
+{\footnotesize\ttfamily const std\+::string \& swarmio\+::tool\+::\+Command\+::\+Get\+Verb (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the verb. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_a9e8175f2e6e18d5d20fd877205533025}\label{classswarmio_1_1tool_1_1Command_a9e8175f2e6e18d5d20fd877205533025}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!HasParameters@{HasParameters}}
+\index{HasParameters@{HasParameters}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{HasParameters()}{HasParameters()}}
+{\footnotesize\ttfamily bool swarmio\+::tool\+::\+Command\+::\+Has\+Parameters (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Does the command have parameters? 
+
+\begin{DoxyReturn}{Returns}
+True if parameters were specified 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_a97a331c8e67415b3ab65618a2dfa6dca}\label{classswarmio_1_1tool_1_1Command_a97a331c8e67415b3ab65618a2dfa6dca}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!HasPath@{HasPath}}
+\index{HasPath@{HasPath}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{HasPath()}{HasPath()}}
+{\footnotesize\ttfamily bool swarmio\+::tool\+::\+Command\+::\+Has\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Does the command have a path specified? 
+
+\begin{DoxyReturn}{Returns}
+True if a path was specified 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_afbd32524a07d99f486911786caa7046a}\label{classswarmio_1_1tool_1_1Command_afbd32524a07d99f486911786caa7046a}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!HighlighterCallback@{HighlighterCallback}}
+\index{HighlighterCallback@{HighlighterCallback}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{HighlighterCallback()}{HighlighterCallback()}}
+{\footnotesize\ttfamily static void swarmio\+::tool\+::\+Command\+::\+Highlighter\+Callback (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{input,  }\item[{replxx\+::\+Replxx\+::colors\+\_\+t \&}]{colors,  }\item[{void $\ast$}]{unused }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Highlighter callback for commands. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & Input string \\
+\hline
+{\em colors} & Colors \\
+\hline
+{\em unused} & Unused parameter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_abd9ed9a380b00723443f4ab2acc3dcf8}\label{classswarmio_1_1tool_1_1Command_abd9ed9a380b00723443f4ab2acc3dcf8}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!Is@{Is}}
+\index{Is@{Is}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{Is()}{Is()}}
+{\footnotesize\ttfamily bool swarmio\+::tool\+::\+Command\+::\+Is (\begin{DoxyParamCaption}\item[{const char $\ast$}]{pattern }\end{DoxyParamCaption}) const}
+
+
+
+Do a case insensitive regex match on the verb. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pattern} & Regex pattern \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1tool_1_1Command_a9bc5a3c606ee8c60e496eff1e4bc2019}\label{classswarmio_1_1tool_1_1Command_a9bc5a3c606ee8c60e496eff1e4bc2019}} 
+\index{swarmio::tool::Command@{swarmio::tool::Command}!Parse@{Parse}}
+\index{Parse@{Parse}!swarmio::tool::Command@{swarmio::tool::Command}}
+\doxysubsubsection{\texorpdfstring{Parse()}{Parse()}}
+{\footnotesize\ttfamily static \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}} swarmio\+::tool\+::\+Command\+::\+Parse (\begin{DoxyParamCaption}\item[{std\+::string}]{command }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Parse a string as a command. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em command} & \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}} string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}} 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/tool/Command.\+h\end{DoxyCompactItemize}

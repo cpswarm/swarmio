@@ -1,0 +1,49 @@
+\hypertarget{LogBuffer_8h_source}{}\doxysection{Log\+Buffer.\+h}
+\label{LogBuffer_8h_source}\index{include/swarmio/tool/LogBuffer.h@{include/swarmio/tool/LogBuffer.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <g3log/g3log.hpp>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <mutex>}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{keyword}{namespace }swarmio::tool }
+\DoxyCodeLine{9 \{}
+\DoxyCodeLine{10     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1tool_1_1LogBuffer}{LogBuffer}} final }
+\DoxyCodeLine{11     \{}
+\DoxyCodeLine{12         \textcolor{keyword}{private}:}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{18             std::list<g3::LogMessage> \_messages;}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{24             std::mutex \_mutex;}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{26         \textcolor{keyword}{public}:}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{33             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1tool_1_1LogBuffer_a1cecb1671972f8dbf4127ed63006ee16}{ReceiveLogMessage}}(g3::LogMessageMover logEntry)}
+\DoxyCodeLine{34             \{}
+\DoxyCodeLine{35                 std::unique\_lock<std::mutex> guard(\_mutex);}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37                 \textcolor{comment}{// Add to list                }}
+\DoxyCodeLine{38                 \_messages.push\_back(logEntry.get());}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40                 \textcolor{comment}{// Remove one if we are over the limit}}
+\DoxyCodeLine{41                 \textcolor{keywordflow}{if} (\_messages.size() > 15)}
+\DoxyCodeLine{42                 \{}
+\DoxyCodeLine{43                     \_messages.pop\_front();}
+\DoxyCodeLine{44                 \}}
+\DoxyCodeLine{45             \}}
+\DoxyCodeLine{46 }
+\DoxyCodeLine{52             std::list<g3::LogMessage> \mbox{\hyperlink{classswarmio_1_1tool_1_1LogBuffer_ae628cc71c0d9f8d8a792afc8a6d67052}{GetMessages}}()}
+\DoxyCodeLine{53             \{}
+\DoxyCodeLine{54                 std::unique\_lock<std::mutex> guard(\_mutex);}
+\DoxyCodeLine{55 }
+\DoxyCodeLine{56                 \textcolor{comment}{// Copy list}}
+\DoxyCodeLine{57                 \textcolor{keywordflow}{return} \_messages;}
+\DoxyCodeLine{58             \}}
+\DoxyCodeLine{59     \};}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61 \}}
+
+\end{DoxyCode}

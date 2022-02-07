@@ -1,0 +1,238 @@
+\hypertarget{classswarmio_1_1services_1_1Awaiter}{}\doxysection{swarmio\+::services\+::Awaiter\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{classswarmio_1_1services_1_1Awaiter}\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+
+
+A special mailbox that handles responses to a message.  
+
+
+
+
+{\ttfamily \#include $<$Awaiter.\+h$>$}
+
+Inheritance diagram for swarmio\+::services\+::Awaiter\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classswarmio_1_1services_1_1Awaiter}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a4ff54f91cb67addf85c7a7c897041c71}{Awaiter}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint, uint64\+\_\+t request\+Identifier)
+\begin{DoxyCompactList}\small\item\em Construct a new Response\+Awaiter object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aefd47edfac3824652ce6799257d4db74}{Awaiter}} (const T \&value)
+\begin{DoxyCompactList}\small\item\em Construct an awaiter with a cached value. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a695d8ba9e9622a15779f7150ed5e6022}{Awaiter}} (\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}} \&\&other)
+\begin{DoxyCompactList}\small\item\em Move an \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}} object. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_ada71a0247fcb37973aeac0017491ebea}{Get\+Response}} ()
+\begin{DoxyCompactList}\small\item\em Get the response value. Will throw an exception if called before the response is received. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a0e5b416e648c9af0db2f5a5f3e284970}{Receive\+Message}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$sender, const data\+::\+Message $\ast$message) override
+\begin{DoxyCompactList}\small\item\em Delivery point of all messages. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aff31dcf0ae301bbadcfe60bf7dced793}{Wait\+For\+Response}} (const std\+::chrono\+::milliseconds \&timeout)
+\begin{DoxyCompactList}\small\item\em Wait for the response to become available or util the timeout period ellapses. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_ae2486bde1ce342d9e98b7138aa0a1819}{Has\+Exception}} ()
+\begin{DoxyCompactList}\small\item\em Checks whether the result of the processing has ended with an exception. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a231447e579955e4b39e330f220a138a2}{Get\+Identifier}} () const
+\begin{DoxyCompactList}\small\item\em Get request identifier. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual T \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aad62709180c5196148d9740e10dca89f}{Extract\+Response}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node, const data\+::\+Message $\ast$message)=0
+\begin{DoxyCompactList}\small\item\em Called when a response for the original message has been received. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aab9fb4a8d145d5f426fd481bff11bf9c}{Is\+Finished}} ()
+\begin{DoxyCompactList}\small\item\em Check whether the last message has been received. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class T$>$\newline
+class swarmio\+::services\+::\+Awaiter$<$ T $>$}
+A special mailbox that handles responses to a message. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Return value type \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_a4ff54f91cb67addf85c7a7c897041c71}\label{classswarmio_1_1services_1_1Awaiter_a4ff54f91cb67addf85c7a7c897041c71}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!Awaiter@{Awaiter}}
+\index{Awaiter@{Awaiter}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Awaiter()}{Awaiter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Awaiter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint,  }\item[{uint64\+\_\+t}]{request\+Identifier }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new Response\+Awaiter object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} \\
+\hline
+{\em request\+Identifier} & Original message identifier \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_aefd47edfac3824652ce6799257d4db74}\label{classswarmio_1_1services_1_1Awaiter_aefd47edfac3824652ce6799257d4db74}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!Awaiter@{Awaiter}}
+\index{Awaiter@{Awaiter}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Awaiter()}{Awaiter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Awaiter (\begin{DoxyParamCaption}\item[{const T \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct an awaiter with a cached value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_a695d8ba9e9622a15779f7150ed5e6022}\label{classswarmio_1_1services_1_1Awaiter_a695d8ba9e9622a15779f7150ed5e6022}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!Awaiter@{Awaiter}}
+\index{Awaiter@{Awaiter}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Awaiter()}{Awaiter()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Awaiter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}}$<$ T $>$ \&\&}]{other }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Move an \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em other} & Other object \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_aad62709180c5196148d9740e10dca89f}\label{classswarmio_1_1services_1_1Awaiter_aad62709180c5196148d9740e10dca89f}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!ExtractResponse@{ExtractResponse}}
+\index{ExtractResponse@{ExtractResponse}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ExtractResponse()}{ExtractResponse()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+virtual T \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Extract\+Response (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node,  }\item[{const data\+::\+Message $\ast$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [pure virtual]}}
+
+
+
+Called when a response for the original message has been received. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & Sender node \\
+\hline
+{\em message} & Message \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{classswarmio_1_1services_1_1ErrorAwaiter_a3c785634899c2085275f0b232c3b3df2}{swarmio\+::services\+::\+Error\+Awaiter}}.
+
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_a231447e579955e4b39e330f220a138a2}\label{classswarmio_1_1services_1_1Awaiter_a231447e579955e4b39e330f220a138a2}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!GetIdentifier@{GetIdentifier}}
+\index{GetIdentifier@{GetIdentifier}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetIdentifier()}{GetIdentifier()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+uint64\+\_\+t \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Get\+Identifier (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get request identifier. 
+
+\begin{DoxyReturn}{Returns}
+uint64\+\_\+t Identifier 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_ada71a0247fcb37973aeac0017491ebea}\label{classswarmio_1_1services_1_1Awaiter_ada71a0247fcb37973aeac0017491ebea}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!GetResponse@{GetResponse}}
+\index{GetResponse@{GetResponse}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{GetResponse()}{GetResponse()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+T \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Get\+Response (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the response value. Will throw an exception if called before the response is received. 
+
+\begin{DoxyReturn}{Returns}
+T response 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_ae2486bde1ce342d9e98b7138aa0a1819}\label{classswarmio_1_1services_1_1Awaiter_ae2486bde1ce342d9e98b7138aa0a1819}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!HasException@{HasException}}
+\index{HasException@{HasException}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{HasException()}{HasException()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Has\+Exception (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Checks whether the result of the processing has ended with an exception. 
+
+\begin{DoxyReturn}{Returns}
+True if an exception will be thrown by \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_ada71a0247fcb37973aeac0017491ebea}{Get\+Response()}}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_aab9fb4a8d145d5f426fd481bff11bf9c}\label{classswarmio_1_1services_1_1Awaiter_aab9fb4a8d145d5f426fd481bff11bf9c}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!IsFinished@{IsFinished}}
+\index{IsFinished@{IsFinished}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{IsFinished()}{IsFinished()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+virtual bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Is\+Finished (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Check whether the last message has been received. 
+
+\begin{DoxyReturn}{Returns}
+True if no further messages should be processed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_a0e5b416e648c9af0db2f5a5f3e284970}\label{classswarmio_1_1services_1_1Awaiter_a0e5b416e648c9af0db2f5a5f3e284970}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!ReceiveMessage@{ReceiveMessage}}
+\index{ReceiveMessage@{ReceiveMessage}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ReceiveMessage()}{ReceiveMessage()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+virtual bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Receive\+Message (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{sender,  }\item[{const data\+::\+Message $\ast$}]{message }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Delivery point of all messages. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sender} & The node that has sent the message \\
+\hline
+{\em message} & The message itself \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the message had been processed and should not be forwarded to other mailboxes 
+\end{DoxyReturn}
+
+
+Reimplemented from \mbox{\hyperlink{classswarmio_1_1Mailbox_a3b0333451a105645c1004657c9a61dcf}{swarmio\+::\+Mailbox}}.
+
+\mbox{\Hypertarget{classswarmio_1_1services_1_1Awaiter_aff31dcf0ae301bbadcfe60bf7dced793}\label{classswarmio_1_1services_1_1Awaiter_aff31dcf0ae301bbadcfe60bf7dced793}} 
+\index{swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}!WaitForResponse@{WaitForResponse}}
+\index{WaitForResponse@{WaitForResponse}!swarmio::services::Awaiter$<$ T $>$@{swarmio::services::Awaiter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{WaitForResponse()}{WaitForResponse()}}
+{\footnotesize\ttfamily template$<$class T $>$ \\
+bool \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{swarmio\+::services\+::\+Awaiter}}$<$ T $>$\+::\+Wait\+For\+Response (\begin{DoxyParamCaption}\item[{const std\+::chrono\+::milliseconds \&}]{timeout }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Wait for the response to become available or util the timeout period ellapses. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em timeout} & Time to wait \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the response has been received. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/services/Awaiter.\+h\end{DoxyCompactItemize}

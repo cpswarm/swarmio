@@ -1,0 +1,37 @@
+\hypertarget{PeriodicService_8h_source}{}\doxysection{Periodic\+Service.\+h}
+\label{PeriodicService_8h_source}\index{include/swarmio/services/PeriodicService.h@{include/swarmio/services/PeriodicService.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/Mailbox.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <thread>}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{keyword}{namespace }swarmio::services}
+\DoxyCodeLine{7 \{}
+\DoxyCodeLine{13     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService}{PeriodicService}} : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}}
+\DoxyCodeLine{14     \{}
+\DoxyCodeLine{15         \textcolor{keyword}{private}:}
+\DoxyCodeLine{16 }
+\DoxyCodeLine{21             std::thread* \_worker = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{27             std::atomic<bool> \_shutdownRequested;}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{33             std::chrono::milliseconds \_period;}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{39             \textcolor{keywordtype}{void} Worker();}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41         \textcolor{keyword}{protected}:}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{49             \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a3e563f0682bc42d8282b136bc8647831}{PeriodicService}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint, std::chrono::milliseconds period)}
+\DoxyCodeLine{50                 : \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}(endpoint), \_shutdownRequested(false), \_period(period), \_worker(nullptr) \{ \}}
+\DoxyCodeLine{51 }
+\DoxyCodeLine{57             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a7fe36b4cfe985134ad5a56b1c13190c9}{MailboxWasConnected}}() noexcept override;}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{64             virtual \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a06cb5b60b4598afd92fdc7a94fe87656}{MailboxWillBeDisconnected}}() noexcept override;}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{70             virtual \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1services_1_1PeriodicService_a4902d21c3526f8cd549785e14c0e8cd9}{Update}}() = 0;}
+\DoxyCodeLine{71     \};}
+\DoxyCodeLine{72 \}}
+
+\end{DoxyCode}

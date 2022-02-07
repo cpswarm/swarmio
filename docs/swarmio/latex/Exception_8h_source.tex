@@ -1,0 +1,30 @@
+\hypertarget{Exception_8h_source}{}\doxysection{Exception.\+h}
+\label{Exception_8h_source}\index{include/swarmio/Exception.h@{include/swarmio/Exception.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <exception>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{5 }
+\DoxyCodeLine{6 \textcolor{keyword}{namespace }swarmio}
+\DoxyCodeLine{7 \{}
+\DoxyCodeLine{12     \textcolor{keyword}{class }SWARMIO\_API \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}} : \textcolor{keyword}{public} std::exception}
+\DoxyCodeLine{13     \{}
+\DoxyCodeLine{14         \textcolor{keyword}{private}:}
+\DoxyCodeLine{15         }
+\DoxyCodeLine{20             std::string \_message;}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22         \textcolor{keyword}{public}:}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{29             \mbox{\hyperlink{classswarmio_1_1Exception_a345b32a6661c903dd85bee143726e16b}{Exception}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* message)}
+\DoxyCodeLine{30                 : \_message(message) \{ \}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{37             \textcolor{keyword}{const} \textcolor{keywordtype}{char}* \mbox{\hyperlink{classswarmio_1_1Exception_a766cf267024870d20b87592b9ec711ca}{what}}() const noexcept\textcolor{keyword}{ override}}
+\DoxyCodeLine{38 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{39                 \textcolor{keywordflow}{return} \_message.c\_str();}
+\DoxyCodeLine{40             \}}
+\DoxyCodeLine{41     \};}
+\DoxyCodeLine{42 \}}
+
+\end{DoxyCode}

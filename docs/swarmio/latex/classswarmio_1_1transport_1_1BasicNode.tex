@@ -1,0 +1,112 @@
+\hypertarget{classswarmio_1_1transport_1_1BasicNode}{}\doxysection{swarmio\+::transport\+::Basic\+Node Class Reference}
+\label{classswarmio_1_1transport_1_1BasicNode}\index{swarmio::transport::BasicNode@{swarmio::transport::BasicNode}}
+
+
+A simple \mbox{\hyperlink{classswarmio_1_1Node}{Node}} with a UUID.  
+
+
+
+
+{\ttfamily \#include $<$Basic\+Node.\+h$>$}
+
+Inheritance diagram for swarmio\+::transport\+::Basic\+Node\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classswarmio_1_1transport_1_1BasicNode}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_ad10eef49fcc6535da3ef0fed3651dcb3}{Basic\+Node}} (const std\+::string \&uuid, const std\+::string \&name, const std\+::string \&device\+Class)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode}{Basic\+Node}} object. \end{DoxyCompactList}\item 
+virtual const std\+::string \& \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a3c890bf5a4a05ded21eea92f808b3ad5}{Get\+UUID}} () const override
+\begin{DoxyCompactList}\small\item\em Get the unique identifier of the node. \end{DoxyCompactList}\item 
+virtual const std\+::string \& \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a11cc187a7bdcd039dcd7a07e1af6efe1}{Get\+Name}} () const override
+\begin{DoxyCompactList}\small\item\em Returns the (possibly non-\/unique) name of the node. \end{DoxyCompactList}\item 
+virtual const std\+::string \& \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode_a274fd871c3b523f2e8af27579e732c9d}{Get\+Device\+Class}} () const override
+\begin{DoxyCompactList}\small\item\em Get the class of the underlying device. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A simple \mbox{\hyperlink{classswarmio_1_1Node}{Node}} with a UUID. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1transport_1_1BasicNode_ad10eef49fcc6535da3ef0fed3651dcb3}\label{classswarmio_1_1transport_1_1BasicNode_ad10eef49fcc6535da3ef0fed3651dcb3}} 
+\index{swarmio::transport::BasicNode@{swarmio::transport::BasicNode}!BasicNode@{BasicNode}}
+\index{BasicNode@{BasicNode}!swarmio::transport::BasicNode@{swarmio::transport::BasicNode}}
+\doxysubsubsection{\texorpdfstring{BasicNode()}{BasicNode()}}
+{\footnotesize\ttfamily swarmio\+::transport\+::\+Basic\+Node\+::\+Basic\+Node (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{uuid,  }\item[{const std\+::string \&}]{name,  }\item[{const std\+::string \&}]{device\+Class }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicNode}{Basic\+Node}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em uuid} & Unique identifier \\
+\hline
+{\em name} & Discoverable name \\
+\hline
+{\em device\+Class} & Device class \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1transport_1_1BasicNode_a274fd871c3b523f2e8af27579e732c9d}\label{classswarmio_1_1transport_1_1BasicNode_a274fd871c3b523f2e8af27579e732c9d}} 
+\index{swarmio::transport::BasicNode@{swarmio::transport::BasicNode}!GetDeviceClass@{GetDeviceClass}}
+\index{GetDeviceClass@{GetDeviceClass}!swarmio::transport::BasicNode@{swarmio::transport::BasicNode}}
+\doxysubsubsection{\texorpdfstring{GetDeviceClass()}{GetDeviceClass()}}
+{\footnotesize\ttfamily virtual const std\+::string \& swarmio\+::transport\+::\+Basic\+Node\+::\+Get\+Device\+Class (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the class of the underlying device. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classswarmio_1_1Node_ab42f6650d87f177d045cd915352d9b41}{swarmio\+::\+Node}}.
+
+\mbox{\Hypertarget{classswarmio_1_1transport_1_1BasicNode_a11cc187a7bdcd039dcd7a07e1af6efe1}\label{classswarmio_1_1transport_1_1BasicNode_a11cc187a7bdcd039dcd7a07e1af6efe1}} 
+\index{swarmio::transport::BasicNode@{swarmio::transport::BasicNode}!GetName@{GetName}}
+\index{GetName@{GetName}!swarmio::transport::BasicNode@{swarmio::transport::BasicNode}}
+\doxysubsubsection{\texorpdfstring{GetName()}{GetName()}}
+{\footnotesize\ttfamily virtual const std\+::string \& swarmio\+::transport\+::\+Basic\+Node\+::\+Get\+Name (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Returns the (possibly non-\/unique) name of the node. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classswarmio_1_1Node_a2bc2e65769f8d0e8271d6fe2d10e44e1}{swarmio\+::\+Node}}.
+
+\mbox{\Hypertarget{classswarmio_1_1transport_1_1BasicNode_a3c890bf5a4a05ded21eea92f808b3ad5}\label{classswarmio_1_1transport_1_1BasicNode_a3c890bf5a4a05ded21eea92f808b3ad5}} 
+\index{swarmio::transport::BasicNode@{swarmio::transport::BasicNode}!GetUUID@{GetUUID}}
+\index{GetUUID@{GetUUID}!swarmio::transport::BasicNode@{swarmio::transport::BasicNode}}
+\doxysubsubsection{\texorpdfstring{GetUUID()}{GetUUID()}}
+{\footnotesize\ttfamily virtual const std\+::string \& swarmio\+::transport\+::\+Basic\+Node\+::\+Get\+UUID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the unique identifier of the node. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classswarmio_1_1Node_ad2acd95e920d917d335e32565a82a393}{swarmio\+::\+Node}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/transport/Basic\+Node.\+h\end{DoxyCompactItemize}

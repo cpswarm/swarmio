@@ -1,0 +1,94 @@
+\hypertarget{classswarmio_1_1profiles_1_1MemberProfile}{}\doxysection{swarmio\+::profiles\+::Member\+Profile Class Reference}
+\label{classswarmio_1_1profiles_1_1MemberProfile}\index{swarmio::profiles::MemberProfile@{swarmio::profiles::MemberProfile}}
+
+
+Service profile for swarm members.  
+
+
+
+
+{\ttfamily \#include $<$Member\+Profile.\+h$>$}
+
+Inheritance diagram for swarmio\+::profiles\+::Member\+Profile\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classswarmio_1_1profiles_1_1MemberProfile}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a3fdf21673d47cf0cad9d90bc6b4d09d4}{Member\+Profile}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile}{Member\+Profile}}. \end{DoxyCompactList}\item 
+swarmio\+::services\+::event\+::\+Service \& \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a5881ba60663719a9a9dc699841971d3b}{Get\+Event\+Service}} ()
+\begin{DoxyCompactList}\small\item\em Get a reference for the Event service. \end{DoxyCompactList}\item 
+swarmio\+::services\+::keyvalue\+::\+Service \& \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile_a21fa8da51c606f5fb08ae673e919e365}{Get\+Key\+Value\+Service}} ()
+\begin{DoxyCompactList}\small\item\em Get a reference for the Key-\/\+Value service. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1MemberProfile_aea68b83edd666129d649e3d71ddc92fc}\label{classswarmio_1_1profiles_1_1MemberProfile_aea68b83edd666129d649e3d71ddc92fc}} 
+virtual {\bfseries $\sim$\+Member\+Profile} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile}{Member\+Profile}} object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1MemberProfile_a8c5348b2721ef8385b7b8a2f247568ac}\label{classswarmio_1_1profiles_1_1MemberProfile_a8c5348b2721ef8385b7b8a2f247568ac}} 
+swarmio\+::services\+::keyvalue\+::\+Service {\bfseries \+\_\+keyvalue\+Service}
+\begin{DoxyCompactList}\small\item\em Key-\/\+Value service. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1MemberProfile_afda1698b2202141a38c3834430546904}\label{classswarmio_1_1profiles_1_1MemberProfile_afda1698b2202141a38c3834430546904}} 
+swarmio\+::services\+::event\+::\+Service {\bfseries \+\_\+event\+Service}
+\begin{DoxyCompactList}\small\item\em Event service. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Service profile for swarm members. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1MemberProfile_a3fdf21673d47cf0cad9d90bc6b4d09d4}\label{classswarmio_1_1profiles_1_1MemberProfile_a3fdf21673d47cf0cad9d90bc6b4d09d4}} 
+\index{swarmio::profiles::MemberProfile@{swarmio::profiles::MemberProfile}!MemberProfile@{MemberProfile}}
+\index{MemberProfile@{MemberProfile}!swarmio::profiles::MemberProfile@{swarmio::profiles::MemberProfile}}
+\doxysubsubsection{\texorpdfstring{MemberProfile()}{MemberProfile()}}
+{\footnotesize\ttfamily swarmio\+::profiles\+::\+Member\+Profile\+::\+Member\+Profile (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classswarmio_1_1profiles_1_1MemberProfile}{Member\+Profile}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1MemberProfile_a5881ba60663719a9a9dc699841971d3b}\label{classswarmio_1_1profiles_1_1MemberProfile_a5881ba60663719a9a9dc699841971d3b}} 
+\index{swarmio::profiles::MemberProfile@{swarmio::profiles::MemberProfile}!GetEventService@{GetEventService}}
+\index{GetEventService@{GetEventService}!swarmio::profiles::MemberProfile@{swarmio::profiles::MemberProfile}}
+\doxysubsubsection{\texorpdfstring{GetEventService()}{GetEventService()}}
+{\footnotesize\ttfamily swarmio\+::services\+::event\+::\+Service \& swarmio\+::profiles\+::\+Member\+Profile\+::\+Get\+Event\+Service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a reference for the Event service. 
+
+\begin{DoxyReturn}{Returns}
+swarmio\+::services\+::event\+::\+Service\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1MemberProfile_a21fa8da51c606f5fb08ae673e919e365}\label{classswarmio_1_1profiles_1_1MemberProfile_a21fa8da51c606f5fb08ae673e919e365}} 
+\index{swarmio::profiles::MemberProfile@{swarmio::profiles::MemberProfile}!GetKeyValueService@{GetKeyValueService}}
+\index{GetKeyValueService@{GetKeyValueService}!swarmio::profiles::MemberProfile@{swarmio::profiles::MemberProfile}}
+\doxysubsubsection{\texorpdfstring{GetKeyValueService()}{GetKeyValueService()}}
+{\footnotesize\ttfamily swarmio\+::services\+::keyvalue\+::\+Service \& swarmio\+::profiles\+::\+Member\+Profile\+::\+Get\+Key\+Value\+Service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get a reference for the Key-\/\+Value service. 
+
+\begin{DoxyReturn}{Returns}
+swarmio\+::services\+::keyvalue\+::\+Service\& 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/profiles/Member\+Profile.\+h\end{DoxyCompactItemize}

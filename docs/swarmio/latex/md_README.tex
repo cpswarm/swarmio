@@ -1,0 +1,89 @@
+\href{https://github.com/cpswarm/swarmio/tags}{\texttt{ }}
+
+The CPSwarm Communication Library provides a unified interface that tools and swarm members can use to interact with each other. \hypertarget{md_README_autotoc_md1}{}\doxysection{Getting started}\label{md_README_autotoc_md1}
+For more information, see the \href{https://github.com/cpswarm/swarmio/wiki}{\texttt{ WIKI}}.\hypertarget{md_README_autotoc_md2}{}\doxysection{Deployment}\label{md_README_autotoc_md2}
+Packages are built continuously with \href{https://pipelines.linksmart.eu/browse/CPSW-ALS/latest}{\texttt{ Bamboo}}.\hypertarget{md_README_autotoc_md3}{}\doxysection{Build}\label{md_README_autotoc_md3}
+\hypertarget{md_README_autotoc_md4}{}\doxysubsection{Building on Linux}\label{md_README_autotoc_md4}
+Build should work on any Linux distribution, but packaging and architecture detection will only work on Debian and Ubuntu. By default, everything is compiled for the host architecture, but cross-\/compilation is available. Currently armhf and arm64 are supported if the required tools are available. The default compiler is clang, but GCC can also be used. Builds were tested with Ubuntu 16.\+04 and 18.\+04, with all the latest updates installed.
+
+There are three build modes you can choose from\+: \begin{DoxyVerb} - DEVELOPMENT (default)
+\end{DoxyVerb}
+
+
+Development mode will build and install all components into one subdirectory under the build directory. Useful when an IDE needs a full include path and for debugging. By default, products are installed into the \char`\"{}devtree-\/$<$\+ARCH$>$\char`\"{} subdirectory.
+
+\begin{DoxyVerb}- PACKAGE
+\end{DoxyVerb}
+
+
+Package mode will build .deb packages for each target -\/ and set /opt/swarmio as the install prefix. Find the packages under the \char`\"{}packages\char`\"{} subdirectory.
+
+\begin{DoxyVerb}- INSTALL
+\end{DoxyVerb}
+
+
+Install will install all outputs onto the local machine, by default under /opt/swarmio.
+
+To build, create a new directory outside the source tree, and issue the following commands inside it\+: \begin{DoxyVerb} cmake <PATH TO SOURCE> [optional parameters]
+ cmake --build .
+\end{DoxyVerb}
+
+
+Optional parameters\+: \begin{DoxyVerb} -DSWARMIO_BUILD_MODE=<MODE> (DEVELOPMENT, PACKAGE or INSTALL)
+\end{DoxyVerb}
+ Specifies build mode (see above). DEVELOPMENT build will generate debug executables, while PACKAGE and INSTALL builds will compile with release flags (and debug symbols). \begin{DoxyVerb}-DCMAKE_BUILD_TYPE=<TYPE> (Debug, Release, RelWithDebInfo)
+\end{DoxyVerb}
+ Override build type derrived from build mode. See CMake docs for more info. \begin{DoxyVerb}-DCMAKE_INSTALL_PREFIX=<PATH>
+\end{DoxyVerb}
+ Overrides the installation directory. For DEVELOPMENT and INSTALL build, this will override the output directory. For PACKAGE builds, it will override the installation prefix of the generated packages. \begin{DoxyVerb}-DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (armhf or arm64)
+\end{DoxyVerb}
+ Enables cross-\/compilation -\/ required tools must already be installed. On Ubuntu systems, crossbuild-\/essential-\/$<$\+ARCH$>$ packages should do the trick. \begin{DoxyVerb}-DSWARMIO_BUILD_ROS_NODE=ON
+\end{DoxyVerb}
+ If turned on, swarmros will be built. \begin{DoxyVerb}-DSWARMIO_MULTISTRAP_CONFIGURATION=<CONFIG>
+\end{DoxyVerb}
+ If configured, a full multistrap sysroot will be initialized before cross-\/compilation. Requires multistrap and a bunch of other tools to be installed. Currently supported configurations\+:
+\begin{DoxyItemize}
+\item xenial (Ubuntu 16.\+04)
+\item xenial-\/ros (Ubuntu 16.\+04 with ROS Kinetic Kame)
+\item bionic (Ubuntu 18.\+04)
+\item bionic-\/ros (Ubuntu 18.\+04 with ROS Melodic Morenia)
+\end{DoxyItemize}
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{-\/DSWARMIO\_SYSROOT=<SYSROOT PATH>}
+
+\end{DoxyCode}
+
+
+If multistrap is not used, a sysroot needs to be manually set for cross-\/compilation to work. Ensure that the system image contains no absolute symbolic links before using it. \begin{DoxyVerb}-DSWARMIO_GCC_VERSION=<GCC VERSION>
+\end{DoxyVerb}
+ If multistrap is not used, this should be set to indicate the GCC version present in the manually specified sysroot in order to help compilers find the correct libraries to link against. \begin{DoxyVerb}-DSWARMIO_ROS_PREFIX=<PATH>
+\end{DoxyVerb}
+ Specifies the location of the ROS installation to use when building the ROS node. If not specified, the script will try to automatically detect it -\/ by looking for the default installation directory of Kinetic Kame and Melodic Morenia. \begin{DoxyVerb}-DSWARMIO_PREFER_GCC=ON
+\end{DoxyVerb}
+ If specified, GCC will be used instead of clang. Please note that cross-\/compilation will most likely only work if the same operating system (with a different architecture) is used on the host machine. Requires GCC 6 or later.\hypertarget{md_README_autotoc_md5}{}\doxysubsection{Building on Windows}\label{md_README_autotoc_md5}
+On Windows, only DEVELOPMENT mode is supported. Building the ROS node and multistrap environments are not supported. Basic build command is the same as on Linux\+: \begin{DoxyVerb} cmake <PATH TO SOURCE> [optional parameters]
+ cmake --build .
+\end{DoxyVerb}
+
+
+Optional parameters\+: \begin{DoxyVerb} -DCMAKE_BUILD_TYPE=<TYPE> (Debug, Release, RelWithDebInfo)
+\end{DoxyVerb}
+ Overrides the default build mode (Debug). \begin{DoxyVerb}-DCMAKE_INSTALL_PREFIX=<PATH>
+\end{DoxyVerb}
+ Overrides the output directory. \begin{DoxyVerb}-DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (x86 or x64)
+\end{DoxyVerb}
+ Specifies whether to generate 32 or 64 bit builds.\hypertarget{md_README_autotoc_md6}{}\doxysubsection{Quick example}\label{md_README_autotoc_md6}
+If you want to generate packages for an armhf target, with ROS support turned on, targeting Ubuntu Xenial\+: \begin{DoxyVerb}cmake <SOURCE_DIR> -DSWARMIO_BUILD_MODE=PACKAGE
+                   -DSWARMIO_TARGET_ARCHITECTURE=armhf
+                   -DSWARMIO_MULTISTRAP_CONFIGURATION=xenial-ros
+                   -DSWARMIO_BUILD_ROS_NODE=ON
+cmake --build .
+\end{DoxyVerb}
+ All output packages will be placed into the packages subdirectory.\hypertarget{md_README_autotoc_md7}{}\doxysection{Contributing}\label{md_README_autotoc_md7}
+Contributions are welcome.
+
+Please fork, make your changes, and submit a pull request. For major changes, please open an issue first and discuss it with the other authors.\hypertarget{md_README_autotoc_md8}{}\doxysection{Affiliation}\label{md_README_autotoc_md8}
+ ~\newline
+ This work is supported by the European Commission through the \href{https://cpswarm.eu}{\texttt{ CPSwarm H2020 project}} under grant no. 731946. 

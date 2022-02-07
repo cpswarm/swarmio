@@ -1,0 +1,188 @@
+\hypertarget{InMemoryParameter_8h_source}{}\doxysection{In\+Memory\+Parameter.\+h}
+\label{InMemoryParameter_8h_source}\index{include/swarmio/simulator/InMemoryParameter.h@{include/swarmio/simulator/InMemoryParameter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/services/keyvalue/Target.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/data/Variant.pb.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <swarmio/data/discovery/Schema.pb.h>}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{namespace }swarmio::simulator }
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{14     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter}{InMemoryParameter}} final : \textcolor{keyword}{public} services::keyvalue::Target}
+\DoxyCodeLine{15     \{}
+\DoxyCodeLine{16         \textcolor{keyword}{private}:}
+\DoxyCodeLine{17 }
+\DoxyCodeLine{22             data::Variant \_value;}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{28             data::discovery::Type \_type;}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{34             \textcolor{keywordtype}{bool} \_readOnly;}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{40             std::string \_path;}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42         \textcolor{keyword}{public}:}
+\DoxyCodeLine{43             }
+\DoxyCodeLine{50             \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_af7f5221a0566a0c6a598d34e47912f5b}{InMemoryParameter}}(\textcolor{keyword}{const} std::string\& path, \textcolor{keywordtype}{bool} value, \textcolor{keywordtype}{bool} readOnly = \textcolor{keyword}{false})}
+\DoxyCodeLine{51                 : \_readOnly(readOnly), \_path(path)}
+\DoxyCodeLine{52             \{}
+\DoxyCodeLine{53                 \_type = data::discovery::Type::BOOL;}
+\DoxyCodeLine{54                 \_value.set\_bool\_value(value);}
+\DoxyCodeLine{55             \}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{63             \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a2bfc4d8883c3d4988f94ff9e960d02c0}{InMemoryParameter}}(\textcolor{keyword}{const} std::string\& path, \textcolor{keyword}{const} std::string\& value, \textcolor{keywordtype}{bool} readOnly = \textcolor{keyword}{false})}
+\DoxyCodeLine{64                 : \_readOnly(readOnly), \_path(path)}
+\DoxyCodeLine{65             \{}
+\DoxyCodeLine{66                 \_type = data::discovery::Type::STRING;}
+\DoxyCodeLine{67                 \_value.set\_string\_value(value);}
+\DoxyCodeLine{68             \}}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{76             \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_ae8fe1c8ebf88b0bbe143066effdb9c71}{InMemoryParameter}}(\textcolor{keyword}{const} std::string\& path, \textcolor{keyword}{const} \textcolor{keywordtype}{char}* value, \textcolor{keywordtype}{bool} readOnly = \textcolor{keyword}{false})}
+\DoxyCodeLine{77                 : \_readOnly(readOnly), \_path(path)}
+\DoxyCodeLine{78             \{}
+\DoxyCodeLine{79                 \_type = data::discovery::Type::STRING;}
+\DoxyCodeLine{80                 \_value.set\_string\_value(value);}
+\DoxyCodeLine{81             \}}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{89             \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a7edf9ca74b4386cd500b97c2d31027d7}{InMemoryParameter}}(\textcolor{keyword}{const} std::string\& path, \textcolor{keywordtype}{int} value, \textcolor{keywordtype}{bool} readOnly = \textcolor{keyword}{false})}
+\DoxyCodeLine{90                 : \_readOnly(readOnly), \_path(path)}
+\DoxyCodeLine{91             \{}
+\DoxyCodeLine{92                 \_type = data::discovery::Type::INT;}
+\DoxyCodeLine{93                 \_value.set\_int\_value(value);}
+\DoxyCodeLine{94             \}}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{102             \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_afcc1ce75da4f1d9c78c375199e16cd68}{InMemoryParameter}}(\textcolor{keyword}{const} std::string\& path, \textcolor{keywordtype}{double} value, \textcolor{keywordtype}{bool} readOnly = \textcolor{keyword}{false})}
+\DoxyCodeLine{103                 : \_readOnly(readOnly), \_path(path)}
+\DoxyCodeLine{104             \{}
+\DoxyCodeLine{105                 \_type = data::discovery::Type::DOUBLE;}
+\DoxyCodeLine{106                 \_value.set\_double\_value(value);}
+\DoxyCodeLine{107             \}}
+\DoxyCodeLine{108 }
+\DoxyCodeLine{114             \textcolor{keyword}{virtual} data::Variant \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a2af178f861030982cad4214009f1bd2d}{Get}}(\textcolor{keyword}{const} std::string\& path)\textcolor{keyword}{ override}}
+\DoxyCodeLine{115 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{116                 \textcolor{keywordflow}{if} (path == \_path)}
+\DoxyCodeLine{117                 \{}
+\DoxyCodeLine{118                     \textcolor{keywordflow}{return} \_value;}
+\DoxyCodeLine{119                 \}}
+\DoxyCodeLine{120                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{121                 \{}
+\DoxyCodeLine{122                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}In memory parameter queried for unknown resource path."{}});}
+\DoxyCodeLine{123                 \}}
+\DoxyCodeLine{124             \}}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{131             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a5c769c07c9a2dbdc48846fa93cea5a5d}{Set}}(\textcolor{keyword}{const} std::string\& path, \textcolor{keyword}{const} data::Variant\& value)\textcolor{keyword}{ override}}
+\DoxyCodeLine{132 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{133                 \textcolor{keywordflow}{if} (path == \_path)}
+\DoxyCodeLine{134                 \{    }
+\DoxyCodeLine{135                     \textcolor{keywordflow}{if} (\_readOnly)}
+\DoxyCodeLine{136                     \{}
+\DoxyCodeLine{137                         \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Parameter is read-\/only."{}});}
+\DoxyCodeLine{138                     \}                   }
+\DoxyCodeLine{139                     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{140                     \{}
+\DoxyCodeLine{141                         \textcolor{keywordflow}{switch} (value.value\_case())}
+\DoxyCodeLine{142                         \{}
+\DoxyCodeLine{143                             \textcolor{keywordflow}{case} data::Variant::ValueCase::kBoolValue:}
+\DoxyCodeLine{144                                 \textcolor{keywordflow}{if} (\_type == data::discovery::Type::BOOL)}
+\DoxyCodeLine{145                                 \{}
+\DoxyCodeLine{146                                     \_value = value;}
+\DoxyCodeLine{147                                 \}}
+\DoxyCodeLine{148                                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{149                                 \{}
+\DoxyCodeLine{150                                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Invalid type for parameter."{}});}
+\DoxyCodeLine{151                                 \}}
+\DoxyCodeLine{152                                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{153 }
+\DoxyCodeLine{154                             \textcolor{keywordflow}{case} data::Variant::ValueCase::kDoubleValue:}
+\DoxyCodeLine{155                                 \textcolor{keywordflow}{if} (\_type == data::discovery::Type::DOUBLE)}
+\DoxyCodeLine{156                                 \{}
+\DoxyCodeLine{157                                     \_value = value;}
+\DoxyCodeLine{158                                 \}}
+\DoxyCodeLine{159                                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{160                                 \{}
+\DoxyCodeLine{161                                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Invalid type for parameter."{}});}
+\DoxyCodeLine{162                                 \}}
+\DoxyCodeLine{163                                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165                             \textcolor{keywordflow}{case} data::Variant::ValueCase::kIntValue:}
+\DoxyCodeLine{166                                 \textcolor{keywordflow}{if} (\_type == data::discovery::Type::INT)}
+\DoxyCodeLine{167                                 \{}
+\DoxyCodeLine{168                                     \_value = value;}
+\DoxyCodeLine{169                                 \}}
+\DoxyCodeLine{170                                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{171                                 \{}
+\DoxyCodeLine{172                                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Invalid type for parameter."{}});}
+\DoxyCodeLine{173                                 \}}
+\DoxyCodeLine{174                                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176                             \textcolor{keywordflow}{case} data::Variant::ValueCase::kStringValue:}
+\DoxyCodeLine{177                                 \textcolor{keywordflow}{if} (\_type == data::discovery::Type::STRING)}
+\DoxyCodeLine{178                                 \{}
+\DoxyCodeLine{179                                     \_value = value;}
+\DoxyCodeLine{180                                 \}}
+\DoxyCodeLine{181                                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{182                                 \{}
+\DoxyCodeLine{183                                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Invalid type for parameter."{}});}
+\DoxyCodeLine{184                                 \}}
+\DoxyCodeLine{185                                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{186 }
+\DoxyCodeLine{187                             \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{188                                 \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Unknown type for parameter."{}});}
+\DoxyCodeLine{189                         \}  }
+\DoxyCodeLine{190                     \}}
+\DoxyCodeLine{191                     }
+\DoxyCodeLine{192                 \}}
+\DoxyCodeLine{193                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{194                 \{}
+\DoxyCodeLine{195                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}In memory parameter queried for unknown resource path."{}});}
+\DoxyCodeLine{196                 \}}
+\DoxyCodeLine{197             \}}
+\DoxyCodeLine{198 }
+\DoxyCodeLine{204             \textcolor{keyword}{virtual} data::discovery::Field \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a78090aa9b0800bce5faabffd76cc6e17}{GetFieldDescriptor}}(\textcolor{keyword}{const} std::string\& path)\textcolor{keyword}{ const override}}
+\DoxyCodeLine{205 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{206                 \textcolor{keywordflow}{if} (path == \_path)}
+\DoxyCodeLine{207                 \{    }
+\DoxyCodeLine{208                     data::discovery::Field field;}
+\DoxyCodeLine{209                     field.set\_type(\_type);}
+\DoxyCodeLine{210                     \textcolor{keywordflow}{return} field;}
+\DoxyCodeLine{211                 \}}
+\DoxyCodeLine{212                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{213                 \{}
+\DoxyCodeLine{214                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}In memory parameter queried for unknown resource path."{}});}
+\DoxyCodeLine{215                 \}}
+\DoxyCodeLine{216             \}}
+\DoxyCodeLine{217 }
+\DoxyCodeLine{223             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a552d0f2ff6accf91fc6ac92a9650fb2f}{CanWrite}}(\textcolor{keyword}{const} std::string\& path) \textcolor{keyword}{const} \textcolor{keyword}{noexcept} \textcolor{keyword}{override}}
+\DoxyCodeLine{224             \{}
+\DoxyCodeLine{225                 \textcolor{keywordflow}{if} (path == \_path)}
+\DoxyCodeLine{226                 \{    }
+\DoxyCodeLine{227                     \textcolor{keywordflow}{return} !\_readOnly;  }
+\DoxyCodeLine{228                 \}}
+\DoxyCodeLine{229                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{230                 \{}
+\DoxyCodeLine{231                     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{232                 \}}
+\DoxyCodeLine{233             \}}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{240             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_aedd1b3224af0c83d75844d91c38179bc}{CanRead}}(\textcolor{keyword}{const} std::string\& path) \textcolor{keyword}{const} \textcolor{keyword}{noexcept} \textcolor{keyword}{override}}
+\DoxyCodeLine{241             \{}
+\DoxyCodeLine{242                 \textcolor{keywordflow}{if} (path == \_path)}
+\DoxyCodeLine{243                 \{    }
+\DoxyCodeLine{244                     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{245                 \}}
+\DoxyCodeLine{246                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{247         \{}
+\DoxyCodeLine{248                     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{249                 \}}
+\DoxyCodeLine{250             \}}
+\DoxyCodeLine{251 }
+\DoxyCodeLine{257             \textcolor{keyword}{const} std::string\& \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_aa48a1ea96749cb0a9a5dc7b72ba867aa}{GetPath}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{258 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{259                 \textcolor{keywordflow}{return} \_path;}
+\DoxyCodeLine{260             \}}
+\DoxyCodeLine{261     \};}
+\DoxyCodeLine{262 \}}
+\DoxyCodeLine{263 }
+
+\end{DoxyCode}

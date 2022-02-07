@@ -1,0 +1,74 @@
+\hypertarget{classswarmio_1_1profiles_1_1ClientProfile}{}\doxysection{swarmio\+::profiles\+::Client\+Profile Class Reference}
+\label{classswarmio_1_1profiles_1_1ClientProfile}\index{swarmio::profiles::ClientProfile@{swarmio::profiles::ClientProfile}}
+
+
+Service profile for non-\/member clients.  
+
+
+
+
+{\ttfamily \#include $<$Client\+Profile.\+h$>$}
+
+Inheritance diagram for swarmio\+::profiles\+::Client\+Profile\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{classswarmio_1_1profiles_1_1ClientProfile}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile_a5ec5461fba90ceb7cd2723fccabf9a3d}{Client\+Profile}} (\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$endpoint)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile}{Client\+Profile}}. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile_a325c7a354c107182b58a1bc6932ed191}{Cached\+Discovery\+Response\+Was\+Updated}} (const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$node, const data\+::discovery\+::\+Response \&response) override
+\begin{DoxyCompactList}\small\item\em Receives notifications when discovery information becomes available. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1ClientProfile_a4ee8e368b5e4a51ed477299f730be392}\label{classswarmio_1_1profiles_1_1ClientProfile_a4ee8e368b5e4a51ed477299f730be392}} 
+virtual {\bfseries $\sim$\+Client\+Profile} () override
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+Service profile for non-\/member clients. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1ClientProfile_a5ec5461fba90ceb7cd2723fccabf9a3d}\label{classswarmio_1_1profiles_1_1ClientProfile_a5ec5461fba90ceb7cd2723fccabf9a3d}} 
+\index{swarmio::profiles::ClientProfile@{swarmio::profiles::ClientProfile}!ClientProfile@{ClientProfile}}
+\index{ClientProfile@{ClientProfile}!swarmio::profiles::ClientProfile@{swarmio::profiles::ClientProfile}}
+\doxysubsubsection{\texorpdfstring{ClientProfile()}{ClientProfile()}}
+{\footnotesize\ttfamily swarmio\+::profiles\+::\+Client\+Profile\+::\+Client\+Profile (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} $\ast$}]{endpoint }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct a new \mbox{\hyperlink{classswarmio_1_1profiles_1_1ClientProfile}{Client\+Profile}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em endpoint} & \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}} \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1profiles_1_1ClientProfile_a325c7a354c107182b58a1bc6932ed191}\label{classswarmio_1_1profiles_1_1ClientProfile_a325c7a354c107182b58a1bc6932ed191}} 
+\index{swarmio::profiles::ClientProfile@{swarmio::profiles::ClientProfile}!CachedDiscoveryResponseWasUpdated@{CachedDiscoveryResponseWasUpdated}}
+\index{CachedDiscoveryResponseWasUpdated@{CachedDiscoveryResponseWasUpdated}!swarmio::profiles::ClientProfile@{swarmio::profiles::ClientProfile}}
+\doxysubsubsection{\texorpdfstring{CachedDiscoveryResponseWasUpdated()}{CachedDiscoveryResponseWasUpdated()}}
+{\footnotesize\ttfamily virtual void swarmio\+::profiles\+::\+Client\+Profile\+::\+Cached\+Discovery\+Response\+Was\+Updated (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classswarmio_1_1Node}{Node}} $\ast$}]{node,  }\item[{const data\+::discovery\+::\+Response \&}]{response }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Receives notifications when discovery information becomes available. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em node} & \mbox{\hyperlink{classswarmio_1_1Node}{Node}} \\
+\hline
+{\em response} & Discovery response \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/profiles/Client\+Profile.\+h\end{DoxyCompactItemize}

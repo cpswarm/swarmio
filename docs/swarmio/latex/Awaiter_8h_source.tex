@@ -1,0 +1,150 @@
+\hypertarget{Awaiter_8h_source}{}\doxysection{Awaiter.\+h}
+\label{Awaiter_8h_source}\index{include/swarmio/services/Awaiter.h@{include/swarmio/services/Awaiter.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/Mailbox.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/Exception.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <mutex>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <chrono>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <atomic>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <condition\_variable>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <exception>}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{namespace }swarmio::services }
+\DoxyCodeLine{12 \{}
+\DoxyCodeLine{18     \textcolor{keyword}{template} <\textcolor{keyword}{class} T>}
+\DoxyCodeLine{19     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}} : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}} }
+\DoxyCodeLine{20     \{}
+\DoxyCodeLine{21         \textcolor{keyword}{private}:}
+\DoxyCodeLine{22 }
+\DoxyCodeLine{27             uint64\_t \_requestIdentifier;}
+\DoxyCodeLine{28 }
+\DoxyCodeLine{33             T \_response;}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{40             \textcolor{keywordtype}{bool} \_valid;}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{47             std::exception\_ptr \_exception = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{53             std::mutex \_mutex;}
+\DoxyCodeLine{54 }
+\DoxyCodeLine{60             std::condition\_variable \_conditionVariable;}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62         \textcolor{keyword}{protected}:}
+\DoxyCodeLine{63 }
+\DoxyCodeLine{70             \textcolor{keyword}{virtual} T \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aad62709180c5196148d9740e10dca89f}{ExtractResponse}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node, \textcolor{keyword}{const} data::Message* message) = 0;}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{77             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aab9fb4a8d145d5f426fd481bff11bf9c}{IsFinished}}()}
+\DoxyCodeLine{78             \{}
+\DoxyCodeLine{79                 \textcolor{keywordflow}{return} \_valid;}
+\DoxyCodeLine{80             \}}
+\DoxyCodeLine{81 }
+\DoxyCodeLine{82         \textcolor{keyword}{public}:}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{90             \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a4ff54f91cb67addf85c7a7c897041c71}{Awaiter}}(\mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}* endpoint, uint64\_t requestIdentifier)}
+\DoxyCodeLine{91                 : \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}(endpoint), \_requestIdentifier(requestIdentifier), \_valid(false) \{ \}}
+\DoxyCodeLine{92 }
+\DoxyCodeLine{98             \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aefd47edfac3824652ce6799257d4db74}{Awaiter}}(\textcolor{keyword}{const} T\& value)}
+\DoxyCodeLine{99                 : \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}(), \_requestIdentifier(0), \_valid(true), \_response(value) \{ \}}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{106             \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a695d8ba9e9622a15779f7150ed5e6022}{Awaiter}}(\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter}{Awaiter}}\&\& other)}
+\DoxyCodeLine{107                 : \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}(std::move(other))}
+\DoxyCodeLine{108             \{}
+\DoxyCodeLine{109                 \textcolor{comment}{// Lock}}
+\DoxyCodeLine{110                 std::unique\_lock<std::mutex> guard(other.\_mutex);}
+\DoxyCodeLine{111 }
+\DoxyCodeLine{112                 \textcolor{comment}{// Pass event handling to this instance}}
+\DoxyCodeLine{113                 other.FinishMovingTo(\textcolor{keyword}{this});}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115                 \textcolor{comment}{// Copy over values}}
+\DoxyCodeLine{116                 \_valid = other.\_valid;}
+\DoxyCodeLine{117                 \_response = other.\_response;}
+\DoxyCodeLine{118                 \_requestIdentifier = other.\_requestIdentifier;}
+\DoxyCodeLine{119             \}}
+\DoxyCodeLine{120 }
+\DoxyCodeLine{127             T \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_ada71a0247fcb37973aeac0017491ebea}{GetResponse}}()}
+\DoxyCodeLine{128             \{}
+\DoxyCodeLine{129                 std::unique\_lock<std::mutex> guard(\_mutex);}
+\DoxyCodeLine{130                 \textcolor{keywordflow}{if} (\_valid)}
+\DoxyCodeLine{131                 \{}
+\DoxyCodeLine{132                     \textcolor{keywordflow}{if} (\_exception)}
+\DoxyCodeLine{133                     \{}
+\DoxyCodeLine{134                         std::rethrow\_exception(\_exception);}
+\DoxyCodeLine{135                     \}}
+\DoxyCodeLine{136                     \textcolor{keywordflow}{else}}
+\DoxyCodeLine{137                     \{}
+\DoxyCodeLine{138                         \textcolor{keywordflow}{return} \_response;}
+\DoxyCodeLine{139                     \}}
+\DoxyCodeLine{140                 \}}
+\DoxyCodeLine{141                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{142                 \{}
+\DoxyCodeLine{143                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Response is not yet available"{}});}
+\DoxyCodeLine{144                 \}}
+\DoxyCodeLine{145             \}}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{155             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a0e5b416e648c9af0db2f5a5f3e284970}{ReceiveMessage}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* sender, \textcolor{keyword}{const} data::Message* message)\textcolor{keyword}{ override}}
+\DoxyCodeLine{156 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{157                 \textcolor{comment}{// Check if we still need the response and then check the reply\_to field}}
+\DoxyCodeLine{158                 \textcolor{keywordflow}{if} (!\mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aab9fb4a8d145d5f426fd481bff11bf9c}{IsFinished}}() \&\&}
+\DoxyCodeLine{159                     message-\/>header().reply\_to() == \_requestIdentifier)}
+\DoxyCodeLine{160                 \{}
+\DoxyCodeLine{161                     \textcolor{comment}{// Acquire lock}}
+\DoxyCodeLine{162                     std::unique\_lock<std::mutex> guard(\_mutex);}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164                     \textcolor{comment}{// Extract the response}}
+\DoxyCodeLine{165                     \textcolor{keywordflow}{try}}
+\DoxyCodeLine{166                     \{}
+\DoxyCodeLine{167                         \_response = \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aad62709180c5196148d9740e10dca89f}{ExtractResponse}}(sender, message);}
+\DoxyCodeLine{168                         \_exception = \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{169                     \}}
+\DoxyCodeLine{170                     \textcolor{keywordflow}{catch} (...)}
+\DoxyCodeLine{171                     \{}
+\DoxyCodeLine{172                         \_exception = std::current\_exception();}
+\DoxyCodeLine{173                     \}}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{175                     \textcolor{comment}{// Mark as valid and notify all clients}}
+\DoxyCodeLine{176                     \_valid = \textcolor{keyword}{true};}
+\DoxyCodeLine{177                     guard.unlock();}
+\DoxyCodeLine{178                     \_conditionVariable.notify\_all();}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180                     \textcolor{comment}{// Handled}}
+\DoxyCodeLine{181                     \textcolor{keywordflow}{return} \textcolor{keyword}{true};}
+\DoxyCodeLine{182                 \}}
+\DoxyCodeLine{183                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{184                 \{}
+\DoxyCodeLine{185                     \textcolor{comment}{// Not handled}}
+\DoxyCodeLine{186                     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{187                 \}}
+\DoxyCodeLine{188             \}}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{197             \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_aff31dcf0ae301bbadcfe60bf7dced793}{WaitForResponse}}(\textcolor{keyword}{const} std::chrono::milliseconds\& timeout)}
+\DoxyCodeLine{198             \{}
+\DoxyCodeLine{199                 \textcolor{comment}{// Acquire lock}}
+\DoxyCodeLine{200                 std::unique\_lock<std::mutex> guard(\_mutex);}
+\DoxyCodeLine{201 }
+\DoxyCodeLine{202                 \textcolor{comment}{// Wait}}
+\DoxyCodeLine{203                 \textcolor{keywordflow}{return} \_conditionVariable.wait\_for(guard, timeout, [\textcolor{keyword}{this}]\{ \textcolor{keywordflow}{return} \_valid; \});}
+\DoxyCodeLine{204             \}}
+\DoxyCodeLine{205 }
+\DoxyCodeLine{212             \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_ae2486bde1ce342d9e98b7138aa0a1819}{HasException}}()}
+\DoxyCodeLine{213             \{}
+\DoxyCodeLine{214                 std::unique\_lock<std::mutex> guard(\_mutex);}
+\DoxyCodeLine{215                 \textcolor{keywordflow}{if} (\_valid)}
+\DoxyCodeLine{216                 \{}
+\DoxyCodeLine{217                     \textcolor{keywordflow}{return} (\textcolor{keywordtype}{bool})\_exception;}
+\DoxyCodeLine{218                 \}}
+\DoxyCodeLine{219                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{220                 \{}
+\DoxyCodeLine{221                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Response is not yet available"{}});}
+\DoxyCodeLine{222                 \}}
+\DoxyCodeLine{223             \}}
+\DoxyCodeLine{224 }
+\DoxyCodeLine{230             uint64\_t \mbox{\hyperlink{classswarmio_1_1services_1_1Awaiter_a231447e579955e4b39e330f220a138a2}{GetIdentifier}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{231 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{232                 \textcolor{keywordflow}{return} \_requestIdentifier;}
+\DoxyCodeLine{233             \}}
+\DoxyCodeLine{234     \};}
+\DoxyCodeLine{235 \}}
+
+\end{DoxyCode}

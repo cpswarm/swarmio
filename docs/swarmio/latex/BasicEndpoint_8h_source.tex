@@ -1,0 +1,68 @@
+\hypertarget{BasicEndpoint_8h_source}{}\doxysection{Basic\+Endpoint.\+h}
+\label{BasicEndpoint_8h_source}\index{include/swarmio/transport/BasicEndpoint.h@{include/swarmio/transport/BasicEndpoint.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/Endpoint.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/Mailbox.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <mutex>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <set>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <atomic>}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{namespace }swarmio::transport}
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{15     \textcolor{keyword}{class }SWARMIO\_API \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint}{BasicEndpoint}} : \textcolor{keyword}{public} \mbox{\hyperlink{classswarmio_1_1Endpoint}{Endpoint}}}
+\DoxyCodeLine{16     \{}
+\DoxyCodeLine{17         \textcolor{keyword}{private}:}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{23             \textcolor{keywordtype}{bool} \_isRunning;}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{28             std::set<Mailbox*> \_mailboxes;}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{34             std::recursive\_mutex \_mutex;}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{40             std::atomic<uint64\_t> \_counter;}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{49             \textcolor{keywordtype}{void} ReplyWithError(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* sender, \textcolor{keyword}{const} data::Message* message, data::Error error);}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51         \textcolor{keyword}{protected}:}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{57             \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a9c622fc963aea91fa4de509d44f73aa9}{BasicEndpoint}}() : \_counter(1), \_isRunning(false) \{ \}}
+\DoxyCodeLine{58 }
+\DoxyCodeLine{68             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a33e87a03304dd261766cc3fc6c74dcf9}{Send}}(\textcolor{keyword}{const} \textcolor{keywordtype}{void}* data, \textcolor{keywordtype}{size\_t} size, \textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) = 0;}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{77             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_ab8fe4a6b7f445aafc8cce2f8c60212c2}{ReceiveMessage}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* sender, \textcolor{keyword}{const} data::Message* message) \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{87             \textcolor{keyword}{virtual} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a2be1fface987f288c34aa646f98c6d42}{ReceiveMessage}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* sender, \textcolor{keyword}{const} \textcolor{keywordtype}{void}* data, \textcolor{keywordtype}{size\_t} size) \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{88 }
+\DoxyCodeLine{94             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_ad637df4c3f0e1b5ca52ebe8394c838e5}{NodeWasDiscovered}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{95 }
+\DoxyCodeLine{101             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a9735030edc6d29ff332e049c844c0301}{NodeDidJoin}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{102 }
+\DoxyCodeLine{108             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_ae07f2eefea4b97b52fa0fb49f2576429}{NodeWillLeave}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{noexcept};}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{118             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a23e525d9306249b78821a02022093a15}{RegisterMailbox}}(\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}* mailbox) \textcolor{keyword}{override};}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{128             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a95ccd53dedf18c7aeb384f25b2fc7422}{UnregisterMailbox}}(\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}* mailbox) \textcolor{keyword}{override};}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{137             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a05cf49c6ddf5df68dabc2a393646a646}{ReplaceMailbox}}(\mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}* oldMailbox, \mbox{\hyperlink{classswarmio_1_1Mailbox}{Mailbox}}* newMailbox) \textcolor{keyword}{override};}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139         \textcolor{keyword}{public}:}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{146             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_abd0a3499a9fd2a2af16ff52719020ac9}{Start}}() \textcolor{keyword}{override};}
+\DoxyCodeLine{147 }
+\DoxyCodeLine{155             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a8085f1e1f4d650d64ce37d1962c3377e}{Stop}}() \textcolor{keyword}{override};}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{162             \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a96b7d90a1fd8be1f43bc30e32f1587ae}{IsRunning}}()}
+\DoxyCodeLine{163             \{}
+\DoxyCodeLine{164                 \textcolor{keywordflow}{return} \_isRunning;}
+\DoxyCodeLine{165             \}}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{177             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_a20f4fac961c7efa9779fbf668187431d}{Send}}(data::Message* message, \textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node) \textcolor{keyword}{override};}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{186             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1transport_1_1BasicEndpoint_ae39e0a3e28948ea43b73ae2ae9c69554}{Tag}}(data::Message* message) \textcolor{keyword}{override};}
+\DoxyCodeLine{187     \};}
+\DoxyCodeLine{188 \}}
+
+\end{DoxyCode}

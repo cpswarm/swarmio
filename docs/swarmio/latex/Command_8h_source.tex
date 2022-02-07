@@ -1,0 +1,64 @@
+\hypertarget{Command_8h_source}{}\doxysection{Command.\+h}
+\label{Command_8h_source}\index{include/swarmio/tool/Command.h@{include/swarmio/tool/Command.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <map>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <replxx.hxx>}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{namespace }swarmio::tool }
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{15     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}} final}
+\DoxyCodeLine{16     \{}
+\DoxyCodeLine{17         \textcolor{keyword}{private}:}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{23             std::string \_verb;}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{29             std::string \_path;}
+\DoxyCodeLine{30 }
+\DoxyCodeLine{35             std::map<std::string, std::string> \_parameters;}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{42             \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}}(\textcolor{keyword}{const} std::string\& verb)}
+\DoxyCodeLine{43             \{}
+\DoxyCodeLine{44                 \_verb = verb;}
+\DoxyCodeLine{45             \} }
+\DoxyCodeLine{46 }
+\DoxyCodeLine{47         \textcolor{keyword}{public}:}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{55             \textcolor{keyword}{static} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command}{Command}} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a9bc5a3c606ee8c60e496eff1e4bc2019}{Parse}}(std::string command);}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{64             \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_afbd32524a07d99f486911786caa7046a}{HighlighterCallback}}(\textcolor{keyword}{const} std::string\& input, replxx::Replxx::colors\_t\& colors, \textcolor{keywordtype}{void}* unused);}
+\DoxyCodeLine{65 }
+\DoxyCodeLine{72             \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_abd9ed9a380b00723443f4ab2acc3dcf8}{Is}}(\textcolor{keyword}{const} \textcolor{keywordtype}{char}* pattern) \textcolor{keyword}{const};}
+\DoxyCodeLine{73             }
+\DoxyCodeLine{79             \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a97a331c8e67415b3ab65618a2dfa6dca}{HasPath}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{80 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{81                 \textcolor{keywordflow}{return} !\_path.empty();}
+\DoxyCodeLine{82             \}}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{89             \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a9e8175f2e6e18d5d20fd877205533025}{HasParameters}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{90 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{91                 \textcolor{keywordflow}{return} !\_parameters.empty();}
+\DoxyCodeLine{92             \}}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{99             \textcolor{keyword}{const} std::string\& \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_add47fb1fd5322c79e26f96048c76e4a6}{GetVerb}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{100 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{101                 \textcolor{keywordflow}{return} \_verb;}
+\DoxyCodeLine{102             \}}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{109             \textcolor{keyword}{const} std::string\& \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_a76691764e4238e5da9eb8e93a4a2630d}{GetPath}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{110 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{111                 \textcolor{keywordflow}{return} \_path;}
+\DoxyCodeLine{112             \}}
+\DoxyCodeLine{113 }
+\DoxyCodeLine{119             \textcolor{keyword}{const} std::map<std::string, std::string>\& \mbox{\hyperlink{classswarmio_1_1tool_1_1Command_aefe976a996f22fd83e7475c1e76af5a0}{GetParameters}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{120 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{121                 \textcolor{keywordflow}{return} \_parameters;}
+\DoxyCodeLine{122             \}}
+\DoxyCodeLine{123     \};}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125 \}}
+
+\end{DoxyCode}

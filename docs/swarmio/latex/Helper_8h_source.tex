@@ -1,0 +1,55 @@
+\hypertarget{Helper_8h_source}{}\doxysection{Helper.\+h}
+\label{Helper_8h_source}\index{include/swarmio/data/Helper.h@{include/swarmio/data/Helper.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/data/Variant.pb.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/data/discovery/Schema.pb.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <sstream>}}
+\DoxyCodeLine{6 }
+\DoxyCodeLine{7 \textcolor{keyword}{namespace }swarmio::data}
+\DoxyCodeLine{8 \{}
+\DoxyCodeLine{15     \textcolor{keyword}{class }SWARMIO\_API \mbox{\hyperlink{classswarmio_1_1data_1_1Helper}{Helper}} final}
+\DoxyCodeLine{16     \{}
+\DoxyCodeLine{17         \textcolor{keyword}{private}:}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{23             \mbox{\hyperlink{classswarmio_1_1data_1_1Helper}{Helper}}() \{ \}}
+\DoxyCodeLine{24 }
+\DoxyCodeLine{31             \textcolor{keyword}{static} \textcolor{keyword}{const} \textcolor{keywordtype}{char}* TypeToString(discovery::Type type);}
+\DoxyCodeLine{32 }
+\DoxyCodeLine{39             \textcolor{keyword}{static} \textcolor{keywordtype}{void} WriteEscapedAndQuotedStringToStream(std::ostream\& stream, \textcolor{keyword}{const} std::string\& value);}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{49             \textcolor{keyword}{static} \textcolor{keywordtype}{void} WriteElementSeparatorToStream(std::ostream\& stream, \textcolor{keywordtype}{bool}\& first, \textcolor{keywordtype}{bool} prettyPrint, \textcolor{keywordtype}{int} indentationLevel);}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51         \textcolor{keyword}{public}: }
+\DoxyCodeLine{52 }
+\DoxyCodeLine{59             \textcolor{keyword}{static} \textcolor{keywordtype}{bool} \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a2e74caaa349c0cfe49447b72d503b756}{IsArray}}(\textcolor{keyword}{const} Variant\& value);}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{68             \textcolor{keyword}{static} \textcolor{keywordtype}{size\_t} \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_af82941313cae7f5b5b553088439d0dbb}{GetCount}}(\textcolor{keyword}{const} Variant\& value);}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{77             \textcolor{keyword}{static} Variant::ValueCase \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a7f18f7595d40c5662b024a406e7dce96}{GetBaseType}}(\textcolor{keyword}{const} Variant\& value);}
+\DoxyCodeLine{78 }
+\DoxyCodeLine{86             \textcolor{keyword}{static} discovery::Schema \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a7c58b46f91227bdab47a9f128ec73b81}{GetSchemaDescriptor}}(\textcolor{keyword}{const} Map\& value, \textcolor{keywordtype}{bool} includeArraySizes = \textcolor{keyword}{false});}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{95             \textcolor{keyword}{static} discovery::Field \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a1bc7634ca9fbd66254707382747657b2}{GetFieldDescriptor}}(\textcolor{keyword}{const} Variant\& value, \textcolor{keywordtype}{bool} includeArraySizes = \textcolor{keyword}{false});}
+\DoxyCodeLine{96 }
+\DoxyCodeLine{104             \textcolor{keyword}{static} std::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a139d6d80b38134ba90dd0a1dfca9b257}{ToString}}(\textcolor{keyword}{const} discovery::Schema\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true}); }
+\DoxyCodeLine{105 }
+\DoxyCodeLine{113             \textcolor{keyword}{static} std::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a3d1098fbb7bc362b9b93776fd6a595de}{ToString}}(\textcolor{keyword}{const} Variant\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true});   }
+\DoxyCodeLine{114 }
+\DoxyCodeLine{122             \textcolor{keyword}{static} std::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_ae07ac4cdc41ba415722625c43f74728b}{ToString}}(\textcolor{keyword}{const} Map\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true});   }
+\DoxyCodeLine{123 }
+\DoxyCodeLine{131             \textcolor{keyword}{static} std::string \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_ae6e2f4b2921e062e7cb03d5fbddf9b78}{ToString}}(\textcolor{keyword}{const} google::protobuf::Map<std::string, swarmio::data::Variant>\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true});   }
+\DoxyCodeLine{132 }
+\DoxyCodeLine{141             \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_a7c7fe1b62dbea18702612b1622a23d3b}{WriteToStream}}(std::ostream\& stream, \textcolor{keyword}{const} Variant\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true}, \textcolor{keywordtype}{int} indentationLevel = 0);}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{151             \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_af5d0086a0e006bd5a6c1f32157cc9d99}{WriteToStream}}(std::ostream\& stream, \textcolor{keyword}{const} Map\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true}, \textcolor{keywordtype}{int} indentationLevel = 0);}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{161             \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_ae07e57160e68486926185ead72774dea}{WriteToStream}}(std::ostream\& stream, \textcolor{keyword}{const} google::protobuf::Map<std::string, swarmio::data::Variant>\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true}, \textcolor{keywordtype}{int} indentationLevel = 0);}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{171             \textcolor{keyword}{static} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1data_1_1Helper_aa11c894675757746e84999956cc89fec}{WriteToStream}}(std::ostream\& stream, \textcolor{keyword}{const} discovery::Schema\& value, \textcolor{keywordtype}{bool} prettyPrint = \textcolor{keyword}{true}, \textcolor{keywordtype}{int} indentationLevel = 0);   }
+\DoxyCodeLine{172     \};}
+\DoxyCodeLine{173 \}}
+
+\end{DoxyCode}

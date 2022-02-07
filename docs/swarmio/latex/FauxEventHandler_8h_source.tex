@@ -1,0 +1,60 @@
+\hypertarget{FauxEventHandler_8h_source}{}\doxysection{Faux\+Event\+Handler.\+h}
+\label{FauxEventHandler_8h_source}\index{include/swarmio/simulator/FauxEventHandler.h@{include/swarmio/simulator/FauxEventHandler.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{2 }
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <swarmio/Exception.h>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <swarmio/data/discovery/Schema.pb.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <swarmio/services/event/Handler.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include <map>}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{8 }
+\DoxyCodeLine{9 \textcolor{keyword}{namespace }swarmio::simulator }
+\DoxyCodeLine{10 \{}
+\DoxyCodeLine{16     \textcolor{keyword}{class }\mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler}{FauxEventHandler}} final : \textcolor{keyword}{public} services::event::Handler}
+\DoxyCodeLine{17     \{}
+\DoxyCodeLine{18         \textcolor{keyword}{private}:}
+\DoxyCodeLine{19 }
+\DoxyCodeLine{24             std::string \_name;}
+\DoxyCodeLine{25 }
+\DoxyCodeLine{30             std::map<std::string, data::discovery::Type> \_parameters;}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32         \textcolor{keyword}{public}:}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{39             \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_ad5f31096f90edadfd45ed51a6dd67075}{FauxEventHandler}}(\textcolor{keyword}{const} std::string\& name)}
+\DoxyCodeLine{40                 : \_name(name) \{ \}}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{48             \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_ae0248e1a1f99e713f83139f111937383}{AddParameter}}(\textcolor{keyword}{const} std::string\& key, data::discovery::Type type)}
+\DoxyCodeLine{49             \{}
+\DoxyCodeLine{50                 \_parameters[key] = type;}
+\DoxyCodeLine{51             \}}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{61             \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_afe6b7145590f4e973a5b6644a26b2adb}{EventWasTriggered}}(\textcolor{keyword}{const} \mbox{\hyperlink{classswarmio_1_1Node}{Node}}* node, \textcolor{keyword}{const} data::event::Notification\& event)\textcolor{keyword}{ override }\{  \}}
+\DoxyCodeLine{62 }
+\DoxyCodeLine{70             \textcolor{keyword}{virtual} data::discovery::Schema \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_a1425c316d2d5b354c570b2a383ed4631}{DescribeEvent}}(\textcolor{keyword}{const} std::string\& name)\textcolor{keyword}{ override}}
+\DoxyCodeLine{71 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{72                 \textcolor{keywordflow}{if} (name == \_name)}
+\DoxyCodeLine{73                 \{}
+\DoxyCodeLine{74                     data::discovery::Schema schema;}
+\DoxyCodeLine{75                     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} p : \_parameters)}
+\DoxyCodeLine{76                     \{}
+\DoxyCodeLine{77                         (*schema.mutable\_fields())[p.first].set\_type(p.second);}
+\DoxyCodeLine{78                     \}}
+\DoxyCodeLine{79                     \textcolor{keywordflow}{return} schema;}
+\DoxyCodeLine{80                 \}}
+\DoxyCodeLine{81                 \textcolor{keywordflow}{else}}
+\DoxyCodeLine{82                 \{}
+\DoxyCodeLine{83                     \textcolor{keywordflow}{throw} \mbox{\hyperlink{classswarmio_1_1Exception}{Exception}}(\textcolor{stringliteral}{"{}Fake event handler queried for unknown event."{}});}
+\DoxyCodeLine{84                 \}}
+\DoxyCodeLine{85             \}}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{92             \textcolor{keyword}{const} std::string\& \mbox{\hyperlink{classswarmio_1_1simulator_1_1FauxEventHandler_aa1b6b09a5cf4617864bba1f2f9021094}{GetName}}()\textcolor{keyword}{ const}}
+\DoxyCodeLine{93 \textcolor{keyword}{            }\{}
+\DoxyCodeLine{94                 \textcolor{keywordflow}{return} \_name;}
+\DoxyCodeLine{95             \}}
+\DoxyCodeLine{96     \};}
+\DoxyCodeLine{97 \}}
+\DoxyCodeLine{98 }
+
+\end{DoxyCode}

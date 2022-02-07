@@ -1,0 +1,221 @@
+\hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter}{}\doxysection{swarmio\+::simulator\+::In\+Memory\+Parameter Class Reference}
+\label{classswarmio_1_1simulator_1_1InMemoryParameter}\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+
+
+A strongly typed in-\/memory parameter target that can be made read-\/only.  
+
+
+
+
+{\ttfamily \#include $<$In\+Memory\+Parameter.\+h$>$}
+
+Inheritance diagram for swarmio\+::simulator\+::In\+Memory\+Parameter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classswarmio_1_1simulator_1_1InMemoryParameter}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_af7f5221a0566a0c6a598d34e47912f5b}{In\+Memory\+Parameter}} (const std\+::string \&path, bool value, bool read\+Only=false)
+\begin{DoxyCompactList}\small\item\em Create a new boolean in-\/memory parameter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a2bfc4d8883c3d4988f94ff9e960d02c0}{In\+Memory\+Parameter}} (const std\+::string \&path, const std\+::string \&value, bool read\+Only=false)
+\begin{DoxyCompactList}\small\item\em Create a new string in-\/memory parameter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_ae8fe1c8ebf88b0bbe143066effdb9c71}{In\+Memory\+Parameter}} (const std\+::string \&path, const char $\ast$value, bool read\+Only=false)
+\begin{DoxyCompactList}\small\item\em Create a new string in-\/memory parameter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a7edf9ca74b4386cd500b97c2d31027d7}{In\+Memory\+Parameter}} (const std\+::string \&path, int value, bool read\+Only=false)
+\begin{DoxyCompactList}\small\item\em Create a new integer in-\/memory parameter. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_afcc1ce75da4f1d9c78c375199e16cd68}{In\+Memory\+Parameter}} (const std\+::string \&path, double value, bool read\+Only=false)
+\begin{DoxyCompactList}\small\item\em Create a new integer in-\/memory parameter. \end{DoxyCompactList}\item 
+virtual data\+::\+Variant \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a2af178f861030982cad4214009f1bd2d}{Get}} (const std\+::string \&path) override
+\begin{DoxyCompactList}\small\item\em Get the current value of the target. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a5c769c07c9a2dbdc48846fa93cea5a5d}{Set}} (const std\+::string \&path, const data\+::\+Variant \&value) override
+\begin{DoxyCompactList}\small\item\em Set the current value of the target. \end{DoxyCompactList}\item 
+virtual data\+::discovery\+::\+Field \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a78090aa9b0800bce5faabffd76cc6e17}{Get\+Field\+Descriptor}} (const std\+::string \&path) const override
+\begin{DoxyCompactList}\small\item\em Get the data type of the target. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_a552d0f2ff6accf91fc6ac92a9650fb2f}{Can\+Write}} (const std\+::string \&path) const noexcept override
+\begin{DoxyCompactList}\small\item\em Determines whether the value can be written. \end{DoxyCompactList}\item 
+virtual bool \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_aedd1b3224af0c83d75844d91c38179bc}{Can\+Read}} (const std\+::string \&path) const noexcept override
+\begin{DoxyCompactList}\small\item\em Determines whether the value can be read. \end{DoxyCompactList}\item 
+const std\+::string \& \mbox{\hyperlink{classswarmio_1_1simulator_1_1InMemoryParameter_aa48a1ea96749cb0a9a5dc7b72ba867aa}{Get\+Path}} () const
+\begin{DoxyCompactList}\small\item\em Get the resource path of the parameter. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+A strongly typed in-\/memory parameter target that can be made read-\/only. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_af7f5221a0566a0c6a598d34e47912f5b}\label{classswarmio_1_1simulator_1_1InMemoryParameter_af7f5221a0566a0c6a598d34e47912f5b}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!InMemoryParameter@{InMemoryParameter}}
+\index{InMemoryParameter@{InMemoryParameter}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{InMemoryParameter()}{InMemoryParameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+In\+Memory\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{bool}]{value,  }\item[{bool}]{read\+Only = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new boolean in-\/memory parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+{\em read\+Only} & Is read-\/only? \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_a2bfc4d8883c3d4988f94ff9e960d02c0}\label{classswarmio_1_1simulator_1_1InMemoryParameter_a2bfc4d8883c3d4988f94ff9e960d02c0}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!InMemoryParameter@{InMemoryParameter}}
+\index{InMemoryParameter@{InMemoryParameter}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{InMemoryParameter()}{InMemoryParameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+In\+Memory\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{const std\+::string \&}]{value,  }\item[{bool}]{read\+Only = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new string in-\/memory parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+{\em read\+Only} & Is read-\/only? \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_ae8fe1c8ebf88b0bbe143066effdb9c71}\label{classswarmio_1_1simulator_1_1InMemoryParameter_ae8fe1c8ebf88b0bbe143066effdb9c71}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!InMemoryParameter@{InMemoryParameter}}
+\index{InMemoryParameter@{InMemoryParameter}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{InMemoryParameter()}{InMemoryParameter()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+In\+Memory\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{const char $\ast$}]{value,  }\item[{bool}]{read\+Only = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new string in-\/memory parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+{\em read\+Only} & Is read-\/only? \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_a7edf9ca74b4386cd500b97c2d31027d7}\label{classswarmio_1_1simulator_1_1InMemoryParameter_a7edf9ca74b4386cd500b97c2d31027d7}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!InMemoryParameter@{InMemoryParameter}}
+\index{InMemoryParameter@{InMemoryParameter}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{InMemoryParameter()}{InMemoryParameter()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+In\+Memory\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{int}]{value,  }\item[{bool}]{read\+Only = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new integer in-\/memory parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+{\em read\+Only} & Is read-\/only? \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_afcc1ce75da4f1d9c78c375199e16cd68}\label{classswarmio_1_1simulator_1_1InMemoryParameter_afcc1ce75da4f1d9c78c375199e16cd68}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!InMemoryParameter@{InMemoryParameter}}
+\index{InMemoryParameter@{InMemoryParameter}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{InMemoryParameter()}{InMemoryParameter()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+In\+Memory\+Parameter (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{double}]{value,  }\item[{bool}]{read\+Only = {\ttfamily false} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new integer in-\/memory parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value \\
+\hline
+{\em read\+Only} & Is read-\/only? \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_aedd1b3224af0c83d75844d91c38179bc}\label{classswarmio_1_1simulator_1_1InMemoryParameter_aedd1b3224af0c83d75844d91c38179bc}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!CanRead@{CanRead}}
+\index{CanRead@{CanRead}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{CanRead()}{CanRead()}}
+{\footnotesize\ttfamily virtual bool swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+Can\+Read (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Determines whether the value can be read. 
+
+\begin{DoxyReturn}{Returns}
+True if Get operations are allowed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_a552d0f2ff6accf91fc6ac92a9650fb2f}\label{classswarmio_1_1simulator_1_1InMemoryParameter_a552d0f2ff6accf91fc6ac92a9650fb2f}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!CanWrite@{CanWrite}}
+\index{CanWrite@{CanWrite}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{CanWrite()}{CanWrite()}}
+{\footnotesize\ttfamily virtual bool swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+Can\+Write (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}, {\ttfamily [noexcept]}}
+
+
+
+Determines whether the value can be written. 
+
+\begin{DoxyReturn}{Returns}
+True if Set operations are allowed 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_a2af178f861030982cad4214009f1bd2d}\label{classswarmio_1_1simulator_1_1InMemoryParameter_a2af178f861030982cad4214009f1bd2d}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!Get@{Get}}
+\index{Get@{Get}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{Get()}{Get()}}
+{\footnotesize\ttfamily virtual data\+::\+Variant swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+Get (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the current value of the target. 
+
+\begin{DoxyReturn}{Returns}
+data\+::\+Variant 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_a78090aa9b0800bce5faabffd76cc6e17}\label{classswarmio_1_1simulator_1_1InMemoryParameter_a78090aa9b0800bce5faabffd76cc6e17}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!GetFieldDescriptor@{GetFieldDescriptor}}
+\index{GetFieldDescriptor@{GetFieldDescriptor}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{GetFieldDescriptor()}{GetFieldDescriptor()}}
+{\footnotesize\ttfamily virtual data\+::discovery\+::\+Field swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+Get\+Field\+Descriptor (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Get the data type of the target. 
+
+\begin{DoxyReturn}{Returns}
+data\+::discovery\+::\+Type 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_aa48a1ea96749cb0a9a5dc7b72ba867aa}\label{classswarmio_1_1simulator_1_1InMemoryParameter_aa48a1ea96749cb0a9a5dc7b72ba867aa}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!GetPath@{GetPath}}
+\index{GetPath@{GetPath}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{GetPath()}{GetPath()}}
+{\footnotesize\ttfamily const std\+::string \& swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+Get\+Path (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the resource path of the parameter. 
+
+\begin{DoxyReturn}{Returns}
+const std\+::string\& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classswarmio_1_1simulator_1_1InMemoryParameter_a5c769c07c9a2dbdc48846fa93cea5a5d}\label{classswarmio_1_1simulator_1_1InMemoryParameter_a5c769c07c9a2dbdc48846fa93cea5a5d}} 
+\index{swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}!Set@{Set}}
+\index{Set@{Set}!swarmio::simulator::InMemoryParameter@{swarmio::simulator::InMemoryParameter}}
+\doxysubsubsection{\texorpdfstring{Set()}{Set()}}
+{\footnotesize\ttfamily virtual void swarmio\+::simulator\+::\+In\+Memory\+Parameter\+::\+Set (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{path,  }\item[{const data\+::\+Variant \&}]{value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Set the current value of the target. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & New value \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+include/swarmio/simulator/In\+Memory\+Parameter.\+h\end{DoxyCompactItemize}
