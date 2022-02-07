@@ -3,7 +3,7 @@
 
 The CPSwarm Communication Library provides a unified interface that tools and swarm members can use to interact with each other.
 ## Getting started
-For more information, see the [WIKI](https://github.com/cpswarm/swarmio/wiki).
+For more information, see the [WIKI](https://github.com/cpswarm/swarmio/wiki), the swarmio [API documentation](https://cpswarm.github.io/swarmio/swarmio/html/), or the swarmros [message definitions](https://cpswarm.github.io/swarmio/swarmros/index-msg.html).
 
 ## Deployment
 Packages are built continuously with [Bamboo](https://pipelines.linksmart.eu/browse/CPSW-ALS/latest).
@@ -11,11 +11,11 @@ Packages are built continuously with [Bamboo](https://pipelines.linksmart.eu/bro
 ## Build
 ### Building on Linux
 Build should work on any Linux distribution, but packaging
-and architecture detection will only work on Debian and 
-Ubuntu. By default, everything is compiled for the host 
-architecture, but cross-compilation is available. Currently 
-armhf and arm64 are supported if the required tools are 
-available. The default compiler is clang, but GCC can also 
+and architecture detection will only work on Debian and
+Ubuntu. By default, everything is compiled for the host
+architecture, but cross-compilation is available. Currently
+armhf and arm64 are supported if the required tools are
+available. The default compiler is clang, but GCC can also
 be used. Builds were tested with Ubuntu 16.04 and 18.04,
 with all the latest updates installed.
 
@@ -23,34 +23,34 @@ There are three build modes you can choose from:
 
      - DEVELOPMENT (default)
 
- 
+
  Development mode will build and install all components into
  one subdirectory under the build directory. Useful when an
  IDE needs a full include path and for debugging. By default,
  products are installed into the "devtree-<ARCH>" subdirectory.
- 
+
 
      - PACKAGE
 
- 
+
  Package mode will build .deb packages for each target -
  and set /opt/swarmio as the install prefix. Find the packages
  under the "packages" subdirectory.
- 
+
 
      - INSTALL
 
- 
+
  Install will install all outputs onto the local machine,
  by default under /opt/swarmio.
- 
-To build, create a new directory outside the source tree, 
+
+To build, create a new directory outside the source tree,
 and issue the following commands inside it:
 
      cmake <PATH TO SOURCE> [optional parameters]
      cmake --build .
 
- 
+
 Optional parameters:
 
      -DSWARMIO_BUILD_MODE=<MODE> (DEVELOPMENT, PACKAGE or INSTALL)
@@ -68,7 +68,7 @@ Optional parameters:
 
  Overrides the installation directory. For DEVELOPMENT and
  INSTALL build, this will override the output directory. For
- PACKAGE builds, it will override the installation prefix 
+ PACKAGE builds, it will override the installation prefix
  of the generated packages.
 
      -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (armhf or arm64)
@@ -84,14 +84,14 @@ Optional parameters:
      -DSWARMIO_MULTISTRAP_CONFIGURATION=<CONFIG>
 
  If configured, a full multistrap sysroot will be initialized
- before cross-compilation. Requires multistrap and a bunch of 
+ before cross-compilation. Requires multistrap and a bunch of
  other tools to be installed. Currently supported configurations:
   - xenial (Ubuntu 16.04)
   - xenial-ros (Ubuntu 16.04 with ROS Kinetic Kame)
   - bionic (Ubuntu 18.04)
   - bionic-ros (Ubuntu 18.04 with ROS Melodic Morenia)
 
-```	
+```
 -DSWARMIO_SYSROOT=<SYSROOT PATH>
 ```
 
@@ -107,9 +107,9 @@ Optional parameters:
 
      -DSWARMIO_ROS_PREFIX=<PATH>
 
- Specifies the location of the ROS installation to use when 
+ Specifies the location of the ROS installation to use when
  building the ROS node. If not specified, the script will try
- to automatically detect it - by looking for the default 
+ to automatically detect it - by looking for the default
  installation directory of Kinetic Kame and Melodic Morenia.
 
      -DSWARMIO_PREFER_GCC=ON
@@ -118,7 +118,7 @@ Optional parameters:
  that cross-compilation will most likely only work if the
  same operating system (with a different architecture) is
  used on the host machine. Requires GCC 6 or later.
- 
+
 ### Building on Windows
 
 On Windows, only DEVELOPMENT mode is supported. Building the
@@ -128,7 +128,7 @@ build command is the same as on Linux:
      cmake <PATH TO SOURCE> [optional parameters]
      cmake --build .
 
- 
+
 Optional parameters:
 
      -DCMAKE_BUILD_TYPE=<TYPE> (Debug, Release, RelWithDebInfo)
@@ -137,7 +137,7 @@ Optional parameters:
 
      -DCMAKE_INSTALL_PREFIX=<PATH>
 
- Overrides the output directory. 
+ Overrides the output directory.
 
      -DSWARMIO_TARGET_ARCHITECTURE=<ARCH> (x86 or x64)
 
@@ -159,10 +159,10 @@ ROS support turned on, targeting Ubuntu Xenial:
 All output packages will be placed into the packages subdirectory.
 
 ## Contributing
-Contributions are welcome. 
+Contributions are welcome.
 
 Please fork, make your changes, and submit a pull request. For major changes, please open an issue first and discuss it with the other authors.
 
 ## Affiliation
-![CPSwarm](https://github.com/cpswarm/template/raw/master/cpswarm.png)  
+![CPSwarm](https://github.com/cpswarm/template/raw/master/cpswarm.png)
 This work is supported by the European Commission through the [CPSwarm H2020 project](https://cpswarm.eu) under grant no. 731946.
