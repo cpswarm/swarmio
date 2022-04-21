@@ -106,6 +106,7 @@ void ZyreEndpoint::Start()
     std::unique_ptr<swarmio::Endpoint> endpoint;
     try
     {
+        config.setIncludeDir(configFilePath.substr(0, configFilePath.find_last_of("/\\")).c_str());
         config.readFile(configFilePath.c_str());
         std::string type = (const char *)config.lookup("endpoint.type");
         if (type == "zyre")
